@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(C_PlayerBehaviour))]
-[RequireComponent(typeof(Rigid))]
+[RequireComponent(typeof(Rigidbody2D))]
 
 public class C_PlayerController : MonoBehaviour {
 

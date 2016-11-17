@@ -12,4 +12,9 @@ public class GameCore : MonoBehaviour {
 	void Update () {
 	    //if(Input)
 	}
+
+    bool OverlapOtherWorld()
+    {
+        return true;
+    }
 }
