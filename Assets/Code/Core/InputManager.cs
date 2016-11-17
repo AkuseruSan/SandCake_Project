@@ -7,7 +7,7 @@ public static class InputManager {
     {
         foreach (Touch t in Input.touches)
         {
-            if(t.position.x < Screen.width / 3)
+            if(t.phase == TouchPhase.Began && t.position.x < Screen.width / 3)
             {
                 Debug.Log("Jumped!");
                 return true;

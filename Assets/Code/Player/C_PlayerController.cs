@@ -23,6 +23,7 @@ public class C_PlayerController : MonoBehaviour {
 	void Update () {
         Movement();
         RotatePlayer();
+        if(Input.anyKey) Jump();
 	}
 
     #region events
