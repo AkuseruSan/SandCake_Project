@@ -9,7 +9,7 @@
 		// Don't draw in the RGBA channels; just the depth buffer
 
 		ColorMask 0
-		ZTest Less
+		//ZTest Less
 		ZWrite On
 
 		// Do nothing specific in the pass:
