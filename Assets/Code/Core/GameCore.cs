@@ -11,6 +11,8 @@ public class GameCore : MonoBehaviour {
 
     private const int DAY_LAYER = 8;
     private const int NIGHT_LAYER = 9;
+
+    RaycastHit hit;
     // Use this for initialization
     void Start () {
 
@@ -20,7 +22,7 @@ public class GameCore : MonoBehaviour {
 	void Update () {
         if(InputManager.DrawTouch(ref drawPointSpawnPos) == true)
         {
-            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)) as GameObject);
+            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0,0,0)) as GameObject;
             drawPoints.Add(newPoint);
         }
 
@@ -29,16 +31,16 @@ public class GameCore : MonoBehaviour {
 
     void OverlapOtherWorld()
     {
-
-        foreach (GameObject p in drawPoints)
+        if(Physics.Raycast(new Vector3(playerTransform.transform.position.x, playerTransform.position.y, -100), Vector3.forward, out hit, 1000))
         {
-            Debug.Log(Vector2.Distance(p.transform.position, playerTransform.position));
-            if (Vector2.Distance(p.transform.position, playerTransform.position) < 2)
+            if (hit.transform.gameObject.tag == "Depth")
             {
                 playerTransform.gameObject.layer = DAY_LAYER;
             }
+
         }
 
-        playerTransform.gameObject.layer = NIGHT_LAYER;
+        else playerTransform.gameObject.layer = NIGHT_LAYER;
+
     }
 }
