@@ -5,9 +5,11 @@ using System.Collections.Generic;
 public class GameCore : MonoBehaviour {
 
     public Transform playerTransform;
+    public Transform cameraSystemTransform;
+    public Vector3 cameraPositionOffset;
+
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
-    public List<GameObject> drawPoints = new List<GameObject>();
 
     private const int DAY_LAYER = 8;
     private const int NIGHT_LAYER = 9;
@@ -20,13 +22,17 @@ public class GameCore : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(InputManager.DrawTouch(ref drawPointSpawnPos) == true)
-        {
-            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0,0,0)) as GameObject;
-            drawPoints.Add(newPoint);
-        }
-
+        UpdateCameraTransform();
+        SpawnMaskPoints();
         OverlapOtherWorld();
+    }
+
+    void SpawnMaskPoints()
+    {
+        if (InputManager.DrawTouch(ref drawPointSpawnPos) == true)
+        {
+            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 0, 0)) as GameObject;
+        }
     }
 
     void OverlapOtherWorld()
@@ -43,4 +49,10 @@ public class GameCore : MonoBehaviour {
         else playerTransform.gameObject.layer = NIGHT_LAYER;
 
     }
+
+    void UpdateCameraTransform()
+    {
+        cameraSystemTransform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, 0) + cameraPositionOffset;
+    }
+
 }
