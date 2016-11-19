@@ -4,9 +4,13 @@ using System.Collections.Generic;
 
 public class GameCore : MonoBehaviour {
 
-    public Transform playerTransform;
+    public GameObject player;
+
     public Transform cameraSystemTransform;
     public Vector3 cameraPositionOffset;
+
+    [HideInInspector]
+    public C_PlayerController playerController;
 
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
@@ -17,8 +21,9 @@ public class GameCore : MonoBehaviour {
     RaycastHit hit;
     // Use this for initialization
     void Start () {
+        playerController = player.GetComponent<C_PlayerController>();
 
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -37,22 +42,22 @@ public class GameCore : MonoBehaviour {
 
     void OverlapOtherWorld()
     {
-        if(Physics.Raycast(new Vector3(playerTransform.transform.position.x, playerTransform.position.y, -100), Vector3.forward, out hit, 1000))
+        if(Physics.Raycast(new Vector3(player.transform.position.x, player.transform.position.y, -100), Vector3.forward, out hit, 1000))
         {
             if (hit.transform.gameObject.tag == "Depth")
             {
-                playerTransform.gameObject.layer = DAY_LAYER;
+                player.gameObject.layer = DAY_LAYER;
             }
 
         }
 
-        else playerTransform.gameObject.layer = NIGHT_LAYER;
+        else player.gameObject.layer = NIGHT_LAYER;
 
     }
 
     void UpdateCameraTransform()
     {
-        cameraSystemTransform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, 0) + cameraPositionOffset;
+        cameraSystemTransform.position = new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset;
     }
 
 }

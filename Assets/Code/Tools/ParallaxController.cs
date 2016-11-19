@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class ParallaxController : MonoBehaviour {
 
+    public enum ParallaxLayer { FRONT, BACK }
+
     public List<DualSprite> parallaxSprites;
 	// Use this for initialization
 	void Start () {
@@ -30,7 +32,7 @@ public class ParallaxController : MonoBehaviour {
 
             GameObject goNight = new GameObject("NightLayer");
             goNight.AddComponent<SpriteRenderer>().sprite = parallaxSprites[i].night;
-            goNight.GetComponent<SpriteRenderer>().sortingOrder = parallaxSprites[i].sortOrder;
+            //goNight.GetComponent<SpriteRenderer>().sortingOrder = parallaxSprites[i].sortOrder;
             goNight.transform.parent = go.transform;
         }
     }

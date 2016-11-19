@@ -20,10 +20,10 @@ public class C_PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         Movement();
         RotatePlayer();
-        if(Input.anyKey) Jump();
 	}
 
     #region events
@@ -51,7 +51,7 @@ public class C_PlayerController : MonoBehaviour {
         rBody.velocity = new Vector2(contactNormal.y * speed, rBody.velocity.y);
     }
 
-    void Jump()
+    public void Jump()
     {
         rBody.AddForce(jump, ForceMode2D.Impulse);
     }
