@@ -1,9 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class InputManager {
+public class InputManager : MonoBehaviour{
 
-    public static bool DrawTouch(ref Vector3 posRef)
+    public static InputManager Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
+
+    public bool DrawTouch(ref Vector3 posRef)
     {
         foreach (Touch t in Input.touches)
         {
@@ -12,13 +23,13 @@ public static class InputManager {
             return true;
         }
 
-        //if(Input.GetMouseButton(0) && Input.mousePosition.x > Screen.width/3)
-        //{
-        //    posRef = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
-        //    posRef.z = -5;
+        if (Input.GetMouseButton(0))
+        {
+            posRef = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+            posRef.z = -5;
 
-        //    return true;
-        //}
+            return true;
+        }
 
         return false;
     }

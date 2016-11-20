@@ -10,11 +10,15 @@ public class C_PlayerController : MonoBehaviour {
     private Rigidbody2D rBody;
 
     public float speed;
+    public float maxSpeed { get; private set; }
+    public float minSpeed { get; private set; }
     public Vector2 jump;
     #endregion
 
     // Use this for initialization
     void Start () {
+        minSpeed = 1;
+        maxSpeed = 10;
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
 	}
@@ -48,6 +52,7 @@ public class C_PlayerController : MonoBehaviour {
 
     void Movement()
     {
+        speed = Mathf.Clamp(speed, minSpeed, maxSpeed);
         rBody.velocity = new Vector2(contactNormal.y * speed, rBody.velocity.y);
     }
 

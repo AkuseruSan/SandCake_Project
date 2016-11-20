@@ -3,13 +3,34 @@ using System.Collections;
 
 public class ParallaxLayerBehaviour : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public float movementSpeed;
+    private float movementSpeedAux;
+
+    private Transform player;
+
+    private Vector2 animatedOffset;
+
+
+    void Awake()
+    {
+
+    }
+    // Use this for initialization
+    void Start()
+    {
+        animatedOffset = Vector2.zero;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!GameCore.Instance.IsPaused())
+        {
+            movementSpeedAux = movementSpeed * AuxLib.Map(GameCore.Instance.playerController.speed, GameCore.Instance.playerController.minSpeed, GameCore.Instance.playerController.maxSpeed, 0, 1);
+            animatedOffset += new Vector2(movementSpeedAux, 0) * Time.deltaTime;
+
+
+            this.GetComponent<MeshRenderer>().material.SetTextureOffset("_MainTex", animatedOffset);
+        }
+    }
 }
