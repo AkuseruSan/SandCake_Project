@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class ParallaxController : MonoBehaviour {
 
+    public static ParallaxController Instance { get; private set; }
+
     public enum ParallaxLayerOrder { BACK, FRONT }
 
     public float parallaxLayersWidthScale;
@@ -16,6 +18,17 @@ public class ParallaxController : MonoBehaviour {
 
     private int parallaxLayerMin = 1;
     private int parallaxLayerMax = 2;
+
+    void Awake()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        Instance = this;
+    }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -25,16 +38,21 @@ public class ParallaxController : MonoBehaviour {
         CreateParallaxLayers();
 
         //Rescale
-        float h = (Camera.main.orthographicSize * 2.0f);
-        float w = (h * Screen.width / Screen.height) * parallaxLayersWidthScale;
-
-        transform.localScale = new Vector3(w, h * parallaxLayersHeightScale, 1f);
+        Rescale();
     }
 	
 	// Update is called once per frame
 	void Update () {
 
 	}
+
+    void Rescale()
+    {
+        float h = (Camera.main.orthographicSize * 2.0f);
+        float w = (h * Screen.width / Screen.height) * parallaxLayersWidthScale;
+
+        transform.localScale = new Vector3(w, h * parallaxLayersHeightScale, 1f);
+    }
 
     void CreateParallaxLayers()
     {

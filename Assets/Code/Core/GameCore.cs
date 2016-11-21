@@ -60,7 +60,18 @@ public class GameCore : MonoBehaviour {
     {
         if (InputManager.Instance.DrawTouch(ref drawPointSpawnPos) == true)
         {
-            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 0, 0)) as GameObject;
+            if (Physics.Raycast(new Vector3(drawPointSpawnPos.x, drawPointSpawnPos.y, -100), Vector3.forward, out hit, 1000))
+            {
+                if (hit.transform.gameObject.tag != "Depth")
+                {
+                    GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 0, 0)) as GameObject;
+                }
+            }
+
+            else
+            {
+                GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 0, 0)) as GameObject;
+            }
         }
     }
 
