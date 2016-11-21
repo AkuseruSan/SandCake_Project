@@ -5,15 +5,24 @@ using UnityEngine.UI;
 //Class only called by UI elements events.
 public class InputManagerUI : MonoBehaviour {
 
-    private GameCore core;
+    public static InputManagerUI Instance {get; private set;}
+
+    void Awake()
+    {
+        if( Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
 
     void Start()
     {
-        core = GetComponent<GameCore>();
+
     }
 
 	public void JumpButton()
     {
-        core.playerController.Jump();
+        GameCore.Instance.playerController.Jump();
     }
 }

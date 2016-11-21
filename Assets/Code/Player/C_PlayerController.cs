@@ -12,6 +12,7 @@ public class C_PlayerController : MonoBehaviour {
     public float speed;
     public float maxSpeed { get; private set; }
     public float minSpeed { get; private set; }
+    public float rotationLerpTime;
     public Vector2 jump;
     #endregion
 
@@ -47,7 +48,7 @@ public class C_PlayerController : MonoBehaviour {
 
     void RotatePlayer()
     {
-        
+        rBody.rotation = -Mathf.Sin(contactNormal.x) * 360 * Time.deltaTime * rotationLerpTime;
     }
 
     void Movement()
@@ -59,6 +60,7 @@ public class C_PlayerController : MonoBehaviour {
     public void Jump()
     {
         rBody.AddForce(jump, ForceMode2D.Impulse);
+        rBody.rotation = 0;
     }
 
     #endregion
