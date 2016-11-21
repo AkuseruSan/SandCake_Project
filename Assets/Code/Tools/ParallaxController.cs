@@ -58,6 +58,7 @@ public class ParallaxController : MonoBehaviour {
             goDay.name ="DayLayer";
             goDay.transform.parent = go.transform;
             goDay.transform.localPosition = Vector3.zero;
+            Destroy(goDay.GetComponent<MeshCollider>());
             goDay.GetComponent<MeshRenderer>().material = Resources.Load("Materials/MAT_ParallaxLayer") as Material;
             goDay.GetComponent<MeshRenderer>().material.mainTexture = parallaxLayers[i].day;
             goDay.layer = GameCore.DAY_LAYER;
@@ -67,6 +68,7 @@ public class ParallaxController : MonoBehaviour {
             goNight.name = "NightLayer";
             goNight.transform.parent = go.transform;
             goNight.transform.localPosition = Vector3.zero;
+            Destroy(goNight.GetComponent<MeshCollider>());
             goNight.GetComponent<MeshRenderer>().material = Resources.Load("Materials/MAT_ParallaxLayer") as Material;
             goNight.GetComponent<MeshRenderer>().material.mainTexture = parallaxLayers[i].night;
             goNight.layer = GameCore.NIGHT_LAYER;

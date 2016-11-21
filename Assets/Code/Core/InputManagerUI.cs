@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
+//Class only called by UI elements events.
 public class InputManagerUI : MonoBehaviour {
 
     private GameCore core;

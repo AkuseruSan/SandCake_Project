@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-
+//Singleton Controller
 public class GameCore : MonoBehaviour {
 
     public static GameCore Instance { get; private set; }
@@ -71,8 +71,10 @@ public class GameCore : MonoBehaviour {
             if (hit.transform.gameObject.tag == "Depth")
             {
                 player.gameObject.layer = DAY_LAYER;
+
             }
 
+            else player.gameObject.layer = NIGHT_LAYER;
         }
 
         else player.gameObject.layer = NIGHT_LAYER;
