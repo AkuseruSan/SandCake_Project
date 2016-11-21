@@ -13,6 +13,7 @@ public class GameCore : MonoBehaviour {
     public Transform parallaxSystemTransform;
 
     public Vector3 cameraPositionOffset;
+    public float camSize;
 
     [HideInInspector]
     public C_PlayerController playerController;
@@ -45,7 +46,7 @@ public class GameCore : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerController = player.GetComponent<C_PlayerController>();
-
+        camSize = 10;
     }
 	
 	// Update is called once per frame
