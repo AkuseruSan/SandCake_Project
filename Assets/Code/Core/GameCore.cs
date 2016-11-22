@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
 
 
 //Singleton Controller
@@ -15,8 +17,12 @@ public class GameCore : MonoBehaviour {
     public Vector3 cameraPositionOffset;
     public float camSize;
 
+    public float worldConstructorOffsetX;//Position between every spawn.
+
     [HideInInspector]
     public C_PlayerController playerController;
+
+    public List<WorldModuleData> worldModules;
 
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
@@ -34,19 +40,20 @@ public class GameCore : MonoBehaviour {
 
     void Awake()
     {
-        isPaused = false;
-
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
         Instance = this;
+
+        isPaused = false;
     }
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        DontDestroyOnLoad(this);
         playerController = player.GetComponent<C_PlayerController>();
-        camSize = 10;
     }
 	
 	// Update is called once per frame
