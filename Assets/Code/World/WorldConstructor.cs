@@ -9,8 +9,6 @@ public class WorldConstructor : MonoBehaviour {
     private WorldModuleData lastModuleQueued;
     private Queue<GameObject> worldModulesQueue = new Queue<GameObject>();
 
-    private Dictionary<WorldModuleType, float> spawnPriority;
-
 	// Use this for initialization
 	void Start () {
         lastX = transform.position.x;
@@ -44,15 +42,22 @@ public class WorldConstructor : MonoBehaviour {
 
     WorldModuleData NextElementToEnqueue()
     {
-        WorldModuleData tempMod = GameCore.Instance.worldModules[NextListInDictionary()][Random.Range(0, GameCore.Instance.worldModules.Count - 1)];
+        WorldModuleType nextType = NextElementTypeToEnqueue();
+
+        WorldModuleData tempMod = GameCore.Instance.worldModules[nextType][Random.Range(0, GameCore.Instance.worldModules[nextType].Count)];
         lastModuleQueued = tempMod;
 
         return tempMod;
     }
 
-    WorldModuleType NextListInDictionary()
+    WorldModuleType NextElementTypeToEnqueue()
     {
-        return WorldModuleType.VOID;
+        float rand = Random.Range(0, 5);
+        
+        WorldModuleType randomType = (WorldModuleType)rand;
+
+        return randomType;
+        
     }
 
     bool CompatibleModules(WorldModuleData modA, WorldModuleData modB)

@@ -7,6 +7,8 @@ public enum WorldModuleType { VOID = 0, SIMPLE_JUMP = 1, SIMPLE_PAINT = 2, COMPL
 
 public static class AuxLib {
 
+
+
     public static float Map(float value, float minIn, float minOut, float maxIn, float maxOut)
     {
         return maxIn + (value - minIn) * (maxOut - maxIn) / (minOut - minIn);

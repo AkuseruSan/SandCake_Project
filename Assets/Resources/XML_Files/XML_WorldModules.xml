@@ -4,4 +4,8 @@
   <!--| Module Connections -> | TOP = 0 | MIDDLE = 1 | BOTTOM = 2 |-->
   <Module type ="1" beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
   <Module type ="3" beginConnection = "0" endConnection = "2" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module type ="0" beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module type ="2" beginConnection = "0" endConnection = "2" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module type ="4" beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module type ="3" beginConnection = "0" endConnection = "2" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
 </WorldModules>
