@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum WorldModuleConnect { VOID = 0, TOP = 1, MIDDLE = 2, BOTTOM = 3 }
+public enum WorldModuleConnect { TOP = 0, MIDDLE = 1, BOTTOM = 2 }
+public enum WorldModuleType { VOID = 0, SIMPLE_JUMP = 1, SIMPLE_PAINT = 2, COMPLEX_PAINT = 3, INDIRECT_PAINT = 4 }
 
 public static class AuxLib {
 

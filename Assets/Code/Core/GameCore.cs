@@ -22,7 +22,7 @@ public class GameCore : MonoBehaviour {
     [HideInInspector]
     public C_PlayerController playerController;
 
-    public List<WorldModuleData> worldModules;
+    public Dictionary<WorldModuleType,List<WorldModuleData>> worldModules;
 
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
@@ -55,7 +55,10 @@ public class GameCore : MonoBehaviour {
         DontDestroyOnLoad(this);
         playerController = player.GetComponent<C_PlayerController>();
 
+        worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
         InitializeWorldModulesFromXML();
+
+        Debug.Log(worldModules);
     }
 	
 	// Update is called once per frame
@@ -129,18 +132,52 @@ public class GameCore : MonoBehaviour {
 
     void InitializeWorldModulesFromXML()
     {
-        TextAsset xmlData = new TextAsset();
-        xmlData = (TextAsset)Resources.Load("Talents.xml", typeof(TextAsset));
-
         XmlDocument xmlDoc = new XmlDocument();
         xmlDoc.Load(Application.dataPath + "/Resources/XML_Files/XML_WorldModules.xml");
         XmlNodeList worldModules = xmlDoc.GetElementsByTagName("Module");
 
         foreach (XmlNode module in worldModules)
         {
-            GameCore.Instance.worldModules.Add(new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
-                                                                    (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value), 
-                                                                    module.Attributes.GetNamedItem("path").Value));
+            switch ((WorldModuleType)int.Parse(module.Attributes.GetNamedItem("type").Value))
+            {
+                case WorldModuleType.VOID:
+                    {
+                        GameCore.Instance.worldModules[WorldModuleType.VOID].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
+                                                                                            (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
+                                                                                            module.Attributes.GetNamedItem("path").Value)));
+                    }
+                    break;
+                case WorldModuleType.SIMPLE_JUMP:
+                    {
+                        GameCore.Instance.worldModules[WorldModuleType.SIMPLE_JUMP].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
+                                                                                            (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
+                                                                                            module.Attributes.GetNamedItem("path").Value)));
+                    }
+                    break;
+                case WorldModuleType.SIMPLE_PAINT:
+                    {
+                        GameCore.Instance.worldModules[WorldModuleType.SIMPLE_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
+                                                                                            (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
+                                                                                            module.Attributes.GetNamedItem("path").Value)));
+                    }
+                    break;
+                case WorldModuleType.COMPLEX_PAINT:
+                    {
+                        GameCore.Instance.worldModules[WorldModuleType.COMPLEX_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
+                                                                                            (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
+                                                                                            module.Attributes.GetNamedItem("path").Value)));
+                    }
+                    break;
+                case WorldModuleType.INDIRECT_PAINT:
+                    {
+                        GameCore.Instance.worldModules[WorldModuleType.INDIRECT_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
+                                                                                            (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
+                                                                                            module.Attributes.GetNamedItem("path").Value)));
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

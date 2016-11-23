@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <WorldModules version="9.5">
-  <!--| VOID = 0 | TOP = 1 | MIDDLE = 2 | BOTTOM = 3 |-->
-  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
-  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
-  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
-  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <!--| Module Type -> | VOID = 0 | SIMPLE_JUMP = 1 | SIMPLE_PAINT = 2 | COMPLEX_PAINT = 3 | INDIRECT_PAINT = 4 |-->
+  <!--| Module Connections -> | TOP = 0 | MIDDLE = 1 | BOTTOM = 2 |-->
+  <Module type ="1" beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module type ="3" beginConnection = "0" endConnection = "2" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
 </WorldModules>

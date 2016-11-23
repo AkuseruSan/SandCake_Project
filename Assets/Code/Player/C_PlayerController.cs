@@ -8,6 +8,7 @@ public class C_PlayerController : MonoBehaviour {
     #region variables
     private Vector2 contactNormal;
     private Rigidbody2D rBody;
+    private Quaternion rotation;
 
     public float speed;
     public float maxSpeed { get; private set; }
@@ -29,7 +30,7 @@ public class C_PlayerController : MonoBehaviour {
     {
         Movement();
         RotatePlayer();
-	}
+    }
 
     #region events
 
@@ -48,7 +49,8 @@ public class C_PlayerController : MonoBehaviour {
 
     void RotatePlayer()
     {
-        rBody.rotation = -Mathf.Sin(contactNormal.x) * 360 * Time.deltaTime * rotationLerpTime;
+        rotation = new Quaternion(0, 0, -Mathf.Sin(contactNormal.x) * 180 * Time.deltaTime * rotationLerpTime, 0);
+        //this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotation, rotationLerpTime * Time.deltaTime);
     }
 
     void Movement()
