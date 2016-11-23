@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<WorldModules version="9.5">
+  <!--| VOID = 0 | TOP = 1 | MIDDLE = 2 | BOTTOM = 3 |-->
+  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+  <Module beginConnection = "0" endConnection = "0" path ="/Resources/Prefabs/WorldModules/P_WorldModule_00"></Module>
+</WorldModules>

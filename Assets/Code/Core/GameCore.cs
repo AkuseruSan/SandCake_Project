@@ -54,6 +54,8 @@ public class GameCore : MonoBehaviour {
     {
         DontDestroyOnLoad(this);
         playerController = player.GetComponent<C_PlayerController>();
+
+        InitializeWorldModulesFromXML();
     }
 	
 	// Update is called once per frame
@@ -125,4 +127,20 @@ public class GameCore : MonoBehaviour {
         else parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, parallaxSystemTransform.position.y, 0);
     }
 
+    void InitializeWorldModulesFromXML()
+    {
+        TextAsset xmlData = new TextAsset();
+        xmlData = (TextAsset)Resources.Load("Talents.xml", typeof(TextAsset));
+
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(Application.dataPath + "/Resources/XML_Files/XML_WorldModules.xml");
+        XmlNodeList worldModules = xmlDoc.GetElementsByTagName("Module");
+
+        foreach (XmlNode module in worldModules)
+        {
+            GameCore.Instance.worldModules.Add(new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
+                                                                    (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value), 
+                                                                    module.Attributes.GetNamedItem("path").Value));
+        }
+    }
 }
