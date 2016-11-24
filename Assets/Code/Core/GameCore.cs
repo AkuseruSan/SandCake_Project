@@ -133,7 +133,7 @@ public class GameCore : MonoBehaviour {
 
         else parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, parallaxSystemTransform.position.y, 0);
     }
-
+    /*
     void InitializeWorldModulesFromXML()
     {
         XmlDocument xmlDoc = new XmlDocument();
@@ -206,7 +206,7 @@ public class GameCore : MonoBehaviour {
             }
         }
     }
-
+    */
     void InitializeWorldModules()
     {
         foreach (WorldModuleData data in worldModulesList)
