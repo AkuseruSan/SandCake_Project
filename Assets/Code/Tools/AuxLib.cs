@@ -27,14 +27,16 @@ public struct DualTexture
 [System.Serializable]
 public class WorldModuleData
 {
+    public WorldModuleType type;
     public WorldModuleConnect beginConnection;
     public WorldModuleConnect endConnection;
     public GameObject module;
 
-    public WorldModuleData(WorldModuleConnect b, WorldModuleConnect e, string path)
+    public WorldModuleData(WorldModuleType t, WorldModuleConnect b, WorldModuleConnect e, GameObject m)
     {
+        type = t;
         beginConnection = b;
         endConnection = e;
-        module = Resources.Load(Application.dataPath + path) as GameObject;
+        module = m;
     }
 }

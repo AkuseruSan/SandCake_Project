@@ -22,6 +22,7 @@ public class GameCore : MonoBehaviour {
     [HideInInspector]
     public C_PlayerController playerController;
 
+    public List<WorldModuleData> worldModulesList;
     public Dictionary<WorldModuleType,List<WorldModuleData>> worldModules;
 
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
@@ -56,8 +57,10 @@ public class GameCore : MonoBehaviour {
         playerController = player.GetComponent<C_PlayerController>();
 
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
-        
-        InitializeWorldModulesFromXML();
+
+        //InitializeWorldModulesFromXML();
+        InitializeWorldModules();
+        worldModulesList.Clear();
 
         Debug.Log(worldModules.Count);
     }
@@ -196,6 +199,64 @@ public class GameCore : MonoBehaviour {
                         worldModules[WorldModuleType.INDIRECT_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
                                                                                                 (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
                                                                                                 module.Attributes.GetNamedItem("path").Value)));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    void InitializeWorldModules()
+    {
+        foreach (WorldModuleData data in worldModulesList)
+        {
+            switch (data.type)
+            {
+                case WorldModuleType.VOID:
+                    {
+                        if (!worldModules.ContainsKey(WorldModuleType.VOID))
+                            worldModules.Add(WorldModuleType.VOID, new List<WorldModuleData>());
+
+                        worldModules[WorldModuleType.VOID].Add((new WorldModuleData(data.type, data.beginConnection, data.endConnection, data.module)));
+
+
+                    }
+                    break;
+                case WorldModuleType.SIMPLE_JUMP:
+                    {
+                        if (!worldModules.ContainsKey(WorldModuleType.SIMPLE_JUMP))
+                            worldModules.Add(WorldModuleType.SIMPLE_JUMP, new List<WorldModuleData>());
+
+                        worldModules[WorldModuleType.SIMPLE_JUMP].Add((new WorldModuleData(data.type, data.beginConnection, data.endConnection, data.module)));
+
+                    }
+                    break;
+                case WorldModuleType.SIMPLE_PAINT:
+                    {
+                        if (!worldModules.ContainsKey(WorldModuleType.SIMPLE_PAINT))
+                            worldModules.Add(WorldModuleType.SIMPLE_PAINT, new List<WorldModuleData>());
+
+                        worldModules[WorldModuleType.SIMPLE_PAINT].Add((new WorldModuleData(data.type, data.beginConnection, data.endConnection, data.module)));
+
+                    }
+                    break;
+                case WorldModuleType.COMPLEX_PAINT:
+                    {
+                        if (!worldModules.ContainsKey(WorldModuleType.COMPLEX_PAINT))
+                            worldModules.Add(WorldModuleType.COMPLEX_PAINT, new List<WorldModuleData>());
+
+                        worldModules[WorldModuleType.COMPLEX_PAINT].Add((new WorldModuleData(data.type, data.beginConnection, data.endConnection, data.module)));
+
+                    }
+                    break;
+                case WorldModuleType.INDIRECT_PAINT:
+                    {
+                        if (!worldModules.ContainsKey(WorldModuleType.INDIRECT_PAINT))
+                            worldModules.Add(WorldModuleType.INDIRECT_PAINT, new List<WorldModuleData>());
+
+                        worldModules[WorldModuleType.INDIRECT_PAINT].Add((new WorldModuleData(data.type, data.beginConnection, data.endConnection, data.module)));
+
                     }
                     break;
                 default:
