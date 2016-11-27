@@ -27,7 +27,7 @@ public class WorldConstructor : MonoBehaviour {
             }
         }
 
-        if (transform.position.x - lastX >= GameCore.Instance.worldConstructorOffsetX)
+        if (transform.position.x - lastX >= GameCore.Instance.worldConstructorSpawnToSpawnDistance)
         {
             lastX = transform.position.x;
             SpawnWorldModule();

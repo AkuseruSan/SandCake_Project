@@ -17,7 +17,7 @@ public class GameCore : MonoBehaviour {
     public Vector3 cameraPositionOffset;
     public float camSize;
 
-    public float worldConstructorOffsetX;//Position between every spawn.
+    public float worldConstructorSpawnToSpawnDistance;//Position between every spawn. Must be constant
 
     [HideInInspector]
     public C_PlayerController playerController;
