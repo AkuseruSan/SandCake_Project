@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public enum WorldModuleConnect { TOP = 0, MIDDLE = 1, BOTTOM = 2 }
+
+[System.Serializable]
 public enum WorldModuleType { VOID = 0, SIMPLE_JUMP = 1, SIMPLE_PAINT = 2, COMPLEX_PAINT = 3, INDIRECT_PAINT = 4 }
 
 public static class AuxLib {
@@ -27,16 +30,21 @@ public struct DualTexture
 [System.Serializable]
 public class WorldModuleData
 {
-    public WorldModuleType type;
     public WorldModuleConnect beginConnection;
     public WorldModuleConnect endConnection;
     public GameObject module;
 
-    public WorldModuleData(WorldModuleType t, WorldModuleConnect b, WorldModuleConnect e, GameObject m)
+    public WorldModuleData(WorldModuleConnect b, WorldModuleConnect e, GameObject m)
     {
-        type = t;
         beginConnection = b;
         endConnection = e;
         module = m;
     }
+}
+
+[System.Serializable]
+public struct WorldDictionaryList
+{
+    public WorldModuleType type;
+    public List<WorldModuleData> worldModules;
 }
