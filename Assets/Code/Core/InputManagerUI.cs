@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 //Class only called by UI elements events.
 public class InputManagerUI : MonoBehaviour {
@@ -17,6 +18,11 @@ public class InputManagerUI : MonoBehaviour {
     }
 
     void Start()
+    {
+        
+    }
+
+    public void StartMenuAnim()
     {
 
     }

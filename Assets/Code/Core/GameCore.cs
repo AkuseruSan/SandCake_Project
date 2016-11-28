@@ -62,8 +62,6 @@ public class GameCore : MonoBehaviour {
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 
         InitializeWorldModules();
-
-        Debug.Log(worldModules.Count);
     }
 	
 	// Update is called once per frame
