@@ -11,16 +11,14 @@ public class C_PlayerController : MonoBehaviour {
     private Quaternion rotation;
 
     public float speed;
-    public float maxSpeed { get; private set; }
-    public float minSpeed { get; private set; }
+    public float maxSpeed;
+    public float minSpeed;
     public float rotationLerpTime;
     public Vector2 jump;
     #endregion
 
     // Use this for initialization
     void Start () {
-        minSpeed = 1;
-        maxSpeed = 10;
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
 	}
@@ -28,6 +26,7 @@ public class C_PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        ClampSpeed();
         Movement();
         RotatePlayer();
     }
@@ -46,6 +45,11 @@ public class C_PlayerController : MonoBehaviour {
     #endregion
 
     #region functions
+
+    void ClampSpeed()
+    {
+        speed = Mathf.Clamp(speed, minSpeed, maxSpeed);
+    }
 
     void RotatePlayer()
     {

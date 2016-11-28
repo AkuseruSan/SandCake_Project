@@ -72,6 +72,7 @@ public class ParallaxController : MonoBehaviour {
                 go.transform.localPosition = new Vector3(0, 0, AuxLib.Map(i, 0, parallaxLayers.Count, -parallaxLayerMin, -parallaxLayerMax));
             }
 
+
             GameObject goDay = GameObject.CreatePrimitive(PrimitiveType.Quad);
             goDay.name ="DayLayer";
             goDay.transform.parent = go.transform;
@@ -80,7 +81,8 @@ public class ParallaxController : MonoBehaviour {
             goDay.GetComponent<MeshRenderer>().material = Resources.Load("Materials/MAT_ParallaxLayer") as Material;
             goDay.GetComponent<MeshRenderer>().material.mainTexture = parallaxLayers[i].day;
             goDay.layer = GameCore.DAY_LAYER;
-            goDay.AddComponent<ParallaxLayerBehaviour>().movementSpeed = SetParallaxLayerSpeed(i);
+            goDay.AddComponent<ParallaxLayerBehaviour>().movementSpeed = parallaxLayers[i].speed;
+
 
             GameObject goNight = GameObject.CreatePrimitive(PrimitiveType.Quad);
             goNight.name = "NightLayer";
@@ -90,22 +92,7 @@ public class ParallaxController : MonoBehaviour {
             goNight.GetComponent<MeshRenderer>().material = Resources.Load("Materials/MAT_ParallaxLayer") as Material;
             goNight.GetComponent<MeshRenderer>().material.mainTexture = parallaxLayers[i].night;
             goNight.layer = GameCore.NIGHT_LAYER;
-            goNight.AddComponent<ParallaxLayerBehaviour>().movementSpeed = SetParallaxLayerSpeed(i);
+            goNight.AddComponent<ParallaxLayerBehaviour>().movementSpeed = parallaxLayers[i].speed;
         }
     }
-
-    #region Auxiliar Functions
-    private float SetParallaxLayerSpeed(int index)
-    {
-        if (parallaxLayers.Count > 1)
-        {
-            float aux = parallaxLayers.Count - index;
-            float aux2 = AuxLib.Map(aux, 1, parallaxLayers.Count, parallaxMinSpeed, parallaxMaxSpeed);
-
-            return aux2;
-        }
-        else
-            return parallaxMaxSpeed;
-    }
-    #endregion
 }

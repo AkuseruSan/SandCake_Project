@@ -22,6 +22,7 @@ public static class AuxLib {
 [System.Serializable]
 public struct DualTexture
 {
+    public float speed;
     public Texture day;
     public Texture night;
     public ParallaxController.ParallaxLayerOrder order;

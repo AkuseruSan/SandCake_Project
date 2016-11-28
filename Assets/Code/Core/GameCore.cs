@@ -61,7 +61,6 @@ public class GameCore : MonoBehaviour {
 
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 
-        //InitializeWorldModulesFromXML();
         InitializeWorldModules();
 
         Debug.Log(worldModules.Count);
@@ -135,86 +134,12 @@ public class GameCore : MonoBehaviour {
 
         else parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, parallaxSystemTransform.position.y, 0);
     }
-    /*
-    void InitializeWorldModulesFromXML()
-    {
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(Application.dataPath + "/Resources/XML_Files/XML_WorldModules.xml");
-        XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Module");
 
-
-
-        foreach (XmlNode module in nodeList)
-        {
-            switch ((WorldModuleType)int.Parse(module.Attributes.GetNamedItem("type").Value))
-            {
-                case WorldModuleType.VOID:
-                    {
-                        if (!worldModules.ContainsKey(WorldModuleType.VOID))
-                            worldModules.Add(WorldModuleType.VOID, new List<WorldModuleData>());
-
-                        worldModules[WorldModuleType.VOID].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
-                                                                                                (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
-                                                                                                module.Attributes.GetNamedItem("path").Value)));
-
-
-                    }
-                    break;
-                case WorldModuleType.SIMPLE_JUMP:
-                    {
-                        if (!worldModules.ContainsKey(WorldModuleType.SIMPLE_JUMP))
-                            worldModules.Add(WorldModuleType.SIMPLE_JUMP, new List<WorldModuleData>());
-
-                        worldModules[WorldModuleType.SIMPLE_JUMP].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
-                                                                                                (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
-                                                                                                module.Attributes.GetNamedItem("path").Value)));
-
-                    }
-                    break;
-                case WorldModuleType.SIMPLE_PAINT:
-                    {
-                        if (!worldModules.ContainsKey(WorldModuleType.SIMPLE_PAINT))
-                            worldModules.Add(WorldModuleType.SIMPLE_PAINT, new List<WorldModuleData>());
-
-                        worldModules[WorldModuleType.SIMPLE_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
-                                                                                                (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
-                                                                                                module.Attributes.GetNamedItem("path").Value)));
-
-                    }
-                    break;
-                case WorldModuleType.COMPLEX_PAINT:
-                    {
-                        if (!worldModules.ContainsKey(WorldModuleType.COMPLEX_PAINT))
-                            worldModules.Add(WorldModuleType.COMPLEX_PAINT, new List<WorldModuleData>());
-
-                        worldModules[WorldModuleType.COMPLEX_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
-                                                                                                (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
-                                                                                                module.Attributes.GetNamedItem("path").Value)));
-
-                    }
-                    break;
-                case WorldModuleType.INDIRECT_PAINT:
-                    {
-                        if (!worldModules.ContainsKey(WorldModuleType.INDIRECT_PAINT))
-                            worldModules.Add(WorldModuleType.INDIRECT_PAINT, new List<WorldModuleData>());
-
-                        worldModules[WorldModuleType.INDIRECT_PAINT].Add((new WorldModuleData((WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("beginConnection").Value),
-                                                                                                (WorldModuleConnect)int.Parse(module.Attributes.GetNamedItem("endConnection").Value),
-                                                                                                module.Attributes.GetNamedItem("path").Value)));
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    */
     void InitializeWorldModules()
     {
 
         foreach (WorldDictionaryList data in worldModulesList)
-        {
-            
+        {        
             foreach(WorldModuleData mod in data.worldModules)
             {
                 if (!worldModules.ContainsKey(data.type))
