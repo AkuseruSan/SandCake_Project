@@ -1,12 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 //Class only called by UI elements events.
 public class InputManagerUI : MonoBehaviour {
 
+
     public static InputManagerUI Instance {get; private set;}
+
+    [Header("UI Transforms")]
+    public Transform mainMenuPanel;
+    public Transform backgroundMainMenu;
+
+    private Animator menuAnimator;
 
     void Awake()
     {
@@ -19,12 +27,13 @@ public class InputManagerUI : MonoBehaviour {
 
     void Start()
     {
-        
+        menuAnimator = mainMenuPanel.GetComponent<Animator>();
     }
 
-    public void StartMenuAnim()
+    public void StartGame()
     {
-
+        menuAnimator.SetTrigger("exit");
+        GameCore.Instance.playerController.speed = 1.5f;
     }
 
 	public void JumpButton()
