@@ -12,7 +12,6 @@ public class InputManagerUI : MonoBehaviour {
 
     [Header("UI Transforms")]
     public Transform mainMenuPanel;
-    public Transform backgroundMainMenu;
 
     private Animator menuAnimator;
 
