@@ -11,10 +11,13 @@ public class GameCore : MonoBehaviour {
 
     public static GameCore Instance { get; private set; }
 
+    [HideInInspector]
     public GameState gameState;
+
     public GameObject player;
     public Transform cameraSystemTransform;
     public Transform parallaxSystemTransform;
+    public Transform worldManager;
 
     public Vector3 cameraPositionOffset;
     public float camSize;
@@ -57,6 +60,8 @@ public class GameCore : MonoBehaviour {
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 
         InitializeWorldModules();
+
+        worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
     }
 	
 	// Update is called once per frame
@@ -77,6 +82,7 @@ public class GameCore : MonoBehaviour {
                 {
                     UpdateCameraTransform();
                     UpdateParallaxTransform();
+                    UpdateWorldManager();
 
                     if(!EventSystem.current.IsPointerOverGameObject())
                         SpawnMaskPoints();
@@ -165,5 +171,10 @@ public class GameCore : MonoBehaviour {
                 worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
             }
         }
+    }
+
+    void UpdateWorldManager()
+    {
+        worldManager.position = new Vector3(cameraSystemTransform.position.x, 0, 0);
     }
 }
