@@ -5,11 +5,14 @@ using System.Xml;
 using System.Xml.Serialization;
 
 
+public enum GameState { AWAKE, PAUSE, PLAY }
+
 //Singleton Controller
 public class GameCore : MonoBehaviour {
 
     public static GameCore Instance { get; private set; }
 
+    public GameState gameState;
     public GameObject player;
     public Transform cameraSystemTransform;
     public Transform parallaxSystemTransform;
@@ -20,7 +23,7 @@ public class GameCore : MonoBehaviour {
     public float worldConstructorSpawnToSpawnDistance;//Position between every spawn. Must be constant
 
     [HideInInspector]
-    public C_PlayerController playerController;
+    public PlayerController playerController;
 
     [Space(20)]
     [Header("[World Dictionary Lists]")]
@@ -29,13 +32,6 @@ public class GameCore : MonoBehaviour {
     public Dictionary<WorldModuleType,List<WorldModuleData>> worldModules;
 
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
-
-    private bool isPaused;
-
-    public bool IsPaused()
-    {
-        return isPaused;
-    }
 
     public const int DAY_LAYER = 8;
     public const int NIGHT_LAYER = 9;
@@ -49,15 +45,15 @@ public class GameCore : MonoBehaviour {
             Destroy(gameObject);
         }
         Instance = this;
-
-        isPaused = false;
     }
 
     // Use this for initialization
     void Start ()
     {
         DontDestroyOnLoad(this);
-        playerController = player.GetComponent<C_PlayerController>();
+
+        gameState = GameState.AWAKE;
+        playerController = player.GetComponent<PlayerController>();
 
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 
@@ -66,10 +62,30 @@ public class GameCore : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        UpdateCameraTransform();
-        UpdateParallaxTransform();
-        SpawnMaskPoints();
-        OverlapOtherWorld();
+        switch (gameState)
+        {
+            case GameState.AWAKE:
+                {
+
+                }
+                break;
+            case GameState.PAUSE:
+                {
+
+                }
+                break;
+            case GameState.PLAY:
+                {
+                    UpdateCameraTransform();
+                    UpdateParallaxTransform();
+                    SpawnMaskPoints();
+                    OverlapOtherWorld();
+                }
+                break;
+            default:
+                break;
+        }
+
     }
 
     void SpawnMaskPoints()
@@ -115,7 +131,8 @@ public class GameCore : MonoBehaviour {
 
     void UpdateCameraTransform()
     {
-        cameraSystemTransform.position = new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset;
+        //if(Vector3.Distance(cameraSystemTransform.position, player.transform.position) > 10)
+            cameraSystemTransform.position = Vector3.Lerp(cameraSystemTransform.position, new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset, Time.deltaTime * 4f);
     }
 
     void UpdateParallaxTransform()

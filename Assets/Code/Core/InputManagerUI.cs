@@ -32,7 +32,7 @@ public class InputManagerUI : MonoBehaviour {
     public void StartGame()
     {
         menuAnimator.SetTrigger("exit");
-        GameCore.Instance.playerController.speed = 1.5f;
+        GameCore.Instance.gameState = GameState.PLAY;
     }
 
 	public void JumpButton()
