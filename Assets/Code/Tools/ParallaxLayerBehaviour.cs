@@ -26,7 +26,7 @@ public class ParallaxLayerBehaviour : MonoBehaviour {
     {
         if (GameCore.Instance.gameState == GameState.PLAY)
         {
-            movementSpeedAux = movementSpeed * AuxLib.Map(GameCore.Instance.playerController.speed, GameCore.Instance.playerController.minSpeed, GameCore.Instance.playerController.maxSpeed, 0, 1);
+            movementSpeedAux = movementSpeed * AuxLib.Map(GameCore.Instance.playerController.rBody.velocity.x, GameCore.Instance.playerController.minSpeed, GameCore.Instance.playerController.maxSpeed, 0, 1);
             animatedOffset += new Vector2(movementSpeedAux, 0) * Time.deltaTime;
 
 

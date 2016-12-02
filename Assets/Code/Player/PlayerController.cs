@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour {
 
     #region variables
     private Vector2 contactNormal;
-    private Rigidbody2D rBody;
+    public Rigidbody2D rBody { get; private set; }
     private Quaternion rotation;
     private int jumpCount, currentJumpCount;
 
@@ -43,8 +43,8 @@ public class PlayerController : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
-                    ClampSpeed();
                     Movement();
+                    ClampSpeed();
                     RotatePlayer();
                 }
                 break;
@@ -58,7 +58,6 @@ public class PlayerController : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("GROUND!");
         currentJumpCount = jumpCount; 
     }
 
@@ -71,6 +70,11 @@ public class PlayerController : MonoBehaviour {
         contactNormal = contactNormal.normalized;
     }
 
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        
+    }
+
     #endregion
 
     #region functions
@@ -78,18 +82,19 @@ public class PlayerController : MonoBehaviour {
     void ClampSpeed()
     {
         speed = Mathf.Clamp(speed, minSpeed, maxSpeed);
+        rBody.velocity = new Vector2(Mathf.Clamp(rBody.velocity.x, minSpeed, maxSpeed), rBody.velocity.y);
     }
 
     void RotatePlayer()
     {
-        rotation = new Quaternion(0, 0, -Mathf.Sin(contactNormal.x) * 180 * Time.deltaTime * rotationLerpTime, 0);
-        //this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotation, rotationLerpTime * Time.deltaTime);
+        rotation = Quaternion.Euler(0, 0, -Mathf.Sin(contactNormal.x) * 180);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotation, rotationLerpTime * Time.deltaTime);
     }
 
     void Movement()
     {
-        speed = Mathf.Clamp(speed, minSpeed, maxSpeed);
         rBody.velocity = new Vector2(contactNormal.y * speed, rBody.velocity.y);
+
     }
 
     public void Jump()
@@ -98,7 +103,7 @@ public class PlayerController : MonoBehaviour {
         {
             currentJumpCount -= 1;
             rBody.AddForce(jump, ForceMode2D.Impulse);
-            rBody.rotation = 0;
+            contactNormal.x = 0;
         }
     }
 

@@ -124,7 +124,7 @@ public class GameCore : MonoBehaviour {
 
     void UpdateCameraSize()
     {
-        camSize = Mathf.Lerp(camSize, AuxLib.Map(playerController.speed, playerController.minSpeed, playerController.maxSpeed, minCamSize, maxCamSize), Time.deltaTime * 4f);
+        camSize = Mathf.Lerp(camSize, AuxLib.Map(playerController.rBody.velocity.x, playerController.minSpeed, playerController.maxSpeed, minCamSize, maxCamSize), Time.deltaTime * 4f);
         Debug.Log(camSize);
     }
 
@@ -156,12 +156,12 @@ public class GameCore : MonoBehaviour {
 
         if (cameraSystemTransform.position.y + Camera.main.orthographicSize * 0.5f > (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize * 0.5f)
         {
-            cameraSystemTransform.position = new Vector3(player.transform.position.x + cameraPositionOffset.x, (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize, 0);
+            cameraSystemTransform.position = new Vector3(cameraSystemTransform.position.x, (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize, 0);
         }
 
         else if (cameraSystemTransform.position.y - Camera.main.orthographicSize * 0.5f < (-parallaxSystemTransform.localScale.y * 0.5f) + Camera.main.orthographicSize * 0.5f)
         {
-            cameraSystemTransform.position = new Vector3(player.transform.position.x + cameraPositionOffset.x, (-parallaxSystemTransform.localScale.y * 0.5f) + Camera.main.orthographicSize, 0);
+            cameraSystemTransform.position = new Vector3(cameraSystemTransform.position.x, (-parallaxSystemTransform.localScale.y * 0.5f) + Camera.main.orthographicSize, 0);
         }
     }
 
