@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     private Vector2 contactNormal;
     private Rigidbody2D rBody;
     private Quaternion rotation;
+    private int jumpCount, currentJumpCount;
 
     public float speed;
     public float maxSpeed;
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        jumpCount = 1;
+        currentJumpCount = jumpCount;
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
 	}
@@ -53,6 +56,12 @@ public class PlayerController : MonoBehaviour {
 
     #region events
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("GROUND!");
+        currentJumpCount = jumpCount; 
+    }
+
     void OnCollisionStay2D(Collision2D other)
     {
         foreach(ContactPoint2D contact in other.contacts)
@@ -85,8 +94,12 @@ public class PlayerController : MonoBehaviour {
 
     public void Jump()
     {
-        rBody.AddForce(jump, ForceMode2D.Impulse);
-        rBody.rotation = 0;
+        if (currentJumpCount > 0)
+        {
+            currentJumpCount -= 1;
+            rBody.AddForce(jump, ForceMode2D.Impulse);
+            rBody.rotation = 0;
+        }
     }
 
     #endregion

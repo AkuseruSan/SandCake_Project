@@ -39,4 +39,16 @@ public class InputManagerUI : MonoBehaviour {
     {
         GameCore.Instance.playerController.Jump();
     }
+
+    public void TogglePauseGame()
+    {
+        if(GameCore.Instance.gameState == GameState.PLAY)
+        {
+            GameCore.Instance.gameState = GameState.PAUSE;
+        }
+        else if(GameCore.Instance.gameState == GameState.PAUSE)
+        {
+            GameCore.Instance.gameState = GameState.PLAY;
+        }
+    }
 }

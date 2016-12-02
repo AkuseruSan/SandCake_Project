@@ -70,7 +70,7 @@ public class GameCore : MonoBehaviour {
         {
             case GameState.AWAKE:
                 {
-
+                    
                 }
                 break;
             case GameState.PAUSE:
@@ -139,23 +139,23 @@ public class GameCore : MonoBehaviour {
 
     void UpdateCameraTransform()
     {
-        //if(Vector3.Distance(cameraSystemTransform.position, player.transform.position) > 10)
-            cameraSystemTransform.position = Vector3.Lerp(cameraSystemTransform.position, new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset, Time.deltaTime * 4f);
+        if (cameraSystemTransform.position.y + Camera.main.orthographicSize * 0.5f > (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize * 0.5f)
+        {
+            cameraSystemTransform.position = new Vector3(player.transform.position.x + cameraPositionOffset.x, (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize, 0);
+        }
+
+        else if (cameraSystemTransform.position.y - Camera.main.orthographicSize * 0.5f < (-parallaxSystemTransform.localScale.y * 0.5f) + Camera.main.orthographicSize * 0.5f)
+        {
+            cameraSystemTransform.position = new Vector3(player.transform.position.x + cameraPositionOffset.x, (-parallaxSystemTransform.localScale.y * 0.5f) + Camera.main.orthographicSize, 0);
+        }
+
+        else cameraSystemTransform.position = Vector3.Lerp(cameraSystemTransform.position, new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset, Time.deltaTime * 4f);
+
     }
 
     void UpdateParallaxTransform()
     {
-        if (cameraSystemTransform.position.y - (Camera.main.orthographicSize * 0.5f) > parallaxSystemTransform.position.y + (Camera.main.orthographicSize * 0.5f))
-        {
-            parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, cameraSystemTransform.position.y - (Camera.main.orthographicSize), 0);
-        }
-
-        else if(cameraSystemTransform.position.y + (Camera.main.orthographicSize * 0.5f) < parallaxSystemTransform.position.y - (Camera.main.orthographicSize * 0.5f))
-        {
-            parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, cameraSystemTransform.position.y + (Camera.main.orthographicSize), 0);
-        }
-
-        else parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, parallaxSystemTransform.position.y, 0);
+        parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, 0, 0);
     }
 
     void InitializeWorldModules()
