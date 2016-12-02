@@ -139,6 +139,8 @@ public class GameCore : MonoBehaviour {
 
     void UpdateCameraTransform()
     {
+        cameraSystemTransform.position = new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset;
+
         if (cameraSystemTransform.position.y + Camera.main.orthographicSize * 0.5f > (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize * 0.5f)
         {
             cameraSystemTransform.position = new Vector3(player.transform.position.x + cameraPositionOffset.x, (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize, 0);
@@ -148,9 +150,6 @@ public class GameCore : MonoBehaviour {
         {
             cameraSystemTransform.position = new Vector3(player.transform.position.x + cameraPositionOffset.x, (-parallaxSystemTransform.localScale.y * 0.5f) + Camera.main.orthographicSize, 0);
         }
-
-        else cameraSystemTransform.position = Vector3.Lerp(cameraSystemTransform.position, new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset, Time.deltaTime * 4f);
-
     }
 
     void UpdateParallaxTransform()
