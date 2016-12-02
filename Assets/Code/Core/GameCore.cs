@@ -20,7 +20,8 @@ public class GameCore : MonoBehaviour {
     public Transform worldManager;
 
     public Vector3 cameraPositionOffset;
-    public float camSize;
+    public float camSize { get; private set; }
+    public float minCamSize, maxCamSize;
 
     public float worldConstructorSpawnToSpawnDistance;//Position between every spawn. Must be constant
 
@@ -54,6 +55,11 @@ public class GameCore : MonoBehaviour {
     {
         DontDestroyOnLoad(this);
 
+        minCamSize = 6;
+        maxCamSize = 10;
+
+        camSize = minCamSize;
+
         gameState = GameState.AWAKE;
         playerController = player.GetComponent<PlayerController>();
 
@@ -80,6 +86,7 @@ public class GameCore : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
+                    UpdateCameraSize();
                     UpdateCameraTransform();
                     UpdateParallaxTransform();
                     UpdateWorldManager();
@@ -115,6 +122,12 @@ public class GameCore : MonoBehaviour {
         }
     }
 
+    void UpdateCameraSize()
+    {
+        camSize = Mathf.Lerp(camSize, AuxLib.Map(playerController.speed, playerController.minSpeed, playerController.maxSpeed, minCamSize, maxCamSize), Time.deltaTime * 4f);
+        Debug.Log(camSize);
+    }
+
     void InstantiateSpawnPoint()
     {
         GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
@@ -139,7 +152,7 @@ public class GameCore : MonoBehaviour {
 
     void UpdateCameraTransform()
     {
-        cameraSystemTransform.position = new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset;
+        cameraSystemTransform.position = Vector3.Lerp(cameraSystemTransform.position, new Vector3(player.transform.position.x, player.transform.position.y, 0) + cameraPositionOffset, Time.deltaTime * 4f);
 
         if (cameraSystemTransform.position.y + Camera.main.orthographicSize * 0.5f > (parallaxSystemTransform.localScale.y * 0.5f) - Camera.main.orthographicSize * 0.5f)
         {
