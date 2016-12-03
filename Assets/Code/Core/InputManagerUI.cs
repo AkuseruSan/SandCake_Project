@@ -12,6 +12,7 @@ public class InputManagerUI : MonoBehaviour {
 
     [Header("UI Transforms")]
     public Transform mainMenuPanel;
+    public Transform score;
 
     private Animator menuAnimator;
 
@@ -27,6 +28,11 @@ public class InputManagerUI : MonoBehaviour {
     void Start()
     {
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        score.GetComponent<Text>().text = "DISTANCE: " + GameCore.Instance.playerController.distanceSinceStart;
     }
 
     public void StartGame()

@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour {
     public Rigidbody2D rBody { get; private set; }
     private Quaternion rotation;
     private int jumpCount, currentJumpCount;
+    private float startPos;
 
+    public int distanceSinceStart;
     public float speed;
     public float maxSpeed;
     public float minSpeed;
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        startPos = transform.position.x;
+        distanceSinceStart = 0;
         jumpCount = 1;
         currentJumpCount = jumpCount;
         contactNormal = Vector2.zero;
@@ -46,6 +50,8 @@ public class PlayerController : MonoBehaviour {
                     Movement();
                     ClampSpeed();
                     RotatePlayer();
+
+                    UpdateDistance();
                 }
                 break;
             default:
@@ -78,6 +84,11 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region functions
+
+    void UpdateDistance()
+    {
+        distanceSinceStart = (int)(transform.position.x - startPos);
+    }
 
     void ClampSpeed()
     {
