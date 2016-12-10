@@ -64,7 +64,13 @@ public class PlayerController : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        currentJumpCount = jumpCount; 
+        currentJumpCount = jumpCount;
+        
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y <= 0) Die();
+            Debug.Log(contact.normal);
+        }
     }
 
     void OnCollisionStay2D(Collision2D other)
@@ -116,6 +122,12 @@ public class PlayerController : MonoBehaviour {
             rBody.AddForce(jump, ForceMode2D.Impulse);
             contactNormal.x = 0;
         }
+    }
+
+    private void Die()
+    {
+        GameCore.Instance.gameState = GameState.GAMEOVER;
+        Debug.Log("Die!");
     }
 
     #endregion

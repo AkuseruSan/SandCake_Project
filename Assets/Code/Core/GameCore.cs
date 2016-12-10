@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
 
-public enum GameState { AWAKE, PAUSE, PLAY }
+public enum GameState { AWAKE, PAUSE, PLAY, GAMEOVER }
 
 //Singleton Controller
 public class GameCore : MonoBehaviour {
@@ -125,7 +125,6 @@ public class GameCore : MonoBehaviour {
     void UpdateCameraSize()
     {
         camSize = Mathf.Lerp(camSize, AuxLib.Map(playerController.rBody.velocity.x, playerController.minSpeed, playerController.maxSpeed, minCamSize, maxCamSize), Time.deltaTime * 4f);
-        Debug.Log(camSize);
     }
 
     void InstantiateSpawnPoint()
