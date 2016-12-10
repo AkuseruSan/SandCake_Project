@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour {
     public float minSpeed;
     public float rotationLerpTime;
     public Vector2 jump;
+
+    private Animator myAnimator;
+    private Animator myAnimatorN;
     #endregion
 
     // Use this for initialization
@@ -28,7 +31,13 @@ public class PlayerController : MonoBehaviour {
         currentJumpCount = jumpCount;
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
-	}
+
+        myAnimatorN = GameObject.FindGameObjectWithTag("Night").gameObject.GetComponent<Animator>();
+        myAnimator = GameObject.FindGameObjectWithTag("Day").gameObject.GetComponent<Animator>();
+
+        myAnimator.SetBool("Grounded", true);
+        myAnimatorN.SetBool("Grounded", true);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -47,6 +56,8 @@ public class PlayerController : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
+                    myAnimator.SetTrigger("Moving");
+                    myAnimatorN.SetTrigger("Moving");
                     Movement();
                     ClampSpeed();
                     RotatePlayer();
@@ -65,7 +76,9 @@ public class PlayerController : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision)
     {
         currentJumpCount = jumpCount;
-        
+        myAnimator.SetBool("Grounded", true);
+        myAnimatorN.SetBool("Grounded", true);
+
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.normal.y <= 0) Die();
@@ -118,10 +131,13 @@ public class PlayerController : MonoBehaviour {
     {
         if (currentJumpCount > 0)
         {
+            myAnimator.SetBool("Grounded", false);
+            myAnimatorN.SetBool("Grounded", false);
             currentJumpCount -= 1;
             rBody.AddForce(jump, ForceMode2D.Impulse);
             contactNormal.x = 0;
         }
+
     }
 
     private void Die()
