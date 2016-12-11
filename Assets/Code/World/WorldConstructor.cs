@@ -12,6 +12,8 @@ public class WorldConstructor : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         lastX = transform.position.x;
+
+
     }
 	
 	// Update is called once per frame
@@ -38,6 +40,7 @@ public class WorldConstructor : MonoBehaviour {
     {
         GameObject go = Instantiate(worldModulesQueue.Dequeue() as GameObject);
         go.transform.position = transform.position;
+        go.transform.localScale = GameCore.Instance.worldModuleScale;
     }
 
     WorldModuleData NextElementToEnqueue()

@@ -22,6 +22,7 @@ public class GameCore : MonoBehaviour {
     public Vector3 cameraPositionOffset;
     public float camSize { get; private set; }
     public float minCamSize, maxCamSize;
+    public Vector3 worldModuleScale;
 
     public float worldConstructorSpawnToSpawnDistance;//Position between every spawn. Must be constant
 
@@ -60,6 +61,8 @@ public class GameCore : MonoBehaviour {
 
         camSize = minCamSize;
 
+        worldConstructorSpawnToSpawnDistance *= worldModuleScale.x;
+
         gameState = GameState.AWAKE;
         playerController = player.GetComponent<PlayerController>();
 
@@ -67,7 +70,7 @@ public class GameCore : MonoBehaviour {
 
         InitializeWorldModules();
 
-        worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
+        worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance * 2f, 0, 0);
     }
 	
 	// Update is called once per frame
