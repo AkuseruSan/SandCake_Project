@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
         {
             case GameState.AWAKE:
                 {
-
+                    
                 }
                 break;
             case GameState.PAUSE:

@@ -13,8 +13,10 @@ public class InputManagerUI : MonoBehaviour {
     [Header("UI Transforms")]
     public Transform mainMenuPanel;
     public Transform score;
+    public Transform optionsAwake;
 
     private Animator menuAnimator;
+    private Animator optionsAwakeAnimator;
 
     void Awake()
     {
@@ -28,11 +30,39 @@ public class InputManagerUI : MonoBehaviour {
     void Start()
     {
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
+        optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
     }
 
     void Update()
     {
+        switch (GameCore.Instance.gameState)
+        {
+            case GameState.AWAKE:
+                {
+                    
+                }
+                break;
+            case GameState.PAUSE:
+                break;
+            case GameState.PLAY:
+                break;
+            case GameState.GAMEOVER:
+                break;
+            default:
+                break;
+        }
+
         score.GetComponent<Text>().text = "DISTANCE: " + GameCore.Instance.playerController.distanceSinceStart;
+    }
+
+    public void OpenOptions()
+    {
+        optionsAwakeAnimator.SetTrigger("activate");
+    }
+
+    public void CloseOptions()
+    {
+        optionsAwakeAnimator.SetTrigger("deactivate");
     }
 
     public void StartGame()
@@ -51,10 +81,12 @@ public class InputManagerUI : MonoBehaviour {
         if(GameCore.Instance.gameState == GameState.PLAY)
         {
             GameCore.Instance.gameState = GameState.PAUSE;
+            Time.timeScale = 0;
         }
         else if(GameCore.Instance.gameState == GameState.PAUSE)
         {
             GameCore.Instance.gameState = GameState.PLAY;
+            Time.timeScale = 1;
         }
     }
 }
