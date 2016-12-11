@@ -94,9 +94,14 @@ public class GameCore : MonoBehaviour {
                     UpdateParallaxTransform();
                     UpdateWorldManager();
 
+#if UNITY_ANDROID
+                    if(!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                        SpawnMaskPoints();
+#endif
+#if UNITY_EDITOR
                     if(!EventSystem.current.IsPointerOverGameObject())
                         SpawnMaskPoints();
-
+#endif
                     OverlapOtherWorld();
                 }
                 break;
