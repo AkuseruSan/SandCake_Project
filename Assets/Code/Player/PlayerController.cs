@@ -58,6 +58,9 @@ public class PlayerController : MonoBehaviour {
                 {
                     myAnimator.SetTrigger("Moving");
                     myAnimatorN.SetTrigger("Moving");
+
+                    //RaycastNormalRotation();
+
                     Movement();
                     ClampSpeed();
                     RotatePlayer();
@@ -88,7 +91,7 @@ public class PlayerController : MonoBehaviour {
 
     void OnCollisionStay2D(Collision2D other)
     {
-        foreach(ContactPoint2D contact in other.contacts)
+        foreach (ContactPoint2D contact in other.contacts)
         {
             contactNormal += contact.normal;
         }
@@ -124,6 +127,18 @@ public class PlayerController : MonoBehaviour {
     void Movement()
     {
         rBody.velocity = new Vector2(contactNormal.y * speed, rBody.velocity.y);
+
+    }
+
+    void RaycastNormalRotation()//Changes player's rotation by raycasting towards the -y vector and detecting floor's normal.
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down);
+
+        if (hit.collider != null && hit.transform != this.transform && hit.transform.gameObject.layer == transform.gameObject.layer)
+        {
+            Debug.Log("Object under Player: " + hit.transform.name);
+            contactNormal = -hit.point.normalized;
+        }
 
     }
 
