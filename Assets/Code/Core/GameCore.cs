@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public enum GameState { AWAKE, PAUSE, PLAY, GAMEOVER }
@@ -105,6 +106,10 @@ public class GameCore : MonoBehaviour {
                     OverlapOtherWorld();
                 }
                 break;
+            case GameState.GAMEOVER:
+                {
+                    SceneManager.LoadScene(0);
+                }break;
             default:
                 break;
         }
@@ -113,20 +118,24 @@ public class GameCore : MonoBehaviour {
 
     void SpawnMaskPoints()
     {
-        if (InputManager.Instance.DrawTouch(ref drawPointSpawnPos) == true)
+        if (InputManager.Instance.DrawTouch(ref drawPointSpawnPos) == true && player.GetComponent<PlayerController>().GetCurrentPower() > 0)
         {
-            if (Physics.Raycast(new Vector3(drawPointSpawnPos.x, drawPointSpawnPos.y, -100), Vector3.forward, out hit, 1000))
-            {
-                if (hit.transform.gameObject.tag != "Depth")
-                {
-                    InstantiateSpawnPoint();
-                }
-            }
+            //if (Physics.Raycast(new Vector3(drawPointSpawnPos.x, drawPointSpawnPos.y, -100), Vector3.forward, out hit, 1000))
+            //{
+            //    if (hit.transform.gameObject.tag != "Depth")
+            //    {
+            //        InstantiateSpawnPoint();
+            //    }
+            //}
 
-            else
-            {
-                InstantiateSpawnPoint();
-            }
+            //else
+            //{
+            //    InstantiateSpawnPoint();
+            //}
+
+            InstantiateSpawnPoint();
+
+            player.GetComponent<PlayerController>().UsePower();
         }
     }
 

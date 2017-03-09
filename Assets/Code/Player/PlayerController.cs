@@ -19,10 +19,20 @@ public class PlayerController : MonoBehaviour {
     public float rotationLerpTime;
     public Vector2 jump;
 
+    private float power;
+    public float maxPower;
+    public float powerRegenSpeed;
+
     private Animator myAnimator;
     private Animator myAnimatorN;
     #endregion
 
+    IEnumerator CooldownWaiter()
+    {
+        power = -1;
+        yield return new WaitForSeconds(2);
+        power = powerRegenSpeed * Time.deltaTime;
+    }
     // Use this for initialization
     void Start () {
         startPos = transform.position.x;
@@ -59,15 +69,31 @@ public class PlayerController : MonoBehaviour {
                     myAnimator.SetTrigger("Moving");
                     myAnimatorN.SetTrigger("Moving");
 
-                    //RaycastNormalRotation();
+                    RotateFromYSpeed();
 
                     Movement();
                     ClampSpeed();
                     RotatePlayer();
 
                     UpdateDistance();
+
+                    if(power > 0)power += powerRegenSpeed * Time.deltaTime;
+                    power = Mathf.Clamp(power, 0, maxPower);
+
+                    if(power == 0)
+                    {
+                        StartCoroutine(CooldownWaiter());
+                    }
+
+                    Debug.Log("Power! - "+power);
+
+                    if (transform.position.y <= -10) GameCore.Instance.gameState = GameState.GAMEOVER;
                 }
                 break;
+            case GameState.GAMEOVER:
+                {
+
+                }break;
             default:
                 break;
         }
@@ -130,16 +156,19 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void RaycastNormalRotation()//Changes player's rotation by raycasting towards the -y vector and detecting floor's normal.
+    public void UsePower()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down);
+        power -= Time.deltaTime;
+    }
 
-        if (hit.collider != null && hit.transform != this.transform && hit.transform.gameObject.layer == transform.gameObject.layer)
-        {
-            Debug.Log("Object under Player: " + hit.transform.name);
-            contactNormal = -hit.point.normalized;
-        }
+    public float GetCurrentPower()
+    {
+        return power;
+    }
 
+    void RotateFromYSpeed()//Changes player's rotation by raycasting towards the -y vector and detecting floor's normal.
+    {
+        
     }
 
     public void Jump()
