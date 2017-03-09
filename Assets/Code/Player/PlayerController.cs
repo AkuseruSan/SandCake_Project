@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour {
     public float rotationLerpTime;
     public Vector2 jump;
 
+    public float cdTime;//CoolDown Time
+    public bool onCoolDown;
+
     private float power;
     public float maxPower;
     public float powerRegenSpeed;
@@ -29,12 +32,13 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator CooldownWaiter()
     {
-        power = -1;
-        yield return new WaitForSeconds(2);
-        power = powerRegenSpeed * Time.deltaTime;
+        onCoolDown = true;
+        yield return new WaitForSeconds(cdTime);
+        onCoolDown = false;
     }
     // Use this for initialization
     void Start () {
+        onCoolDown = false;
         power = maxPower;
         startPos = transform.position.x;
         distanceSinceStart = 0;
@@ -78,13 +82,8 @@ public class PlayerController : MonoBehaviour {
 
                     UpdateDistance();
 
-                    if(power > 0)power += powerRegenSpeed * Time.deltaTime;
+                    if(!onCoolDown) power += powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
-
-                    if(power == 0)
-                    {
-                        StartCoroutine(CooldownWaiter());
-                    }
 
                     Debug.Log("Power! - "+power);
 

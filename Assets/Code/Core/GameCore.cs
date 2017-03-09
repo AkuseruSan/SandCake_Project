@@ -137,6 +137,7 @@ public class GameCore : MonoBehaviour {
 
             player.GetComponent<PlayerController>().UsePower();
         }
+        //else StartCoroutine(GameCore.Instance.)
     }
 
     void UpdateCameraSize()
