@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
+        power = maxPower;
         startPos = transform.position.x;
         distanceSinceStart = 0;
         jumpCount = 1;

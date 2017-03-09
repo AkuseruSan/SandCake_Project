@@ -14,6 +14,7 @@ public class InputManagerUI : MonoBehaviour {
     public Transform mainMenuPanel;
     public Transform score;
     public Transform optionsAwake;
+    public Transform staminaBarValue;
 
     private Animator menuAnimator;
     private Animator optionsAwakeAnimator;
@@ -45,6 +46,9 @@ public class InputManagerUI : MonoBehaviour {
             case GameState.PAUSE:
                 break;
             case GameState.PLAY:
+                {
+                    staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 256 * 2));
+                }
                 break;
             case GameState.GAMEOVER:
                 break;
