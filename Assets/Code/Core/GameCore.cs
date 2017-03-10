@@ -55,7 +55,7 @@ public class GameCore : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
 
         minCamSize = 6;
         maxCamSize = 10;

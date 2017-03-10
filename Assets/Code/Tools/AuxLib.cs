@@ -12,9 +12,9 @@ public static class AuxLib {
 
 
 
-    public static float Map(float value, float minIn, float minOut, float maxIn, float maxOut)
+    public static float Map(float value, float minIn, float maxIn, float minOut, float maxOut)
     {
-        return maxIn + (value - minIn) * (maxOut - maxIn) / (minOut - minIn);
+        return minOut + (value - minIn) * (maxOut - minOut) / (maxIn - minIn);
     }
 
 }
