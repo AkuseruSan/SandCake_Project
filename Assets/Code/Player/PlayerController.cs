@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     public float rotationLerpTime;
     public Vector2 jump;
 
-    public float cdTime;//CoolDown Time
+    [HideInInspector]
     public bool onCoolDown;
 
     private float power;
@@ -30,12 +30,6 @@ public class PlayerController : MonoBehaviour {
     private Animator myAnimatorN;
     #endregion
 
-    IEnumerator CooldownWaiter()
-    {
-        onCoolDown = true;
-        yield return new WaitForSeconds(cdTime);
-        onCoolDown = false;
-    }
     // Use this for initialization
     void Start () {
         onCoolDown = false;
@@ -84,12 +78,12 @@ public class PlayerController : MonoBehaviour {
 
                     
 
-                    if(!onCoolDown) power += powerRegenSpeed * Time.deltaTime;
+                    if(!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
 
-                    Debug.Log("Power! - "+power);
+                    //Debug.Log("Power! - "+power);
 
-                    if (transform.position.y <= -10) GameCore.Instance.gameState = GameState.GAMEOVER;
+                    if (transform.position.y <= -10 || power <= 0) GameCore.Instance.gameState = GameState.GAMEOVER;
                 }
                 break;
             case GameState.GAMEOVER:
@@ -131,6 +125,11 @@ public class PlayerController : MonoBehaviour {
         
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Stamina") RecoverStamina(20);
+    }
+
     #endregion
 
     #region functions
@@ -158,9 +157,15 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    public void UsePower()
+    public void UsePower(float spd)
     {
-        power -= Time.deltaTime;
+        power -= spd*Time.deltaTime;
+    }
+
+    public void RecoverStamina(float percentOnTotal)
+    {
+        
+        power += AuxLib.Map(Mathf.Clamp(percentOnTotal, 0, 100), 0, 100, 0, maxPower);
     }
 
     public float GetCurrentPower()

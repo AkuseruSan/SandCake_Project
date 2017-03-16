@@ -135,7 +135,7 @@ public class GameCore : MonoBehaviour {
 
             InstantiateSpawnPoint();
 
-            player.GetComponent<PlayerController>().UsePower();
+            player.GetComponent<PlayerController>().UsePower(1);
         }
         //else StartCoroutine(GameCore.Instance.)
     }
