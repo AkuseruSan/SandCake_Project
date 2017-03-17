@@ -17,6 +17,32 @@ public static class AuxLib {
         return minOut + (value - minIn) * (maxOut - minOut) / (maxIn - minIn);
     }
 
+    public static bool IsRaycastHit2D(ref Transform t, string[] tags, Vector2 dir, float dist)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(t.position, dir, dist);
+        if (hit.collider != null)
+        {
+            foreach (string tg in tags)
+            {
+                if (hit.collider.tag == tg)
+                {
+                    Debug.Log("Found: " + hit.transform.name);
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    public static float GetDistance2D(Vector2 v1, Vector2 v2)
+    {
+
+    }
+
 }
 
 [System.Serializable]
