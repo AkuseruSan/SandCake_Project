@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour {
 
         myAnimator.SetBool("Grounded", true);
         myAnimatorN.SetBool("Grounded", true);
+
+        myAnimator.SetBool("Sitting", true);
+        myAnimatorN.SetBool("Sitting", true);
     }
 	
 	// Update is called once per frame
@@ -65,8 +68,8 @@ public class PlayerController : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
-                    myAnimator.SetTrigger("Moving");
-                    myAnimatorN.SetTrigger("Moving");
+                    myAnimator.SetBool("Sitting", false);
+                    myAnimatorN.SetBool("Sitting", false);
 
                     RotateFromYSpeed();
 
