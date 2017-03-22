@@ -103,6 +103,8 @@ public class GameCore : MonoBehaviour {
                     if(!EventSystem.current.IsPointerOverGameObject())
                         SpawnMaskPoints();
 #endif
+
+
                     OverlapOtherWorld();
                 }
                 break;

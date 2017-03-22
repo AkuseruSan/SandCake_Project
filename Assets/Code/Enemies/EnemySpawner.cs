@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
 
+    public List<string> enemyPrefabPaths;
 	// Use this for initialization
 	void Start () {
 		
@@ -11,16 +12,13 @@ public class EnemySpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(Input.GetMouseButton(0))
-        {
-            Spawn();
-        }	
+
 	}
 
-    void Spawn()
+    void Spawn(string path, Vector3 startPos)
     {
         GameObject go;
-        go = Instantiate(Resources.Load("Prefabs/Enemies/BaseEnemy") as GameObject);
-        go.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        go = Instantiate(Resources.Load(path) as GameObject);
+        go.transform.position = startPos;
     }
 }

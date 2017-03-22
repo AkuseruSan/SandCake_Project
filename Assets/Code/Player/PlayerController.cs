@@ -131,6 +131,7 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Stamina") RecoverStamina(20);
+        else if (collision.tag == "Enemy") collision.gameObject.GetComponent<BaseEnemyBehaviour>().Attack(transform.gameObject);
     }
 
     #endregion
