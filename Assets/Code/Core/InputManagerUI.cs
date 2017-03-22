@@ -16,6 +16,9 @@ public class InputManagerUI : MonoBehaviour {
     public Transform optionsAwake;
     public Transform staminaBarValue;
 
+    public Slider volume;
+    public AudioSource gameMusic;
+
     private Animator menuAnimator;
     private Animator optionsAwakeAnimator;
 
@@ -32,6 +35,7 @@ public class InputManagerUI : MonoBehaviour {
     {
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
         optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
+        gameMusic = GameObject.FindObjectOfType<AudioSource>();
     }
 
     void Update()
@@ -93,4 +97,10 @@ public class InputManagerUI : MonoBehaviour {
             Time.timeScale = 1;
         }
     }
+
+    public void ChangeVolume(float sliderVolume)
+    {
+        gameMusic.volume = sliderVolume;
+    }
+
 }
