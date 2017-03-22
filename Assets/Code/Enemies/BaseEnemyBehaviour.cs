@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BaseEnemyBehaviour : MonoBehaviour {
 
+    protected int dmg;
     protected Transform target;
     protected float speed;
     protected float spawnHeight;//0 means on floor.
@@ -11,4 +12,9 @@ public class BaseEnemyBehaviour : MonoBehaviour {
 	protected void Awake () {
         transform.position = AuxLib.SetPositionOnRaycastHit2D(transform.gameObject, "Terrain", Vector2.down, spawnHeight);
 	}
+
+    public virtual void Attack(PlayerController pc)
+    {
+        pc.DecreaseStamina(dmg);
+    }
 }

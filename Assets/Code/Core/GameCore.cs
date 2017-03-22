@@ -110,7 +110,7 @@ public class GameCore : MonoBehaviour {
                 break;
             case GameState.GAMEOVER:
                 {
-                    SceneManager.LoadScene(0);
+
                 }break;
             default:
                 break;

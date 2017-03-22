@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Stamina") RecoverStamina(20);
-        else if (collision.tag == "Enemy") collision.gameObject.GetComponent<BaseEnemyBehaviour>().Attack(transform.gameObject);
+        else if (collision.tag == "Enemy") collision.gameObject.GetComponent<BaseEnemyBehaviour>().Attack(GetComponent<PlayerController>());
     }
 
     #endregion
@@ -170,6 +170,11 @@ public class PlayerController : MonoBehaviour {
     {
         
         power += AuxLib.Map(Mathf.Clamp(percentOnTotal, 0, 100), 0, 100, 0, maxPower);
+    }
+
+    public void DecreaseStamina(float percentOnTotal)
+    {
+        power -= AuxLib.Map(Mathf.Clamp(percentOnTotal, 0, 100), 0, 100, 0, maxPower);
     }
 
     public float GetCurrentPower()
