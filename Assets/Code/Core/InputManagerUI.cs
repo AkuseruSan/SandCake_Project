@@ -13,14 +13,20 @@ public class InputManagerUI : MonoBehaviour {
     [Header("UI Transforms")]
     public Transform mainMenuPanel;
     public Transform score;
+    public Transform finalScore;
     public Transform optionsAwake;
     public Transform staminaBarValue;
+    public Transform hud;
+    public Transform endMenu;
 
     public Slider volume;
     public AudioSource gameMusic;
 
     private Animator menuAnimator;
     private Animator optionsAwakeAnimator;
+    private Animator hudDisplay;
+    private Animator endMenuAnimator;
+
 
     void Awake()
     {
@@ -35,7 +41,12 @@ public class InputManagerUI : MonoBehaviour {
     {
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
         optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
+        endMenuAnimator = endMenu.GetComponent<Animator>();
         gameMusic = GameObject.FindObjectOfType<AudioSource>();
+        hudDisplay = hud.GetComponent<Animator>();
+
+        endMenuAnimator.SetBool("Show", false);
+        hudDisplay.SetBool("Playing", false);
     }
 
     void Update()
@@ -51,10 +62,16 @@ public class InputManagerUI : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
+                    hudDisplay.SetBool("Playing", true);
                     staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 256 * 2));
                 }
                 break;
             case GameState.GAMEOVER:
+                {
+                    
+                    endMenuAnimator.SetBool("Show", true);
+                    finalScore.GetComponent<Text>().text = "SCORE: " + GameCore.Instance.playerController.distanceSinceStart;
+                }
                 break;
             default:
                 break;
@@ -96,6 +113,11 @@ public class InputManagerUI : MonoBehaviour {
             GameCore.Instance.gameState = GameState.PLAY;
             Time.timeScale = 1;
         }
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void ChangeVolume(float sliderVolume)
