@@ -47,6 +47,9 @@ public class PlayerController : MonoBehaviour {
         myAnimator.SetBool("Grounded", true);
         myAnimatorN.SetBool("Grounded", true);
 
+        myAnimator.SetBool("Dead", false);
+        myAnimatorN.SetBool("Dead", false);
+
         myAnimator.SetBool("Sitting", true);
         myAnimatorN.SetBool("Sitting", true);
     }
@@ -91,8 +94,10 @@ public class PlayerController : MonoBehaviour {
                 break;
             case GameState.GAMEOVER:
                 {
-
-                }break;
+                    myAnimator.SetBool("Dead", true);
+                    myAnimatorN.SetBool("Dead", true);
+                }
+                break;
             default:
                 break;
         }
