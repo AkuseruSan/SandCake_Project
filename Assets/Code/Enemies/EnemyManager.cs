@@ -28,7 +28,7 @@ public class EnemyManager : MonoBehaviour {
                     {
                         counter = Random.Range(randomSpawnTimeRange.x, randomSpawnTimeRange.y);
 
-                        Debug.Log(GameCore.Instance.player.transform.position);
+                        //Debug.Log(GameCore.Instance.player.transform.position);
                         Spawn("Prefabs/Enemies/Hawk", new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0));
                         Spawn("Prefabs/Enemies/Raven", new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0));
                     }
@@ -47,6 +47,6 @@ public class EnemyManager : MonoBehaviour {
     {
         GameObject go;
         go = Instantiate(Resources.Load(path), startPos, Quaternion.identity) as GameObject;
-        Debug.Log("Initial Position Assigned: "+startPos);
+        //Debug.Log("Initial Position Assigned: "+startPos);
     }
 }

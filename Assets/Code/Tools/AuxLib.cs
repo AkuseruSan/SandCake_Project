@@ -25,7 +25,8 @@ public static class AuxLib {
 
             if (hit.collider.tag == tg)
             {
-                Debug.Log("Found Terrain: " + hit.transform.name);
+                //Debug.Log("Found Terrain: " + hit.transform.name);
+                //Debug.Log("Raycast hitpoint y:" + hit.point.y);
 
                 pos = new Vector3(pos.x, hit.point.y + height, pos.z);
             }

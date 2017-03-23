@@ -19,8 +19,7 @@ public class RavenEnemy : BaseEnemyBehaviour
         {
             case States.INIT:
                 {
-                    separation = 2;
-                    spawnHeight = 5;
+                    separation = 10; 
                     dmg = 5;
                     bulletDir = new Vector2(-0.8f, 0);
                     ctr = Random.Range(1, 3);
@@ -37,7 +36,7 @@ public class RavenEnemy : BaseEnemyBehaviour
                     ctr = Random.Range(1, 3);
 
                     //LOGIC
-                    SpawnBullets(new Vector2(20,0));
+                    SpawnBullets(10);
 
                     state = States.IDDLE;
                 }
@@ -49,15 +48,15 @@ public class RavenEnemy : BaseEnemyBehaviour
         ctr -= Time.deltaTime;
     }
 
-    void SpawnBullets(Vector2 size)
+    void SpawnBullets(int size)
     {
-        for (int i = 0; i < size.x; i++)
+        for (int i = 0; i < size; i++)
         {
             GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Bullet"), transform.position, Quaternion.identity) as GameObject;
-            go.transform.eulerAngles = new Vector3(0,0,size.x/2 - i * separation);
-            go.GetComponent<RavenBulletBehaviour>().SetSpeed(0.4f);
+            go.transform.eulerAngles = new Vector3(0,0,(size * separation)/2 - i * separation);
+            go.GetComponent<RavenBulletBehaviour>().SetSpeed(0.05f);
 
-            Destroy(go, Time.deltaTime * 100);
+            Destroy(go, Time.deltaTime * 240);
         }
     }
 }

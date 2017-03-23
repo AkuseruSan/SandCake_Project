@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (collision.tag == "Stamina") RecoverStamina(20);
         if (collision.tag == "Enemy") DecreaseStamina(5);
+        Debug.Log("The wolf has been TRIGGERED with: " + collision.name);
     }
 
     #endregion

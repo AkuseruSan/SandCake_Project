@@ -18,7 +18,6 @@ public class HawkEnemy : BaseEnemyBehaviour
             case States.INIT:
                 {
 
-                    spawnHeight = 10;
                     target = GameCore.Instance.player.transform;
                     dir = target.position - transform.position;
                     dir.Normalize();
