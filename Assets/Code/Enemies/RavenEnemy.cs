@@ -6,6 +6,7 @@ public class RavenEnemy : BaseEnemyBehaviour
 {
 
     float bulletSpeed;
+    float separation;
     Vector2 bulletDir;
     float ctr;
 
@@ -18,9 +19,11 @@ public class RavenEnemy : BaseEnemyBehaviour
         {
             case States.INIT:
                 {
+                    separation = 2;
                     spawnHeight = 5;
+                    dmg = 5;
                     bulletDir = new Vector2(-0.8f, 0);
-                    ctr = Random.Range(1, 5);
+                    ctr = Random.Range(1, 3);
                     state = States.IDDLE;
                 }
                 break;
@@ -31,10 +34,10 @@ public class RavenEnemy : BaseEnemyBehaviour
                 break;
             case States.ATTACK:
                 {
-                    ctr = Random.Range(1, 5);
+                    ctr = Random.Range(1, 3);
 
                     //LOGIC
-                    SpawnBullets(new Vector2(0,0));
+                    SpawnBullets(new Vector2(20,0));
 
                     state = States.IDDLE;
                 }
@@ -48,12 +51,13 @@ public class RavenEnemy : BaseEnemyBehaviour
 
     void SpawnBullets(Vector2 size)
     {
-        //for(int i = 0; i < size.x; i++)
-        //{
+        for (int i = 0; i < size.x; i++)
+        {
+            GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Bullet"), transform.position, Quaternion.identity) as GameObject;
+            go.transform.eulerAngles = new Vector3(0,0,size.x/2 - i * separation);
+            go.GetComponent<RavenBulletBehaviour>().SetSpeed(0.4f);
 
-        //}
-
-        GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Bullet"), transform.position, Quaternion.identity) as GameObject;
-        go.GetComponent<RavenBulletBehaviour>().SetSpeed(1);
+            Destroy(go, Time.deltaTime * 100);
+        }
     }
 }

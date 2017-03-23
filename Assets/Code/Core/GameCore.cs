@@ -103,10 +103,11 @@ public class GameCore : MonoBehaviour {
                     if(!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                         SpawnMaskPoints();
 #endif
-#if UNITY_EDITOR
+#if UNITY_STANDALONE
                     if(!EventSystem.current.IsPointerOverGameObject())
                         SpawnMaskPoints();
 #endif
+
 
 
                     OverlapOtherWorld();

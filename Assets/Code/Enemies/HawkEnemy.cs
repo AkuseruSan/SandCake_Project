@@ -35,7 +35,7 @@ public class HawkEnemy : BaseEnemyBehaviour
                 break;
             case States.ATTACK:
                 {
-                    Debug.Log("Enemy Position: " + transform.position);
+                    //Debug.Log("Enemy Position: " + transform.position);
                     //transform.Translate(dir);
                 }
                 break;

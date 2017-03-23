@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour {
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.normal == new Vector2( -1, 0)) Die();
-            Debug.Log(contact.normal);
+            //Debug.Log(contact.normal);
         }
     }
 
@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Stamina") RecoverStamina(20);
-        else if (collision.tag == "Enemy") collision.gameObject.GetComponent<BaseEnemyBehaviour>().Attack(GetComponent<PlayerController>());
+        if (collision.tag == "Enemy") DecreaseStamina(5);
     }
 
     #endregion
