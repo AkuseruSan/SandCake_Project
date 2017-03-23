@@ -30,7 +30,7 @@ public class GameCore : MonoBehaviour {
     [HideInInspector]
     public PlayerController playerController;
     [HideInInspector]
-    public EnemyController enemyController;
+    public EnemyManager enemyController;
 
     [Space(20)]
     [Header("[World Dictionary Lists]")]
@@ -69,7 +69,7 @@ public class GameCore : MonoBehaviour {
         gameState = GameState.AWAKE;
         playerController = player.GetComponent<PlayerController>();
 
-        enemyController = transform.GetComponent<EnemyController>();
+        enemyController = transform.GetComponent<EnemyManager>();
 
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 

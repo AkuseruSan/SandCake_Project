@@ -11,7 +11,8 @@ public class BaseEnemyBehaviour : MonoBehaviour {
 	// Use this for initialization
 	protected void Start () {
         transform.position = AuxLib.SetPositionOnRaycastHit2D(transform.position, "Terrain", Vector2.down, spawnHeight);
-	}
+        Debug.Log("Floor Position Tracked");
+    }
 
     public virtual void Attack(PlayerController pc)
     {

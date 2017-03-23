@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyManager : MonoBehaviour {
 
     public Vector2 randomSpawnTimeRange;
     private float counter;
@@ -29,8 +29,8 @@ public class EnemyController : MonoBehaviour {
                         counter = Random.Range(randomSpawnTimeRange.x, randomSpawnTimeRange.y);
 
                         Debug.Log(GameCore.Instance.player.transform.position);
-                        Spawn("Prefabs/Enemies/Hawk", GameCore.Instance.player.transform.position + new Vector3(40, 10, 0));
-                        Spawn("Prefabs/Enemies/Raven", GameCore.Instance.player.transform.position + new Vector3(40, 10, 0));
+                        Spawn("Prefabs/Enemies/Hawk", new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0));
+                        Spawn("Prefabs/Enemies/Raven", new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0));
                     }
 
                     counter -= Time.deltaTime;
@@ -46,7 +46,7 @@ public class EnemyController : MonoBehaviour {
     public void Spawn(string path, Vector3 startPos)
     {
         GameObject go;
-        go = Instantiate(Resources.Load(path) as GameObject);
-        go.transform.position = startPos;
+        go = Instantiate(Resources.Load(path), startPos, Quaternion.identity) as GameObject;
+        Debug.Log("Initial Position Assigned: "+startPos);
     }
 }

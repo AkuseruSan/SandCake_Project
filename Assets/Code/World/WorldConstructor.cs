@@ -6,6 +6,8 @@ public class WorldConstructor : MonoBehaviour {
 
     private float lastX;
 
+    private float flowerSpawnCtr;//Counter = ctr
+
     private WorldModuleData lastModuleQueued;
     private Queue<GameObject> worldModulesQueue = new Queue<GameObject>();
 
@@ -15,6 +17,11 @@ public class WorldConstructor : MonoBehaviour {
         lastX = transform.position.x;
 
 
+    }
+
+    void Update()
+    {
+        SpawnFlowers();
     }
 	
 	// Update is called once per frame
@@ -35,6 +42,17 @@ public class WorldConstructor : MonoBehaviour {
             lastX = transform.position.x;
             SpawnWorldModule();
         }
+    }
+
+    void SpawnFlowers()
+    {
+        if(flowerSpawnCtr <= 0)
+        {
+            flowerSpawnCtr = Random.Range(2, 5);
+            GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x -10, 10, 0), "Terrain", Vector2.down, 1), Quaternion.identity) as GameObject;
+        }
+
+        flowerSpawnCtr -= Time.deltaTime;
     }
 
     void SpawnWorldModule()
