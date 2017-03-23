@@ -43,8 +43,8 @@ public static class AuxLib {
 
         if (hit.collider != null || hit2.collider != null)
         {
-            Debug.Log("Raycast hitpoint collider :" + hit.collider.tag);
-            Debug.Log("Raycast hitpoint2 collider :" + hit2.collider.tag);
+            //Debug.Log("Raycast hitpoint collider :" + hit.collider.tag);
+            //Debug.Log("Raycast hitpoint2 collider :" + hit2.collider.tag);
 
             if (hit.collider.tag == tg && hit2.collider.tag == tg)
             {

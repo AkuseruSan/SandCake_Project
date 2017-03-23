@@ -54,7 +54,7 @@ public class RavenEnemy : BaseEnemyBehaviour
         {
             GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Bullet"), transform.position, Quaternion.identity) as GameObject;
             go.transform.eulerAngles = new Vector3(0,0,(size * separation)/2 - i * separation);
-            go.GetComponent<RavenBulletBehaviour>().SetSpeed(0.05f);
+            go.GetComponent<RavenBulletBehaviour>().SetSpeed(5.0f);
 
             Destroy(go, Time.deltaTime * 240);
         }

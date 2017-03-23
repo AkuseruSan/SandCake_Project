@@ -12,7 +12,7 @@ public class RavenBulletBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Translate(Vector2.down * speed, Space.Self);
+        transform.Translate(Vector2.down * speed * Time.deltaTime, Space.Self);
 	}
 
     public void SetSpeed(float s)
