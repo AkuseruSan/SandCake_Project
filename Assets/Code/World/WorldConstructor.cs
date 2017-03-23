@@ -9,6 +9,7 @@ public class WorldConstructor : MonoBehaviour {
     private WorldModuleData lastModuleQueued;
     private Queue<GameObject> worldModulesQueue = new Queue<GameObject>();
 
+
 	// Use this for initialization
 	void Start () {
         lastX = transform.position.x;
@@ -17,7 +18,7 @@ public class WorldConstructor : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         //Queue System
         if (worldModulesQueue.Count < 20)

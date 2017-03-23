@@ -17,21 +17,21 @@ public static class AuxLib {
         return minOut + (value - minIn) * (maxOut - minOut) / (maxIn - minIn);
     }
 
-    public static Vector3 SetPositionOnRaycastHit2D(GameObject go, string tg, Vector2 dir, float height)
+    public static Vector3 SetPositionOnRaycastHit2D(Vector3 pos, string tg, Vector2 dir, float height)
     {
-        RaycastHit2D hit = Physics2D.Raycast(go.transform.position, dir, 100);
+        RaycastHit2D hit = Physics2D.Raycast(pos, dir, 100);
         if (hit.collider != null)
         {
 
             if (hit.collider.tag == tg)
             {
-                Debug.Log("Found: " + hit.transform.name);
+                Debug.Log("Found Terrain: " + hit.transform.name);
 
-                go.transform.position = new Vector3(go.transform.position.x, hit.point.y + height, go.transform.position.z);
+                pos = new Vector3(pos.x, hit.point.y + height, pos.z);
             }
         }
 
-        return go.transform.position;
+        return pos;
     }
 }
 

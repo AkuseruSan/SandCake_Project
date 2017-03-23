@@ -29,6 +29,8 @@ public class GameCore : MonoBehaviour {
 
     [HideInInspector]
     public PlayerController playerController;
+    [HideInInspector]
+    public EnemyController enemyController;
 
     [Space(20)]
     [Header("[World Dictionary Lists]")]
@@ -67,11 +69,13 @@ public class GameCore : MonoBehaviour {
         gameState = GameState.AWAKE;
         playerController = player.GetComponent<PlayerController>();
 
+        enemyController = transform.GetComponent<EnemyController>();
+
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 
         InitializeWorldModules();
 
-        worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance * 2f, 0, 0);
+        worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
     }
 	
 	// Update is called once per frame

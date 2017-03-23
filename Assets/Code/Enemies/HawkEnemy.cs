@@ -5,21 +5,43 @@ using UnityEngine;
 public class HawkEnemy : BaseEnemyBehaviour
 {
 
-    public enum States { };
-    public States state;
+    public enum States { INIT, IDDLE, ATTACK };
+    public States state = States.INIT;
     private Vector3 dir;
     
-    void Start()
-    {
-        target = GameCore.Instance.player.transform;
-        dir = target.position - transform.position;
-        dir.Normalize();
 
-        dmg = 5;
-    }
 	// Update is called once per frame
 	void Update () {
-        transform.Translate(dir);
+
+        switch (state)
+        {
+            case States.INIT:
+                {
+
+
+                    target = GameCore.Instance.player.transform;
+                    dir = target.position - transform.position;
+                    dir.Normalize();
+
+                    dmg = 5;
+
+                    state = States.IDDLE;
+                }
+                break;
+            case States.IDDLE:
+                {
+                    state = States.ATTACK;
+                }
+                break;
+            case States.ATTACK:
+                {
+                    Debug.Log("Enemy Position: " + transform.position);
+                    //transform.Translate(dir);
+                }
+                break;
+            default:
+                break;
+        }
         
 	}
 }
