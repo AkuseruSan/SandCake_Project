@@ -27,6 +27,29 @@ public static class AuxLib {
             {
                 //Debug.Log("Found Terrain: " + hit.transform.name);
                 //Debug.Log("Raycast hitpoint y:" + hit.point.y);
+                pos = new Vector3(pos.x, hit.point.y + height, pos.z);
+            }
+        }
+
+        return pos;
+    }
+
+    public static Vector3 SetPositionOnRaycastHit2D(Vector3 pos, string tg, Vector2 dir, float height, int layerID)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(pos, dir, 100, 1 << 8);
+        RaycastHit2D hit2 = Physics2D.Raycast(pos, dir, 100, 1 << 9);
+
+        
+
+        if (hit.collider != null || hit2.collider != null)
+        {
+            Debug.Log("Raycast hitpoint collider :" + hit.collider.tag);
+            Debug.Log("Raycast hitpoint2 collider :" + hit2.collider.tag);
+
+            if (hit.collider.tag == tg && hit2.collider.tag == tg)
+            {
+                //Debug.Log("Found Terrain: " + hit.transform.name);
+                
 
                 pos = new Vector3(pos.x, hit.point.y + height, pos.z);
             }

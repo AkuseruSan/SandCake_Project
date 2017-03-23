@@ -26,11 +26,17 @@ public class InputManager : MonoBehaviour{
         }
 #endif
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButton(0))
         {
             posRef = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
             posRef.z = -5;
+
+            return true;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameCore.Instance.playerController.Jump();
 
             return true;
         }

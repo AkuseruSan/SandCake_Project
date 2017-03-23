@@ -46,10 +46,11 @@ public class WorldConstructor : MonoBehaviour {
 
     void SpawnFlowers()
     {
-        if(flowerSpawnCtr <= 0)
+        if (flowerSpawnCtr <= 0)
         {
             flowerSpawnCtr = Random.Range(2, 5);
-            GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x -10, 10, 0), "Terrain", Vector2.down, 1), Quaternion.identity) as GameObject;
+            GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1, 0), Quaternion.identity) as GameObject;
+
         }
 
         flowerSpawnCtr -= Time.deltaTime;

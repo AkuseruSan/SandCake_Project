@@ -100,10 +100,10 @@ public class GameCore : MonoBehaviour {
                     UpdateWorldManager();
 
 #if UNITY_ANDROID
-                    if(!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-                        SpawnMaskPoints();
+                    //if(!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                    //    SpawnMaskPoints();
 #endif
-#if UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_STANDALONE
                     if(!EventSystem.current.IsPointerOverGameObject())
                         SpawnMaskPoints();
 #endif
