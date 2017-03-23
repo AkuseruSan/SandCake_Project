@@ -18,6 +18,8 @@ public class InputManagerUI : MonoBehaviour {
     public Transform staminaBarValue;
     public Transform hud;
     public Transform endMenu;
+    public Transform pausePanel;
+    public Transform actualScore;
 
     public Slider volume;
     public AudioSource gameMusic;
@@ -39,10 +41,11 @@ public class InputManagerUI : MonoBehaviour {
 
     void Start()
     {
+        gameMusic = GameObject.FindObjectOfType<AudioSource>();
+
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
         optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
         endMenuAnimator = endMenu.GetComponent<Animator>();
-        gameMusic = GameObject.FindObjectOfType<AudioSource>();
         hudDisplay = hud.GetComponent<Animator>();
 
         endMenuAnimator.SetBool("Show", false);
@@ -103,21 +106,28 @@ public class InputManagerUI : MonoBehaviour {
 
     public void TogglePauseGame()
     {
-        if(GameCore.Instance.gameState == GameState.PLAY)
+        
+        if (pausePanel.gameObject.activeInHierarchy == false)
         {
             GameCore.Instance.gameState = GameState.PAUSE;
+            pausePanel.gameObject.SetActive(true);
+            actualScore.GetComponent<Text>().text = "SCORE: " + GameCore.Instance.playerController.distanceSinceStart;
             Time.timeScale = 0;
         }
-        else if(GameCore.Instance.gameState == GameState.PAUSE)
+
+        else
         {
             GameCore.Instance.gameState = GameState.PLAY;
+            pausePanel.gameObject.SetActive(false);
             Time.timeScale = 1;
         }
+
     }
 
     public void Restart()
     {
         SceneManager.LoadScene(0);
+        Time.timeScale = 1;
     }
 
     public void ChangeVolume(float sliderVolume)

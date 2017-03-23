@@ -40,6 +40,12 @@ public class InputManager : MonoBehaviour{
 
             return true;
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            InputManagerUI.Instance.TogglePauseGame();
+
+            return true;
+        }
 #endif
         return false;
     }
