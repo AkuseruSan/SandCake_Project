@@ -77,6 +77,9 @@ public class GameData : MonoBehaviour {
         save += "!";
 
         Debug.Log(save);
+
+        PlayerPrefs.SetString("EltaGameData", save);
+
     }
 
 }
