@@ -28,22 +28,14 @@ public class GameData : MonoBehaviour {
         }
         Instance = this;
 
-        if (!PlayerPrefs.HasKey("EltaGameData"))
-        {
-            //INITIALIZE BASIC STRUCT
-            playerData.gameComplete = 0;
-            playerData.energy = 0;
-            playerData.unlockedSpawnPoints = 1;
-            playerData.currentSpawnPoint = 0;
-            playerData.activeMultiplier = 1f;
-            playerData.activePowerUps = new List<bool> { false, false, false, false, false };
-        }
-        else LoadData();
+        //PlayerPrefs.DeleteAll();
+        StartDataLoader();
+
     }
     void Start () {
         DontDestroyOnLoad(this);
 
-        SaveData();
+        //SaveData();
 	}
 	
 	// Update is called once per frame
@@ -55,10 +47,55 @@ public class GameData : MonoBehaviour {
     {
 
     }
-
-    void LoadData()
+    void StartDataLoader()
     {
+        if (!PlayerPrefs.HasKey("EltaGameData"))
+        {
+            //INITIALIZE BASIC STRUCT
+            playerData.gameComplete = 0;
+            playerData.energy = 0;
+            playerData.unlockedSpawnPoints = 1;
+            playerData.currentSpawnPoint = 0;
+            playerData.activeMultiplier = 1f;
+            playerData.activePowerUps = new List<bool> { false, false, false, false, false };// 5 Power Ups
 
+            SaveData();
+        }
+        else LoadData();
+    }
+    private void LoadData()
+    {
+        int index = 0;
+        string data = PlayerPrefs.GetString("EltaGameData");
+
+        string[] load = data.Split('|');
+
+        Debug.Log("Data String Params: " + load.Length);
+
+        playerData.gameComplete = System.Convert.ToUInt32(load[index++]);
+        playerData.energy = System.Convert.ToUInt32(load[index++]);
+        playerData.unlockedSpawnPoints = System.Convert.ToUInt32(load[index++]);
+        playerData.currentSpawnPoint = System.Convert.ToUInt32(load[index++]);
+        playerData.activeMultiplier = (float)System.Convert.ToDouble(load[index++]);
+
+        playerData.activePowerUps = new List<bool> { false, false, false, false, false };
+
+        for (int i = 0; i < playerData.activePowerUps.Count; i++)
+        {
+            if (load[index+i] == "0")
+                playerData.activePowerUps[i] = false;
+            else if (load[index+i] == "1")
+                playerData.activePowerUps[i] = true;
+            else Debug.Log("[Error on Game Data Load!]");
+        }
+
+        //Debug
+        string str = "Loaded Data:\nGame Complete: " + playerData.gameComplete + "\nEnergy: " + playerData.energy + "\nUnlocked Spawn Points: " + playerData.unlockedSpawnPoints + "\nCurrent Spawn Point: " + playerData.currentSpawnPoint + "\nActive Multiplier: " + playerData.activeMultiplier + "\n";
+
+        for (int i = 0; i < playerData.activePowerUps.Count; i++)
+            str += "PowerUp " + i + ": " + playerData.activePowerUps[i] + "\n";
+
+        Debug.Log(str);
     }
 
     void SaveData()
@@ -73,8 +110,6 @@ public class GameData : MonoBehaviour {
         {
             save += "|" + (b ? 1 : 0);
         }
-
-        save += "!";
 
         Debug.Log(save);
 
