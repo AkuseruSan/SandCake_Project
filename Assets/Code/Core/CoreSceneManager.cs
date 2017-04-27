@@ -8,18 +8,21 @@ public class CoreSceneManager : MonoBehaviour {
     enum SceneID { MENU = 1, GAME = 2 }
     public GameObject loadingScreen;
 
+    Scene currentScene;
+
     AsyncOperation currentAsyncOperation;
 
-    enum State
-    {
-        ON_WAIT, LOADING_MENU, LOADING_GAME, UNLOADING_MENU, UNLOADING_GAME
-    };
-    State state = State.ON_WAIT;
+    enum State { ON_WAIT, LOADING, UNLOADING_MENU, UNLOADING_GAME, LOADED };
+    State state;
 
     // Use this for initialization
     void Start ()
     {
+        SetLoadingScreen(false);
+        state = State.ON_WAIT;
         SwitchScene(SceneID.MENU);
+
+        currentScene = SceneManager.GetActiveScene();
 	}
 	
 	// Update is called once per frame
@@ -29,97 +32,98 @@ public class CoreSceneManager : MonoBehaviour {
         {
             case State.ON_WAIT:
                 {
-
+                    //DEBUG
+                    if (Input.GetKeyDown(KeyCode.G)) SwitchScene(SceneID.GAME);
+                    if (Input.GetKeyDown(KeyCode.M)) SwitchScene(SceneID.MENU);
                 }
                 break;
-            case State.LOADING_MENU:
+            case State.LOADING:
                 {
-                    if(currentAsyncOperation.isDone)
+                    Debug.Log("Loading Progress: " + currentAsyncOperation.progress);
+
+                    if (currentAsyncOperation.progress == 0.9f)
                     {
-                        state = State.UNLOADING_GAME;
-                        currentAsyncOperation = SceneManager.UnloadSceneAsync((int)SceneID.GAME);
-                    }
-                }
-                break;
-            case State.LOADING_GAME:
-                {
+                        //ANIMATION
+                        //
+                        //
+                        //ON ANIMATION ENDED
 
+                        state = State.LOADED;
+                        currentAsyncOperation.allowSceneActivation = true;
+                    }
                 }
                 break;
             case State.UNLOADING_MENU:
                 {
-
+                    if (currentAsyncOperation == null || currentAsyncOperation.isDone)
+                    {
+                        state = State.LOADING;
+                        currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.GAME, LoadSceneMode.Additive);
+                        currentAsyncOperation.allowSceneActivation = false;
+                        currentScene = SceneManager.GetSceneByBuildIndex(2);
+                    }
                 }
                 break;
             case State.UNLOADING_GAME:
                 {
-                    if(currentAsyncOperation.isDone)
+                    if (currentAsyncOperation == null || currentAsyncOperation.isDone)
                     {
-                        //SceneManager.SetActiveScene
+                        state = State.LOADING;
+                        currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.MENU, LoadSceneMode.Additive);
+                        currentAsyncOperation.allowSceneActivation = false;
+                        currentScene = SceneManager.GetSceneByBuildIndex(1);
                     }
-
+                }
+                break;
+            case State.LOADED:
+                {
+                    SetLoadingScreen(false);
+                    state = State.ON_WAIT;
                 }
                 break;
             default:
                 break;
         }
-        //switch (state)
-        //{
-        //    case State.NoSceneLoaded:
-        //        break;
-        //    case State.LoadingGame:
-        //        if (currentAsyncOperation.isDone)
-        //        {
-        //            loadingScreen.SetActive(false);
-        //            state = State.GameLoaded;
-        //        }
-        //        break;
-        //    case State.GameLoaded:
-        //        break;
-        //    case State.UnloadingGame:
-        //        if (currentAsyncOperation.isDone)
-        //        {
-        //            state = State.NoSceneLoaded;
-        //            if (nextScene != null)
-        //            {
-        //                LoadNextScene();
-        //            }
-        //            else
-        //        }
-        //        break;
-        //    case State.LoadingMenu:
-        //        break;
-        //    case State.MenuLoaded:
-        //        break;
-        //    case State.UnloadingMenu:
-        //        break;
-        //    default:
-        //        break;
-        //}
+
+        Debug.Log("Scene Manager State: " + state);
     }
     
-    void SwitchScene(SceneID sceneId)
+    void SwitchScene(SceneID sceneID)
     {
-        switch (sceneId)
+        SetLoadingScreen(true);
+
+        switch (sceneID)
         {
             case SceneID.MENU:
                 {
-                    state = State.LOADING_MENU;
-                    //loadingScreen.SetActive(true);
-                    currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.MENU, LoadSceneMode.Additive);
+                    state = State.UNLOADING_GAME;
+                    
+                    currentAsyncOperation = SceneManager.UnloadSceneAsync((int)SceneID.GAME);
                     currentAsyncOperation.allowSceneActivation = false;
                 }
                 break;
             case SceneID.GAME:
                 {
-                    state = State.LOADING_GAME;
-                    //loadingScreen.SetActive(true);
-                    currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.GAME, LoadSceneMode.Additive);
+                    state = State.UNLOADING_MENU;
+
+                    currentAsyncOperation = SceneManager.UnloadSceneAsync((int)SceneID.MENU);
                     currentAsyncOperation.allowSceneActivation = false;
                 }
                 break;
             default:
                 break;
+        }
+    }
+
+    void SetLoadingScreen(bool state)
+    {
+        if(state == true)
+        {
+            loadingScreen.SetActive(true);
+        }
+        else
+        {
+            loadingScreen.SetActive(false);
         }
     }
 }

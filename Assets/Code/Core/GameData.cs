@@ -20,6 +20,7 @@ public class GameData : MonoBehaviour {
 
     #region Constant Data
     public const uint POWERUP_COUNT = 10;
+    public const char CONTROL_CHAR = '|';
     public const string DATA_FILE = "EltaGameData";
 
     #endregion
@@ -81,7 +82,7 @@ public class GameData : MonoBehaviour {
         int index = 0;
         string data = PlayerPrefs.GetString(DATA_FILE);
 
-        string[] load = data.Split('|');
+        string[] load = data.Split(CONTROL_CHAR);
 
         Debug.Log("Data String Params: " + load.Length);
 
@@ -113,15 +114,15 @@ public class GameData : MonoBehaviour {
 
     void SaveData()
     {
-        string save = playerData.gameComplete.ToString() + "|" +
-            playerData.energy + "|" +
-            playerData.unlockedSpawnPoints + "|" +
-            playerData.currentSpawnPoint + "|" +
+        string save = playerData.gameComplete.ToString() + CONTROL_CHAR +
+            playerData.energy + CONTROL_CHAR +
+            playerData.unlockedSpawnPoints + CONTROL_CHAR +
+            playerData.currentSpawnPoint + CONTROL_CHAR +
             playerData.activeMultiplier;
 
         foreach(bool b in playerData.activePowerUps)
         {
-            save += "|" + (b ? 1 : 0);
+            save += CONTROL_CHAR + (b ? 1 : 0);
         }
 
         Debug.Log(save);
