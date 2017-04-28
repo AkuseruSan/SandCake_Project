@@ -6,12 +6,20 @@ public enum Stage { Z_1, Z_2, Z_3, Z_4, Z_BOSS };
 
 public class SpawnManager : MonoBehaviour {
 
+    public static SpawnManager Instance { get; private set; }
+
     Queue current;
-    public List<List<Transform>> worldZones;
+    public List<List<WorldDictionaryList>> worldModulesList;
     public Stage currentStage;
 
-	// Use this for initialization
-	void Start () {
+    [Space(20)]
+    [Header("[World Dictionary Lists]")]
+    //public List<WorldDictionaryList> worldModulesList;
+
+    public Dictionary<WorldModuleType, List<WorldModuleData>> worldModules;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -34,7 +42,25 @@ public class SpawnManager : MonoBehaviour {
         }
     }
 
-    void FillList() {
-            
+   public void InitializeWorldModules(Stage currentStage)
+    {
+
+        foreach (WorldDictionaryList data in worldModulesList[(int)currentStage])
+        {
+            foreach (WorldModuleData mod in data.worldModules)
+            {
+                if (!worldModules.ContainsKey(data.type))
+                    worldModules.Add(data.type, new List<WorldModuleData>());
+
+                worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
+            }
+        }
     }
+
+    void UpdateWorldManager()
+    {
+        GameCore.Instance.worldManager.position = new Vector3(GameCore.Instance.cameraSystemTransform.position.x, 0, 0);
+    }
+
+
 }
