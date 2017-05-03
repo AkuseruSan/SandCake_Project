@@ -73,8 +73,6 @@ public class GameCore : MonoBehaviour {
 
         worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
 
-        SpawnManager.Instance.InitializeWorldModules(SpawnManager.Instance.currentStage);
-
         worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
     }
 	

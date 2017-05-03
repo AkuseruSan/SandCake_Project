@@ -89,3 +89,9 @@ public struct WorldDictionaryList
     public WorldModuleType type;
     public List<WorldModuleData> worldModules;
 }
+
+[System.Serializable]
+public struct ListOfWorldDictionaryList
+{
+    public List<WorldDictionaryList> worldDictionaryList;
+}

@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Stage { Z_1, Z_2, Z_3, Z_4, Z_BOSS };
+public enum Stage { Z_1 = 20, Z_2 = 30, Z_3 = 40, Z_4 = 50, Z_BOSS = 3 };
 
 public class SpawnManager : MonoBehaviour {
 
     public static SpawnManager Instance { get; private set; }
 
     Queue current;
-    public List<List<WorldDictionaryList>> worldModulesList;
     public Stage currentStage;
 
     [Space(20)]
     [Header("[World Dictionary Lists]")]
-    //public List<WorldDictionaryList> worldModulesList;
+    public List<ListOfWorldDictionaryList> listWorldModuleList;
 
     public Dictionary<WorldModuleType, List<WorldModuleData>> worldModules;
 
     // Use this for initialization
     void Start () {
-		
-	}
+
+        worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
+        InitializeWorldModules();
+    }
 	
 	// Update is called once per frame
 	void Update () {
+
         switch (currentStage)
         {
             case Stage.Z_1:
@@ -37,30 +39,25 @@ public class SpawnManager : MonoBehaviour {
                 break;
             case Stage.Z_BOSS:
                 break;
-            default:
-                break;
         }
     }
 
-   public void InitializeWorldModules(Stage currentStage)
+   public void InitializeWorldModules()
     {
-
-        foreach (WorldDictionaryList data in worldModulesList[(int)currentStage])
+        foreach(ListOfWorldDictionaryList index in listWorldModuleList)
         {
-            foreach (WorldModuleData mod in data.worldModules)
+            foreach (WorldDictionaryList data in index.worldDictionaryList)
             {
-                if (!worldModules.ContainsKey(data.type))
-                    worldModules.Add(data.type, new List<WorldModuleData>());
+                foreach (WorldModuleData mod in data.worldModules)
+                {
+                    if (!worldModules.ContainsKey(data.type))
+                        worldModules.Add(data.type, new List<WorldModuleData>());
 
-                worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
+                    worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
+                }
             }
         }
+        
     }
-
-    void UpdateWorldManager()
-    {
-        GameCore.Instance.worldManager.position = new Vector3(GameCore.Instance.cameraSystemTransform.position.x, 0, 0);
-    }
-
 
 }
