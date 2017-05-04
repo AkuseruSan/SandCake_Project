@@ -122,7 +122,7 @@ public class GameData : MonoBehaviour {
 
         foreach(bool b in playerData.activePowerUps)
         {
-            save += CONTROL_CHAR + (b ? 1 : 0);
+            save += CONTROL_CHAR + (b ? "1" : "0");
         }
 
         Debug.Log(save);

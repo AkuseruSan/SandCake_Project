@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CoreSceneManager : MonoBehaviour {
 
-    enum SceneID { MENU = 1, GAME = 2 }
+    enum SceneID { MASTER = 0, MENU = 1, GAME = 2 }
     public GameObject loadingScreen;
 
     Scene currentScene;
@@ -20,10 +20,10 @@ public class CoreSceneManager : MonoBehaviour {
     {
         SetLoadingScreen(false);
         state = State.ON_WAIT;
-        SwitchScene(SceneID.MENU);
 
         currentScene = SceneManager.GetActiveScene();
-	}
+        SwitchScene(SceneID.MENU);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -34,7 +34,7 @@ public class CoreSceneManager : MonoBehaviour {
                 {
                     //DEBUG
                     if (Input.GetKeyDown(KeyCode.G)) SwitchScene(SceneID.GAME);
-                    if (Input.GetKeyDown(KeyCode.M)) SwitchScene(SceneID.MENU);
+                    if (Input.GetKeyDown(KeyCode.H)) SwitchScene(SceneID.MENU);
                 }
                 break;
             case State.LOADING:
@@ -48,8 +48,14 @@ public class CoreSceneManager : MonoBehaviour {
                         //
                         //ON ANIMATION ENDED
 
-                        state = State.LOADED;
-                        currentAsyncOperation.allowSceneActivation = true;
+                        if (true)
+                        {
+
+                            currentAsyncOperation.allowSceneActivation = true;
+                            Debug.Log("Current Active Scene: " + SceneManager.SetActiveScene(currentScene));
+
+                            state = State.LOADED;
+                        }
                     }
                 }
                 break;
@@ -58,9 +64,9 @@ public class CoreSceneManager : MonoBehaviour {
                     if (currentAsyncOperation == null || currentAsyncOperation.isDone)
                     {
                         state = State.LOADING;
+
                         currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.GAME, LoadSceneMode.Additive);
                         currentAsyncOperation.allowSceneActivation = false;
-                        currentScene = SceneManager.GetSceneByBuildIndex(2);
                     }
                 }
                 break;
@@ -69,9 +75,9 @@ public class CoreSceneManager : MonoBehaviour {
                     if (currentAsyncOperation == null || currentAsyncOperation.isDone)
                     {
                         state = State.LOADING;
+
                         currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.MENU, LoadSceneMode.Additive);
                         currentAsyncOperation.allowSceneActivation = false;
-                        currentScene = SceneManager.GetSceneByBuildIndex(1);
                     }
                 }
                 break;
@@ -90,24 +96,60 @@ public class CoreSceneManager : MonoBehaviour {
     
     void SwitchScene(SceneID sceneID)
     {
-        SetLoadingScreen(true);
+
 
         switch (sceneID)
         {
             case SceneID.MENU:
                 {
-                    state = State.UNLOADING_GAME;
-                    
-                    currentAsyncOperation = SceneManager.UnloadSceneAsync((int)SceneID.GAME);
-                    currentAsyncOperation.allowSceneActivation = false;
+                    if (currentScene == SceneManager.GetSceneByBuildIndex((int)SceneID.GAME))
+                    {
+                        SetLoadingScreen(true);
+
+                        currentAsyncOperation = SceneManager.UnloadSceneAsync(currentScene);
+                        currentAsyncOperation.allowSceneActivation = false;
+
+                        currentScene = SceneManager.GetSceneByBuildIndex((int)SceneID.MENU);
+
+                        state = State.UNLOADING_GAME;
+                    }
+                    else if(currentScene == SceneManager.GetSceneByBuildIndex((int)SceneID.MASTER))
+                    {
+                        SetLoadingScreen(true);
+
+                        currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.MENU, LoadSceneMode.Additive);
+                        currentAsyncOperation.allowSceneActivation = false;
+
+                        currentScene = SceneManager.GetSceneByBuildIndex((int)SceneID.MENU);
+
+                        state = State.LOADING;
+                    }
                 }
                 break;
             case SceneID.GAME:
                 {
-                    state = State.UNLOADING_MENU;
+                    if (currentScene == SceneManager.GetSceneByBuildIndex((int)SceneID.MENU))
+                    {
+                        SetLoadingScreen(true);
 
-                    currentAsyncOperation = SceneManager.UnloadSceneAsync((int)SceneID.MENU);
-                    currentAsyncOperation.allowSceneActivation = false;
+                        currentAsyncOperation = SceneManager.UnloadSceneAsync(currentScene);
+                        currentAsyncOperation.allowSceneActivation = false;
+
+                        currentScene = SceneManager.GetSceneByBuildIndex((int)SceneID.GAME);
+
+                        state = State.UNLOADING_MENU;
+                    }
+                    else if (currentScene == SceneManager.GetSceneByBuildIndex((int)SceneID.MASTER))
+                    {
+                        SetLoadingScreen(true);
+
+                        currentAsyncOperation = SceneManager.LoadSceneAsync((int)SceneID.GAME, LoadSceneMode.Additive);
+                        currentAsyncOperation.allowSceneActivation = false;
+
+                        currentScene = SceneManager.GetSceneByBuildIndex((int)SceneID.GAME);
+
+                        state = State.LOADING;
+                    }
                 }
                 break;
             default:
