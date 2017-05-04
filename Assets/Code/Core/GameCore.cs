@@ -192,20 +192,20 @@ public class GameCore : MonoBehaviour {
         parallaxSystemTransform.position = new Vector3(cameraSystemTransform.position.x, 0, 0);
     }
 
-    void InitializeWorldModules()
-    {
+    //void InitializeWorldModules()
+    //{
 
-        foreach (WorldDictionaryList data in worldModulesList)
-        {        
-            foreach(WorldModuleData mod in data.worldModules)
-            {
-                if (!worldModules.ContainsKey(data.type))
-                    worldModules.Add(data.type, new List<WorldModuleData>());
+    //    foreach (WorldDictionaryList data in worldModulesList)
+    //    {        
+    //        foreach(WorldModuleData mod in data.worldModules)
+    //        {
+    //            if (!worldModules.ContainsKey(data.type))
+    //                worldModules.Add(data.type, new List<WorldModuleData>());
 
-                worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
-            }
-        }
-    }
+    //            worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
+    //        }
+    //    }
+    //}
 
     void UpdateWorldManager()
     {

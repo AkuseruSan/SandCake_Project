@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Stage { Z_1 = 20, Z_2 = 30, Z_3 = 40, Z_4 = 50, Z_BOSS = 3 };
+public enum Stage { Z_1 , Z_2, Z_3, Z_BOSS };
 
 public class SpawnManager : MonoBehaviour {
 
@@ -13,15 +13,16 @@ public class SpawnManager : MonoBehaviour {
 
     [Space(20)]
     [Header("[World Dictionary Lists]")]
-    public List<ListOfWorldDictionaryList> listWorldModuleList;
+    public List<WorldModuleData> WorldModuleList;
 
-    public Dictionary<WorldModuleType, List<WorldModuleData>> worldModules;
-
+    public Dictionary<uint, WorldModuleData> WorldModuleDictionary;
     // Use this for initialization
     void Start () {
-
-        worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
-        InitializeWorldModules();
+        for (int i = 0; i < WorldModuleList.Count - 1; ++i)
+        {
+           
+        }
+        
     }
 	
 	// Update is called once per frame
@@ -35,29 +36,11 @@ public class SpawnManager : MonoBehaviour {
                 break;
             case Stage.Z_3:
                 break;
-            case Stage.Z_4:
-                break;
             case Stage.Z_BOSS:
                 break;
         }
     }
 
-   public void InitializeWorldModules()
-    {
-        foreach(ListOfWorldDictionaryList index in listWorldModuleList)
-        {
-            foreach (WorldDictionaryList data in index.worldDictionaryList)
-            {
-                foreach (WorldModuleData mod in data.worldModules)
-                {
-                    if (!worldModules.ContainsKey(data.type))
-                        worldModules.Add(data.type, new List<WorldModuleData>());
-
-                    worldModules[data.type].Add((new WorldModuleData(mod.beginConnection, mod.endConnection, mod.module)));
-                }
-            }
-        }
-        
-    }
+   
 
 }

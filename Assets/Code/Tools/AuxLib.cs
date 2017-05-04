@@ -71,6 +71,8 @@ public struct DualTexture
 [System.Serializable]
 public class WorldModuleData
 {
+    public uint ID;
+    public WorldModuleType type;
     public WorldModuleConnect beginConnection;
     public WorldModuleConnect endConnection;
     public GameObject module;
@@ -86,12 +88,5 @@ public class WorldModuleData
 [System.Serializable]
 public struct WorldDictionaryList
 {
-    public WorldModuleType type;
     public List<WorldModuleData> worldModules;
-}
-
-[System.Serializable]
-public struct ListOfWorldDictionaryList
-{
-    public List<WorldDictionaryList> worldDictionaryList;
 }
