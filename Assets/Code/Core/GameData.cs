@@ -33,12 +33,10 @@ public class GameData : MonoBehaviour {
         }
         Instance = this;
 
-        //PlayerPrefs.DeleteAll();
-
     }
     void Start () {
 
-        StartDataLoader();
+        StartDataManager();
 	}
 	
 	// Update is called once per frame
@@ -50,7 +48,7 @@ public class GameData : MonoBehaviour {
     {
 
     }
-    void StartDataLoader()
+    void StartDataManager()
     {
         if (!PlayerPrefs.HasKey(DATA_FILE))
         {
