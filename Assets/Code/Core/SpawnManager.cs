@@ -11,13 +11,13 @@ public class SpawnManager : MonoBehaviour {
     private int[] zonesNumber;
 
     Queue current;
-    public Stage currentStage;
+    public Stage currentStage = Stage.Z_1;
 
     [Space(20)]
     [Header("[World Dictionary Lists]")]
     public List<WorldModuleData> WorldModuleList;
     private List<List<uint>> ListOfIndex;
-
+    private WorldModuleData previousModule;
     
     public Dictionary<uint, WorldModuleData> WorldModuleDictionary;
 
@@ -45,42 +45,74 @@ public class SpawnManager : MonoBehaviour {
             WorldModuleList[i].SetID(zonesNumber[(int)WorldModuleList[i].stage]);
             ListOfIndex[(int)WorldModuleList[i].stage].Add(WorldModuleList[i].GetID());
             zonesNumber[(int)WorldModuleList[i].stage]++;
-
-
+            
             //Puts the ID of the module as key and the module as value
             WorldModuleDictionary.Add(WorldModuleList[i].GetID(), WorldModuleList[i]);
         }
 
-        for (int i = 0; i < ListOfIndex.Count; ++i)
+        //Queue start
+        current = new Queue();
+
+        while (current.Count < ListOfIndex[(int)currentStage].Count / 2)
         {
-            for (int j = 0; j < ListOfIndex[i].Count; ++j)
+            //Debug.Log("current length: " + current.Count + "  List of index length: " + ListOfIndex[(int)currentStage].Count / 2);
+            int selectedIndex = Random.Range(0, (ListOfIndex[(int)currentStage].Count));
+
+            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
+
+            // ListOfIndex = List with all the modules ID's
+            // currentStage = Representation of the current zone
+            // selectedIndex = Random number to select a modlue inside the corresponding zone
+
+            if(previousModule == null)
             {
-                //Debug.Log("List content in " + i + " " + j + " " + ListOfIndex[i][j]);
+                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex]))
+                {
+                    previousModule = currentModule;
+                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+                }
             }
+
+            else
+            {
+                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+                && previousModule.endConnection == currentModule.beginConnection)
+                {
+                    previousModule = currentModule;
+                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+                }
+            }
+
+        }
+
+        foreach (uint xData in current)
+        {
+            Debug.Log(xData);
         }
     }
 
     // Use this for initialization
     void Start () {
-        WorldModuleList.Clear();        
+        //WorldModuleList.Clear();
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        switch (currentStage)
+        if(current.Count == ListOfIndex[(int)currentStage].Count / 2)
         {
-            case Stage.Z_1:
-                break;
-            case Stage.Z_2:
-                break;
-            case Stage.Z_3:
-                break;
-            case Stage.Z_BOSS:
-                break;
+            //Debug.Log("Ready to spawn!");
+            current.Dequeue();
         }
-    }
 
-   
+        while (current.Count < ListOfIndex[(int)currentStage].Count / 2)
+        {
+            //Debug.Log("Not ready to spawn!");
+            int selectedIndex = Random.Range(0, (ListOfIndex[(int)currentStage].Count));
+
+            if (!current.Contains(selectedIndex)) current.Enqueue(selectedIndex);
+        }
+        
+    }
 
 }
