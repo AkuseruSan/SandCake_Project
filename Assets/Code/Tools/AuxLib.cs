@@ -71,6 +71,9 @@ public struct DualTexture
 [System.Serializable]
 public class WorldModuleData
 {
+    private uint ID;
+    public Stage stage;
+    public WorldModuleType type;
     public WorldModuleConnect beginConnection;
     public WorldModuleConnect endConnection;
     public GameObject module;
@@ -81,11 +84,20 @@ public class WorldModuleData
         endConnection = e;
         module = m;
     }
+
+    public void SetID(int i)
+    {
+        ID = (uint)((int)stage * 100 + 100 + i);
+        //Debug.Log(ID);
+    }
+    public uint GetID()
+    {
+        return ID;
+    }
 }
 
 [System.Serializable]
 public struct WorldDictionaryList
 {
-    public WorldModuleType type;
     public List<WorldModuleData> worldModules;
 }
