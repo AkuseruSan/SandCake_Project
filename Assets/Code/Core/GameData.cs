@@ -19,6 +19,7 @@ public class GameData : MonoBehaviour {
     public PlayerData playerData;
 
     #region Constant Data
+    public const uint MAX_ENERGY = 10000;
     public const uint POWERUP_COUNT = 10;
     public const char CONTROL_CHAR = '|';
     public const string DATA_FILE = "EltaGameData";
@@ -48,6 +49,7 @@ public class GameData : MonoBehaviour {
     {
 
     }
+
     void StartDataManager()
     {
         if (!PlayerPrefs.HasKey(DATA_FILE))

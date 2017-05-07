@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManagerHubUI : MonoBehaviour {
+public class MenuInputManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
