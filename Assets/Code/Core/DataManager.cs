@@ -13,9 +13,9 @@ public struct PlayerData
     public uint gameComplete;
 }
 
-public class GameData : MonoBehaviour {
+public class DataManager : MonoBehaviour {
 
-    public static GameData Instance { get; private set; }
+    public static DataManager Instance { get; private set; }
     public PlayerData playerData;
 
     #region Constant Data

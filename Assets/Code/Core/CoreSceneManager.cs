@@ -24,7 +24,8 @@ public class CoreSceneManager : MonoBehaviour {
         currentAsyncOperation = null;
 
         currentScene = SceneManager.GetActiveScene();
-        //SwitchScene(SceneID.MENU);
+
+        SwitchScene(SceneID.MENU);
     }
 
     // Update is called once per frame
