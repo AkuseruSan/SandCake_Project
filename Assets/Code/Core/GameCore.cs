@@ -8,7 +8,8 @@ using UnityEngine.SceneManagement;
 public enum GameState { AWAKE, PAUSE, PLAY, GAMEOVER }
 
 //Singleton Controller
-public class GameCore : MonoBehaviour {
+public class GameCore : MonoBehaviour
+{
 
     public static GameCore Instance { get; private set; }
 
@@ -36,7 +37,7 @@ public class GameCore : MonoBehaviour {
     [Header("[World Dictionary Lists]")]
     public List<WorldDictionaryList> worldModulesList;
 
-    public Dictionary<WorldModuleType,List<WorldModuleData>> worldModules;
+    public Dictionary<WorldModuleType, List<WorldModuleData>> worldModules;
 
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
@@ -55,7 +56,7 @@ public class GameCore : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         //DontDestroyOnLoad(this);
 
@@ -75,14 +76,15 @@ public class GameCore : MonoBehaviour {
 
         worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         switch (gameState)
         {
             case GameState.AWAKE:
                 {
-                    
+
                 }
                 break;
             case GameState.PAUSE:
@@ -114,7 +116,8 @@ public class GameCore : MonoBehaviour {
             case GameState.GAMEOVER:
                 {
 
-                }break;
+                }
+                break;
             default:
                 break;
         }
@@ -157,7 +160,7 @@ public class GameCore : MonoBehaviour {
 
     void OverlapOtherWorld()
     {
-        if(Physics.Raycast(new Vector3(player.transform.position.x, player.transform.position.y, -100), Vector3.forward, out hit, 1000))
+        if (Physics.Raycast(new Vector3(player.transform.position.x, player.transform.position.y, -100), Vector3.forward, out hit, 1000))
         {
             if (hit.transform.gameObject.tag == "Depth")
             {

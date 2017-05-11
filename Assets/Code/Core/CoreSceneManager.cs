@@ -6,6 +6,9 @@ using UnityEngine;
 public class CoreSceneManager : MonoBehaviour {
 
     enum SceneID { MASTER = 0, MENU = 1, GAME = 2 }
+
+    public static CoreSceneManager Instance { get; private set; }
+
     public GameObject loadingScreen;
 
     Scene currentScene;
@@ -15,6 +18,14 @@ public class CoreSceneManager : MonoBehaviour {
     enum State { ON_WAIT, LOADING, UNLOADING_MENU, UNLOADING_GAME, LOADED };
     State state;
 
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
     // Use this for initialization
     void Start ()
     {
