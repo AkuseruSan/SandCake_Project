@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CoreSceneManager : MonoBehaviour {
 
-    enum SceneID { MASTER = 0, MENU = 1, GAME = 2 }
+    public enum SceneID { MASTER = 0, MENU = 1, GAME = 2 }
 
     public static CoreSceneManager Instance { get; private set; }
 
@@ -115,7 +115,7 @@ public class CoreSceneManager : MonoBehaviour {
         Debug.Log("Core Scene Manager State: " + state);
     }
 
-    private void SwitchScene(SceneID sceneID)
+    public void SwitchScene(SceneID sceneID)
     {
         switch (sceneID)
         {

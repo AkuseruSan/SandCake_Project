@@ -124,9 +124,9 @@ public class InputManagerUI : MonoBehaviour {
 
     }
 
-    public void Restart()
+    public void BackToMainMenu()
     {
-        SceneManager.LoadScene(0);
+        CoreSceneManager.Instance.SwitchScene(CoreSceneManager.SceneID.MENU);
         Time.timeScale = 1;
     }
 
