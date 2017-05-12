@@ -7,6 +7,7 @@ public class WorldConstructor : MonoBehaviour {
     private float lastX;
 
     private float flowerSpawnCtr;//Counter = ctr
+    private float treeSpawnCounter;
 
     //Stores an array with a lenght of the number of zones
     private uint[] zonesNumber;
@@ -119,6 +120,7 @@ public class WorldConstructor : MonoBehaviour {
     void Update()
     {
         SpawnFlowers();
+        SpawnTrees();
     }
 	
 	// Update is called once per frame
@@ -143,6 +145,18 @@ public class WorldConstructor : MonoBehaviour {
         }
 
         flowerSpawnCtr -= Time.deltaTime;
+    }
+
+    void SpawnTrees()
+    {
+        if (treeSpawnCounter <= 0)
+        {
+            treeSpawnCounter = Random.Range(1, 3);
+            GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1, 0), Quaternion.identity) as GameObject;
+
+        }
+
+        treeSpawnCounter -= Time.deltaTime;
     }
 
     void SpawnWorldModule()

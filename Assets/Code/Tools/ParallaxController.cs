@@ -17,7 +17,7 @@ public class ParallaxController : MonoBehaviour {
     public List<DualTexture> parallaxLayers;
 
     private int parallaxLayerMin = 1;
-    private int parallaxLayerMax = 2;
+    private int parallaxLayerMax = 5;
 
     void Awake()
     {
