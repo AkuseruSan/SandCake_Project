@@ -117,6 +117,11 @@ public class PlayerController : MonoBehaviour {
             //Debug.Log(contact.normal);
             if (contact.normal == new Vector2( -1, 0)) Die();
         }
+
+        if (collision.gameObject.tag == "Death")
+        {
+            Die();
+        }
     }
 
     void OnCollisionStay2D(Collision2D other)

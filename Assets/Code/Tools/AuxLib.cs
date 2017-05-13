@@ -44,16 +44,15 @@ public static class AuxLib {
 
         if (hit.collider != null && hit2.collider != null) 
         {
-            //if (extraChecker.collider != null && extraChecker2.collider != null)
-            //{
+            if (extraChecker.collider != null && extraChecker2.collider != null)
+            {
                 if (hit.collider.tag == tg && hit2.collider.tag == tg)
                 {
                     //Debug.Log("Found Terrain: " + hit.transform.name);
                     pos = new Vector3(pos.x, hit.point.y + height, pos.z);
 
                 }
-            //}
-                     
+            }              
 
         }
 
