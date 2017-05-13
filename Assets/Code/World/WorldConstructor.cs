@@ -63,53 +63,7 @@ public class WorldConstructor : MonoBehaviour {
         //Queue start
         current = new Queue<uint>();
 
-        //-------------------- MODULE QUEUE ADDITION MANAGEMENT -----------------------//
-
-        while (current.Count < ListOfIndex[(int)currentStage].Count / 2)
-        {
-
-
-            //Debug.Log("current length: " + current.Count + "  List of index length: " + ListOfIndex[(int)currentStage].Count / 2);
-            int selectedIndex = Random.Range(0, (ListOfIndex[(int)currentStage].Count));
-
-            // ListOfIndex = List with all the modules ID's
-            // currentStage = Representation of the current zone
-            // selectedIndex = Random number to select a modlue inside the corresponding zone
-            // ListOfIndex[(int)currentStage][selectedIndex] = ID of a module
-            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
-
-            if (previousModule == null)
-            {
-                previousModule = currentModule;
-                current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
-                moduleCounter++;
-
-            }
-
-            else
-            {
-                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
-                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type)
-                {
-                    previousModule = currentModule;
-                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
-                    moduleCounter++;
-                }
-                else if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
-                && previousModule.endConnection == currentModule.beginConnection)
-                {
-                    previousModule = currentModule;
-                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
-                    moduleCounter++;
-                }
-            }
-
-        }
-
-        foreach (uint xData in current)
-        {
-            Debug.Log(xData);
-        }
+        EnqueuerSystem();
     }
     // Use this for initialization
     void Start () {
@@ -139,8 +93,31 @@ public class WorldConstructor : MonoBehaviour {
     {
         if (flowerSpawnCtr <= 0)
         {
-            flowerSpawnCtr = Random.Range(2, 5);
-            GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1, 0), Quaternion.identity) as GameObject;
+            flowerSpawnCtr = Random.Range(1, 3);
+
+            Vector3 spawnPosition = AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1);
+            Vector3 spawnPositionCheckR = AuxLib.SetPositionOnRaycastHit2D(new Vector3(spawnPosition.x + 2, 20, 0), "Terrain", Vector2.down, 1);
+            Vector3 spawnPositionCheckL = AuxLib.SetPositionOnRaycastHit2D(new Vector3(spawnPosition.x - 2, 20, 0), "Terrain", Vector2.down, 1);
+
+            if (spawnPosition.y >= 20)
+            {
+                treeSpawnCounter = 0;
+            }
+
+            else if (spawnPositionCheckR.y <= spawnPosition.y - 0.2)
+            {
+                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckR, Quaternion.identity) as GameObject;
+            }
+
+            else if (spawnPositionCheckL.y <= spawnPosition.y - 0.2)
+            {
+                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckL, Quaternion.identity) as GameObject;
+            }
+
+            else
+            {
+                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPosition, Quaternion.identity) as GameObject;
+            }
 
         }
 
@@ -151,8 +128,32 @@ public class WorldConstructor : MonoBehaviour {
     {
         if (treeSpawnCounter <= 0)
         {
-            treeSpawnCounter = Random.Range(1, 3);
-            GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1, 0), Quaternion.identity) as GameObject;
+            treeSpawnCounter = Random.Range(1, 6);
+
+            Vector3 spawnPosition = AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1);
+            Vector3 spawnPositionCheckR = AuxLib.SetPositionOnRaycastHit2D(new Vector3(spawnPosition.x + 2, 20, 0), "Terrain", Vector2.down, 1);
+            Vector3 spawnPositionCheckL = AuxLib.SetPositionOnRaycastHit2D(new Vector3(spawnPosition.x - 2, 20, 0), "Terrain", Vector2.down, 1);
+
+            if (spawnPosition.y >= 20)
+            {
+                treeSpawnCounter = 0;
+            }
+
+            else if (spawnPositionCheckR.y <= spawnPosition.y - 0.2)
+            {
+                GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckR, Quaternion.identity) as GameObject;
+            }
+
+            else if(spawnPositionCheckL.y <= spawnPosition.y - 0.2)
+            {
+                GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckL, Quaternion.identity) as GameObject;
+            }
+
+            else
+            {
+                GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPosition, Quaternion.identity) as GameObject;
+            }
+            
 
         }
 
