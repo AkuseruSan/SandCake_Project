@@ -114,8 +114,13 @@ public class PlayerController : MonoBehaviour {
 
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.normal == new Vector2( -1, 0)) Die();
             //Debug.Log(contact.normal);
+            if (contact.normal == new Vector2( -1, 0)) Die();
+        }
+
+        if (collision.gameObject.tag == "Death")
+        {
+            Die();
         }
     }
 
