@@ -101,7 +101,7 @@ public class WorldConstructor : MonoBehaviour {
 
             if (spawnPosition.y >= 20)
             {
-                treeSpawnCounter = 0;
+                flowerSpawnCtr = 0;
             }
 
             else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)

@@ -29,9 +29,20 @@ public class EnemyManager : MonoBehaviour {
                     {
                         counter = Random.Range(randomSpawnTimeRange.x, randomSpawnTimeRange.y);
 
+
                         //Debug.Log(GameCore.Instance.player.transform.position);
-                        Spawn("Prefabs/Enemies/Raven", new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0));
-                        Spawn("Prefabs/Enemies/Hawk", new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0));
+                        Vector3 playerDistance = new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0);
+                        Vector3 spawnPosition = AuxLib.SetPositionOnRaycastHit2D(playerDistance, "Terrain", Vector2.down, spawnHeight);
+
+                        if(spawnPosition.y >= 7)
+                        {
+                            counter = 0;
+                        }
+                        else
+                        {
+                            GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Raven"), spawnPosition, Quaternion.identity) as GameObject;
+                            //go = Instantiate(Resources.Load("Prefabs/Enemies/Hawk"), spawnPosition, Quaternion.identity) as GameObject;
+                        }
 
                     }
 
@@ -48,6 +59,7 @@ public class EnemyManager : MonoBehaviour {
     public void Spawn(string path, Vector3 startPos)
     {
         GameObject go;
+
         go = Instantiate(Resources.Load(path), AuxLib.SetPositionOnRaycastHit2D(startPos, "Terrain", Vector2.down, spawnHeight), Quaternion.identity) as GameObject;
         //Debug.Log("Initial Position Assigned: "+startPos);
     }
