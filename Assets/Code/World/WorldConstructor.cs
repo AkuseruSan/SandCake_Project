@@ -104,12 +104,12 @@ public class WorldConstructor : MonoBehaviour {
                 treeSpawnCounter = 0;
             }
 
-            else if (spawnPositionCheckR.y <= spawnPosition.y - 0.2)
+            else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckR, Quaternion.identity) as GameObject;
             }
 
-            else if (spawnPositionCheckL.y <= spawnPosition.y - 0.2)
+            else if (spawnPositionCheckL.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckL, Quaternion.identity) as GameObject;
             }
@@ -139,12 +139,12 @@ public class WorldConstructor : MonoBehaviour {
                 treeSpawnCounter = 0;
             }
 
-            else if (spawnPositionCheckR.y <= spawnPosition.y - 0.2)
+            else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckR, Quaternion.identity) as GameObject;
             }
 
-            else if(spawnPositionCheckL.y <= spawnPosition.y - 0.2)
+            else if(spawnPositionCheckL.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckL, Quaternion.identity) as GameObject;
             }

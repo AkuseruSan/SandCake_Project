@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour {
     public float minSpeed;
     public float rotationLerpTime;
     public Vector2 jump;
+    public float invTimeInspector;
+    private float invTime = 1.5f;
+    private bool invulnerable = false;
+    private Color dayColor = new Color(0.79f, 0.79f, 0.79f, 1), nightColor = new Color(0.12f, 0.14f, 0.23f, 1);
 
     [HideInInspector]
     public bool onCoolDown;
@@ -80,6 +84,8 @@ public class PlayerController : MonoBehaviour {
                     ClampSpeed();
                     RotatePlayer();
 
+                    InvulnerabilityCount();
+
                     UpdateDistance();
 
                     
@@ -141,8 +147,15 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Stamina") RecoverStamina(20);
-        if (collision.tag == "Enemy") DecreaseStamina(5);
-        Debug.Log("The wolf has been TRIGGERED with: " + collision.name);
+        if (collision.tag == "Enemy" && invulnerable == false)
+        {
+            DecreaseStamina(5);
+            invTime = invTimeInspector;
+            invulnerable = true;
+            Destroy(collision.gameObject);
+        }
+        //Debug.Log(invulnerable);
+        //Debug.Log("The wolf has been TRIGGERED with: " + collision.name);
     }
 
     #endregion
@@ -207,6 +220,65 @@ public class PlayerController : MonoBehaviour {
             currentJumpCount -= 1;
             rBody.AddForce(jump, ForceMode2D.Impulse);
             contactNormal.x = 0;
+        }
+
+    }
+
+    private void InvulnerabilityCount()
+    {
+        if (invulnerable)
+        {
+            invTime -= Time.deltaTime;
+
+            GameObject Child1 = transform.GetChild(0).gameObject;
+            GameObject Child2 = transform.GetChild(1).gameObject;
+
+            Component[] SMP = Child1.GetComponentsInChildren<Anima2D.SpriteMeshInstance>();
+            Component[] SMP2 = Child2.GetComponentsInChildren<Anima2D.SpriteMeshInstance>();
+
+
+            foreach (Anima2D.SpriteMeshInstance x in SMP)
+            {
+                x.color = new Color(Mathf.Lerp(Mathf.Abs(Mathf.Sin(invTime * 10)), nightColor.r, 0.7f), Mathf.Lerp(0, nightColor.g, 0.5f), Mathf.Lerp(0, nightColor.b, 0.5f), 1);
+            }
+
+
+            foreach (Anima2D.SpriteMeshInstance x in SMP2)
+            {
+                x.color = new Color(Mathf.Lerp(Mathf.Abs(Mathf.Sin(invTime * 10)), dayColor.r, 0.7f), Mathf.Lerp(0, dayColor.g, 0.5f), Mathf.Lerp(0, dayColor.b, 0.5f), 1);
+            }
+
+
+        }
+
+        if(invTime <= 0 && invulnerable == true)
+        {
+
+            invulnerable = false;
+
+            GameObject Child1 = transform.GetChild(0).gameObject;
+            GameObject Child2 = transform.GetChild(1).gameObject;
+
+            Component[] SMP = Child1.GetComponentsInChildren<Anima2D.SpriteMeshInstance>();
+            Component[] SMP2 = Child2.GetComponentsInChildren<Anima2D.SpriteMeshInstance>();
+
+            if (SMP[0].GetComponent<Anima2D.SpriteMeshInstance>().color != nightColor)
+            {
+                foreach (Anima2D.SpriteMeshInstance x in SMP)
+                {
+                    x.color = nightColor;
+                }
+            }
+
+            if (SMP2[0].GetComponent<Anima2D.SpriteMeshInstance>().color != dayColor)
+            {
+                foreach (Anima2D.SpriteMeshInstance x in SMP2)
+                {
+                    x.color = dayColor;
+                }
+            }
+
+        
         }
 
     }
