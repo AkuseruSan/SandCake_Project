@@ -18,6 +18,7 @@ public class ParallaxLayerBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        GetComponent<MeshRenderer>().sortingOrder = -100;
         animatedOffset = Vector2.zero;
 
     }
