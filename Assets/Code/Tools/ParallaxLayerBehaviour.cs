@@ -19,6 +19,7 @@ public class ParallaxLayerBehaviour : MonoBehaviour {
     void Start()
     {
         animatedOffset = Vector2.zero;
+
     }
 
     // Update is called once per frame
