@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class WorldConstructor : MonoBehaviour {
 
+    public enum Stage { Z_1, Z_2, Z_3, Z_4, Z_5, Z_BOSS };
+
     private float lastX;
 
     private float flowerSpawnCtr;//Counter = ctr
@@ -69,7 +71,8 @@ public class WorldConstructor : MonoBehaviour {
     // Use this for initialization
     void Start () {
         lastX = transform.position.x;
-        
+
+        currentStage = (Stage)DataManager.Instance.currentSpawnPoint;
     }
 
     void Update()
