@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class WorldConstructor : MonoBehaviour {
 
@@ -107,6 +108,7 @@ public class WorldConstructor : MonoBehaviour {
             else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckR, Quaternion.identity) as GameObject;
+                SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME);
             }
 
             else if (spawnPositionCheckL.y <= spawnPosition.y - 0.4)

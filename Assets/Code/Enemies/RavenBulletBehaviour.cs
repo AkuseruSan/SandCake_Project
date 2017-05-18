@@ -19,4 +19,11 @@ public class RavenBulletBehaviour : MonoBehaviour {
     {
         speed = s;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        Destroy (gameObject);
+
+    }
 }

@@ -124,10 +124,6 @@ public class PlayerController : MonoBehaviour {
             if (contact.normal == new Vector2( -1, 0)) Die();
         }
 
-        if (collision.gameObject.tag == "Death")
-        {
-            Die();
-        }
     }
 
     void OnCollisionStay2D(Collision2D other)
@@ -153,6 +149,11 @@ public class PlayerController : MonoBehaviour {
             invTime = invTimeInspector;
             invulnerable = true;
             Destroy(collision.gameObject);
+
+            if (collision.gameObject.tag == "Death")
+            {
+                Die();
+            }
         }
         //Debug.Log(invulnerable);
         //Debug.Log("The wolf has been TRIGGERED with: " + collision.name);
