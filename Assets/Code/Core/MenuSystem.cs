@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class MenuSystem : MonoBehaviour {
@@ -9,24 +10,48 @@ public class MenuSystem : MonoBehaviour {
 
     public RectTransform powerUpPopup;
     public RectTransform playPopup;
+    public RectTransform noEnergyPopup;
     public GameObject energyText;
 
-    public float lerpSpeed;
+    private uint currentPlayCost;
+
+    public GameObject[] startPointButtons = new GameObject[DataManager.SPAWN_POINTS];
+    public GameObject bossPointButton;
 
     public float minOrthoSize, maxOrthoSize;
 
     private Vector3 originCameraPosition;
 	// Use this for initialization
 	void Start () {
+
+        currentPlayCost = 0;
         minOrthoSize = Camera.main.orthographicSize;
 
         powerUpPopup.gameObject.SetActive(false);
         playPopup.gameObject.SetActive(false);
+        noEnergyPopup.gameObject.SetActive(false);
 
         originCameraPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
         
         energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
 	}
+
+    public void CheckStartPointButtonAvailable(GameObject btn)
+    {
+        for (uint i = 0; i < startPointButtons.Length; i++)
+        {
+            if (btn == startPointButtons[i])
+            {
+                startPointButtons[i].transform.localScale = new Vector3(1.2f, 1.2f, 1);
+                DataManager.Instance.currentSpawnPoint = i;
+                currentPlayCost = System.Convert.ToUInt32(startPointButtons[i].transform.parent.GetChild(1).GetChild(0).GetComponent<Text>().text);
+            }
+            else
+            {
+                startPointButtons[i].transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
+    }
 
     private RaycastHit2D GetHit()
     {
@@ -48,27 +73,29 @@ public class MenuSystem : MonoBehaviour {
     {
         camTravelMode = CamTravelMode.OUT;
         StopCoroutine("MoveAndLookAt");
-        StartCoroutine(MoveAndLookAt(Camera.main.transform.position, originCameraPosition, CamTravelMode.OUT));
+        StartCoroutine(MoveAndLookAt(Camera.main.transform.position, originCameraPosition, CamTravelMode.OUT, 3, true));
     }
 
-    private IEnumerator MoveAndLookAt(Vector3 origin, Vector3 target, CamTravelMode mode)
+    private IEnumerator MoveAndLookAt(Vector3 origin, Vector3 target, CamTravelMode mode, float speed, bool scalable)
     {
         float t = 0;
 
+        float camOrthoScale = Camera.main.orthographicSize;
         while (t < 1)
         {
             Debug.Log("Traveling Camera . . ."+t);
 
-            t += Time.deltaTime*lerpSpeed;
+            t += Time.deltaTime*speed;
             t = Mathf.Clamp(t, 0, 1);
 
             Camera.main.transform.position = new Vector3(Mathf.Lerp(origin.x, target.x, t), Mathf.Lerp(origin.y, target.y, t), origin.z);
-
-            if (mode == CamTravelMode.IN)
-                Camera.main.orthographicSize = Mathf.Lerp(minOrthoSize, maxOrthoSize, t);
-            else if (mode == CamTravelMode.OUT)
-                Camera.main.orthographicSize = Mathf.Lerp(maxOrthoSize, minOrthoSize, t);
-
+            if (scalable)
+            {
+                if (mode == CamTravelMode.IN)
+                    Camera.main.orthographicSize = Mathf.Lerp(camOrthoScale, maxOrthoSize, t);
+                else if (mode == CamTravelMode.OUT)
+                    Camera.main.orthographicSize = Mathf.Lerp(camOrthoScale, minOrthoSize, t);
+            }
             yield return Camera.main;
         }
 
@@ -78,6 +105,7 @@ public class MenuSystem : MonoBehaviour {
 
     public void StartGame()
     {
+        DataManager.Instance.playerData.energy -= currentPlayCost;
         CoreSceneManager.Instance.SwitchScene(CoreSceneManager.SceneID.GAME);
     }
 
@@ -114,11 +142,14 @@ public class MenuSystem : MonoBehaviour {
                     {
                         camTravelMode = CamTravelMode.IN;
                         StopCoroutine("MoveAndLookAt");
-                        StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN));
+                        StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN, 3, true));
                         powerUpPopup.gameObject.SetActive(true);
                     }
-                    else if(btn.type == Button2D.ButtonType.PLAY)
+                    else if(btn.type == Button2D.ButtonType.PLAY && camTravelMode == CamTravelMode.OUT)
                     {
+                        camTravelMode = CamTravelMode.IN;
+                        StopCoroutine("MoveAndLookAt");
+                        StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN, 3, false));
                         playPopup.gameObject.SetActive(true);
                     }
 
