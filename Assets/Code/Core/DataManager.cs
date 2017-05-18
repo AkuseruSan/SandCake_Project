@@ -10,7 +10,7 @@ public struct PlayerData
     public uint energy;
     public bool[] activePowerUps;
     public float activeMultiplier;
-    public uint gameComplete;
+    public uint gameComplete;// 0 - FIRST TIME PLAY / 1 - PLAYED BEFORE / 2 - GAME COMPLETE
 }
 
 public class DataManager : MonoBehaviour {
@@ -20,9 +20,9 @@ public class DataManager : MonoBehaviour {
 
     #region Constant Data
     public const uint MAX_ENERGY = 10000;
-    public const uint POWERUP_COUNT = 10;
+    public const uint POWERUP_COUNT = 5;
     public const char CONTROL_CHAR = '|';
-    public const string DATA_FILE = "EltaGameData";
+    public const string DATA_KEY = "EltaGameData";
 
     #endregion
     // Use this for initialization
@@ -43,6 +43,30 @@ public class DataManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+        //DEBUGGER
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            DeleteData();
+            Debug.Log("[ALL GAME DATA HAS BEEN DELETED]");
+        }
+
+        //GODMODE FILE
+        else if(Input.GetKeyDown(KeyCode.G))
+        {
+            playerData.gameComplete = 2;
+            playerData.energy = MAX_ENERGY;
+            playerData.unlockedSpawnPoints = 1;
+            playerData.currentSpawnPoint = 0;
+            playerData.activeMultiplier = 1f;
+            playerData.activePowerUps = new bool[POWERUP_COUNT];
+
+            for (int i = 0; i < playerData.activePowerUps.Length; i++)
+            {
+                playerData.activePowerUps[i] = true;
+            }
+
+            SaveData();
+        }
 	}
 
     void LoadScene()
@@ -52,7 +76,7 @@ public class DataManager : MonoBehaviour {
 
     void StartDataManager()
     {
-        if (!PlayerPrefs.HasKey(DATA_FILE))
+        if (!PlayerPrefs.HasKey(DATA_KEY))
         {
             //INITIALIZE BASIC STRUCT
             playerData.gameComplete = 0;
@@ -74,13 +98,13 @@ public class DataManager : MonoBehaviour {
 
     public void DeleteData()
     {
-        PlayerPrefs.DeleteKey(DATA_FILE);
+        PlayerPrefs.DeleteKey(DATA_KEY);
     }
 
     private void LoadData()
     {
         int index = 0;
-        string data = PlayerPrefs.GetString(DATA_FILE);
+        string data = PlayerPrefs.GetString(DATA_KEY);
 
         string[] load = data.Split(CONTROL_CHAR);
 
@@ -125,9 +149,9 @@ public class DataManager : MonoBehaviour {
             save += CONTROL_CHAR + (b ? "1" : "0");
         }
 
-        Debug.Log(save);
+        Debug.Log("[SAVED GAME DATA] Encoded: [ "+save+" ]");
 
-        PlayerPrefs.SetString(DATA_FILE, save);
+        PlayerPrefs.SetString(DATA_KEY, save);
 
     }
 

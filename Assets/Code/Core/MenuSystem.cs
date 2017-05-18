@@ -5,9 +5,11 @@ using UnityEngine;
 public class MenuSystem : MonoBehaviour {
 
     public enum CamTravelMode { IN, OUT }
-    public CamTravelMode camTravelMode = CamTravelMode.OUT;
+    private CamTravelMode camTravelMode = CamTravelMode.OUT;
 
     public RectTransform powerUpPopup;
+    public RectTransform playPopup;
+    public GameObject energyText;
 
     public float lerpSpeed;
 
@@ -17,8 +19,13 @@ public class MenuSystem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         minOrthoSize = Camera.main.orthographicSize;
+
         powerUpPopup.gameObject.SetActive(false);
+        playPopup.gameObject.SetActive(false);
+
         originCameraPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+        
+        energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
 	}
 
     private RaycastHit2D GetHit()
@@ -69,6 +76,11 @@ public class MenuSystem : MonoBehaviour {
         yield return 0;
     }
 
+    public void StartGame()
+    {
+        CoreSceneManager.Instance.SwitchScene(CoreSceneManager.SceneID.GAME);
+    }
+
     private void Update()
     {
         bool input = false;
@@ -104,6 +116,10 @@ public class MenuSystem : MonoBehaviour {
                         StopCoroutine("MoveAndLookAt");
                         StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN));
                         powerUpPopup.gameObject.SetActive(true);
+                    }
+                    else if(btn.type == Button2D.ButtonType.PLAY)
+                    {
+                        playPopup.gameObject.SetActive(true);
                     }
 
                 }
