@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEditor;
 
 public class EnemyManager : MonoBehaviour {
 
@@ -41,7 +43,7 @@ public class EnemyManager : MonoBehaviour {
                         else
                         {
                             GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Raven"), spawnPosition, Quaternion.identity) as GameObject;
-                            //go = Instantiate(Resources.Load("Prefabs/Enemies/Hawk"), spawnPosition, Quaternion.identity) as GameObject;
+                            Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
                         }
 
                     }
@@ -61,6 +63,7 @@ public class EnemyManager : MonoBehaviour {
         GameObject go;
 
         go = Instantiate(Resources.Load(path), AuxLib.SetPositionOnRaycastHit2D(startPos, "Terrain", Vector2.down, spawnHeight), Quaternion.identity) as GameObject;
+        Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
         //Debug.Log("Initial Position Assigned: "+startPos);
     }
 }

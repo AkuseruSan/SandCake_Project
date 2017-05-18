@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEditor;
 
 public class RavenEnemy : BaseEnemyBehaviour
 {
@@ -55,6 +57,7 @@ public class RavenEnemy : BaseEnemyBehaviour
             GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Bullet"), transform.position, Quaternion.identity) as GameObject;
             go.transform.eulerAngles = new Vector3(0,0,(size * separation)/2 - i * separation);
             go.GetComponent<RavenBulletBehaviour>().SetSpeed(5.0f);
+            Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
 
             Destroy(go, Time.deltaTime * 240);
         }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
@@ -72,8 +73,6 @@ public class GameCore : MonoBehaviour
 
         enemyController = transform.GetComponent<EnemyManager>();
 
-        worldModules = new Dictionary<WorldModuleType, List<WorldModuleData>>();
-
         worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
     }
 
@@ -128,24 +127,11 @@ public class GameCore : MonoBehaviour
     {
         if (InputManager.Instance.DrawTouch(ref drawPointSpawnPos) == true && player.GetComponent<PlayerController>().GetCurrentPower() > 0)
         {
-            //if (Physics.Raycast(new Vector3(drawPointSpawnPos.x, drawPointSpawnPos.y, -100), Vector3.forward, out hit, 1000))
-            //{
-            //    if (hit.transform.gameObject.tag != "Depth")
-            //    {
-            //        InstantiateSpawnPoint();
-            //    }
-            //}
-
-            //else
-            //{
-            //    InstantiateSpawnPoint();
-            //}
 
             InstantiateSpawnPoint();
 
             player.GetComponent<PlayerController>().UsePower(1);
         }
-        //else StartCoroutine(GameCore.Instance.)
     }
 
     void UpdateCameraSize()
@@ -156,6 +142,7 @@ public class GameCore : MonoBehaviour
     void InstantiateSpawnPoint()
     {
         GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
+        Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
     }
 
     void OverlapOtherWorld()

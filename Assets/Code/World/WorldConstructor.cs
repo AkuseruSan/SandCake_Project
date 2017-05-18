@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -110,18 +111,20 @@ public class WorldConstructor : MonoBehaviour {
 
             else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
-                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckR, Quaternion.identity) as GameObject;
-                SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME);
+                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/Flower"), spawnPositionCheckR, Quaternion.identity) as GameObject;
+                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else if (spawnPositionCheckL.y <= spawnPosition.y - 0.4)
             {
-                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPositionCheckL, Quaternion.identity) as GameObject;
+                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/Flower"), spawnPositionCheckL, Quaternion.identity) as GameObject;
+                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else
             {
-                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/StaminaFlower_INT"), spawnPosition, Quaternion.identity) as GameObject;
+                GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/Flower"), spawnPosition, Quaternion.identity) as GameObject;
+                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
         }
@@ -147,16 +150,19 @@ public class WorldConstructor : MonoBehaviour {
             else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckR, Quaternion.identity) as GameObject;
+                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else if(spawnPositionCheckL.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckL, Quaternion.identity) as GameObject;
+                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPosition, Quaternion.identity) as GameObject;
+                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
             
 
@@ -170,6 +176,7 @@ public class WorldConstructor : MonoBehaviour {
         GameObject go = Instantiate(WorldModuleDictionary[current.Dequeue()].module as GameObject);
         go.transform.position = transform.position;
         go.transform.localScale = GameCore.Instance.worldModuleScale;
+        Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
     }
 
     void EnqueuerSystem()
@@ -183,7 +190,7 @@ public class WorldConstructor : MonoBehaviour {
             // ListOfIndex = List with all the modules ID's
             // currentStage = Representation of the current zone
             // selectedIndex = Random number to select a modlue inside the corresponding zone
-            //ListOfIndex[(int)currentStage][selectedIndex] = ID of a module
+            // ListOfIndex[(int)currentStage][selectedIndex] = ID of a module
             WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
 
             //First module added || in case of empty queue
