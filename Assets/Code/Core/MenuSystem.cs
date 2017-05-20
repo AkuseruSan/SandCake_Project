@@ -36,19 +36,32 @@ public class MenuSystem : MonoBehaviour {
         energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
 	}
 
+    //Used on UI Buttons events.
     public void CheckStartPointButtonAvailable(GameObject btn)
     {
+        uint unlockedPoints = DataManager.Instance.playerData.unlockedSpawnPoints;
+
         for (uint i = 0; i < startPointButtons.Length; i++)
         {
-            if (btn == startPointButtons[i])
+            if (i < unlockedPoints)
+                startPointButtons[i].GetComponent<Button>().interactable = true;
+            else startPointButtons[i].GetComponent<Button>().interactable = false;
+
+            if (unlockedPoints == startPointButtons.Length + 1) bossPointButton.GetComponent<Button>().interactable = true;
+            else bossPointButton.GetComponent<Button>().interactable = false;
+
+            if (btn == startPointButtons[i] || btn == bossPointButton)
             {
-                startPointButtons[i].transform.localScale = new Vector3(1.2f, 1.2f, 1);
+                btn.transform.localScale = new Vector3(1.2f, 1.2f, 1);
                 DataManager.Instance.currentSpawnPoint = i;
-                currentPlayCost = System.Convert.ToUInt32(startPointButtons[i].transform.parent.GetChild(1).GetChild(0).GetComponent<Text>().text);
+
+                //Esto es una marranada, depende de la jerarquia de gameobjects de la UI
+                currentPlayCost = System.Convert.ToUInt32(btn.transform.parent.GetChild(1).GetChild(0).GetComponent<Text>().text);
             }
             else
             {
                 startPointButtons[i].transform.localScale = new Vector3(1, 1, 1);
+                bossPointButton.transform.localScale = new Vector3(1, 1, 1);
             }
         }
     }
@@ -105,8 +118,15 @@ public class MenuSystem : MonoBehaviour {
 
     public void StartGame()
     {
-        DataManager.Instance.playerData.energy -= currentPlayCost;
-        CoreSceneManager.Instance.SwitchScene(CoreSceneManager.SceneID.GAME);
+        if (DataManager.Instance.playerData.energy < currentPlayCost)
+        {
+            noEnergyPopup.gameObject.SetActive(true);
+        }
+        else
+        {
+            DataManager.Instance.playerData.energy -= currentPlayCost;
+            CoreSceneManager.Instance.SwitchScene(CoreSceneManager.SceneID.GAME);
+        }
     }
 
     private void Update()
@@ -151,6 +171,7 @@ public class MenuSystem : MonoBehaviour {
                         StopCoroutine("MoveAndLookAt");
                         StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN, 3, false));
                         playPopup.gameObject.SetActive(true);
+                        CheckStartPointButtonAvailable(startPointButtons[0]);
                     }
 
                 }

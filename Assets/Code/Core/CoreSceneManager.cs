@@ -46,9 +46,12 @@ public class CoreSceneManager : MonoBehaviour {
         {
             case State.ON_WAIT:
                 {
-                    //DEBUG
-                    if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchScene(SceneID.GAME);
-                    if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchScene(SceneID.MENU);
+                    if (DataManager.Instance.godMode)
+                    {
+                        //DEBUG
+                        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchScene(SceneID.GAME);
+                        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchScene(SceneID.MENU);
+                    }
                 }
                 break;
             case State.LOADING:
