@@ -15,14 +15,17 @@ public struct PlayerData
 
 public class DataManager : MonoBehaviour {
 
+    public enum PowerUpID { BARRIER = 0, DOUBLE_JUMP = 1, REVIVE = 2, PAINT_BOOST = 3, STAMINA_BOOST = 4 }
+
     public static DataManager Instance { get; private set; }
     public PlayerData playerData;
 
-    public uint currentSpawnPoint;
+    public bool godMode;
+    [HideInInspector] public uint currentSpawnPoint;
 
     #region Constant Data
     public const uint MAX_ENERGY = 10000;
-    public const uint SPAWN_POINTS = 5;
+    public const uint SPAWN_POINTS = 6;
     public const uint POWERUP_COUNT = 5;
     public const char CONTROL_CHAR = '|';
     public const string DATA_KEY = "EltaGameData";
@@ -42,34 +45,42 @@ public class DataManager : MonoBehaviour {
 
         currentSpawnPoint = 0;
         StartDataManager();
+
+        if(godMode)
+        {
+            
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-        //DEBUGGER
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-            DeleteData();
-            Debug.Log("[ALL GAME DATA HAS BEEN DELETED]");
-        }
 
-        //GODMODE FILE
-        else if(Input.GetKeyDown(KeyCode.G))
+        if (godMode)
         {
-            playerData.gameComplete = 2;
-            playerData.energy = MAX_ENERGY;
-            playerData.unlockedSpawnPoints = 1;
-            //playerData.currentSpawnPoint = 0;
-            playerData.activeMultiplier = 1f;
-            playerData.activePowerUps = new bool[POWERUP_COUNT];
-
-            for (int i = 0; i < playerData.activePowerUps.Length; i++)
+            //DEBUGGER
+            if (Input.GetKeyDown(KeyCode.X))
             {
-                playerData.activePowerUps[i] = true;
+                DeleteData();
+                Debug.Log("[ALL GAME DATA HAS BEEN DELETED]");
             }
 
-            SaveData();
+            //GODMODE FILE
+            else if (Input.GetKeyDown(KeyCode.G))
+            {
+                playerData.gameComplete = 2;
+                playerData.energy = MAX_ENERGY;
+                playerData.unlockedSpawnPoints = SPAWN_POINTS;
+                //playerData.currentSpawnPoint = 0;
+                playerData.activeMultiplier = 1f;
+                playerData.activePowerUps = new bool[POWERUP_COUNT];
+
+                for (int i = 0; i < playerData.activePowerUps.Length; i++)
+                {
+                    playerData.activePowerUps[i] = true;
+                }
+
+                SaveData();
+            }
         }
 	}
 
