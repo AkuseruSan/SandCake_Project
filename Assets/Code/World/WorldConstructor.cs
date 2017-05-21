@@ -35,6 +35,10 @@ public class WorldConstructor : MonoBehaviour {
     //Number of modules spawned
     public int moduleCounter;
 
+    //Counter of revive time
+    public float reviveCounter = 1f;
+    private bool spawnOnce;
+
     void Awake()
     {
         //Gets the total amount of zones in the enum Stage
@@ -72,7 +76,7 @@ public class WorldConstructor : MonoBehaviour {
     // Use this for initialization
     void Start () {
         lastX = transform.position.x;
-
+        spawnOnce = false;
         currentStage = (Stage)DataManager.Instance.currentSpawnPoint;
     }
 
@@ -80,6 +84,31 @@ public class WorldConstructor : MonoBehaviour {
     {
         SpawnFlowers();
         SpawnTrees();
+        if (GameCore.Instance.playerController.spawnGiantSun)
+        {
+            if (!spawnOnce)
+            {
+                Vector3 spawnPos = new Vector3(GameCore.Instance.playerController.transform.position.x, GameCore.Instance.playerController.transform.position.y, -5);
+                SpawnGiantSun(spawnPos);
+                spawnOnce = true;
+            }
+            
+            if(reviveCounter <= 0)
+            {
+                GameCore.Instance.playerController.spawnGiantSun = false;
+                Time.timeScale = 1f;
+            }
+            if (GameCore.Instance.reviveFirstFrame)
+            {
+                reviveCounter -= Time.deltaTime;
+                GameCore.Instance.reviveFirstFrame = false;
+            }
+            else
+            {
+                reviveCounter -= Time.deltaTime * 1000f;
+            }
+            
+        }
     }
 	
 	// Update is called once per frame
@@ -222,5 +251,9 @@ public class WorldConstructor : MonoBehaviour {
             }
         }
     }
-
+    public void SpawnGiantSun(Vector3 playerPosition)
+    {
+        GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_GiantSun", typeof(GameObject)), playerPosition, Quaternion.Euler(0, 180, 0)) as GameObject;
+        Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+    }
 }

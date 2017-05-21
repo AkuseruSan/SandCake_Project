@@ -45,6 +45,13 @@ public class GameCore : MonoBehaviour
     public const int DAY_LAYER = 8;
     public const int NIGHT_LAYER = 9;
 
+    //Data saving
+    private bool saveDataOnce;
+
+    //Power ups state
+    public bool barrier, doubleJump, revive, paintBoost, staminaBoost;
+    public bool reviveFirstFrame;
+
     RaycastHit hit;
 
     void Awake()
@@ -66,6 +73,8 @@ public class GameCore : MonoBehaviour
 
         camSize = minCamSize;
 
+        reviveFirstFrame = false;
+
         worldConstructorSpawnToSpawnDistance *= worldModuleScale.x;
 
         gameState = GameState.AWAKE;
@@ -74,6 +83,15 @@ public class GameCore : MonoBehaviour
         enemyController = transform.GetComponent<EnemyManager>();
 
         worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
+
+        saveDataOnce = true;
+
+        barrier = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER];
+        revive = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE];
+        doubleJump = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP];
+        paintBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST];
+        staminaBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST];
+
     }
 
     // Update is called once per frame
@@ -114,7 +132,20 @@ public class GameCore : MonoBehaviour
                 break;
             case GameState.GAMEOVER:
                 {
+                    if (saveDataOnce)
+                    {
 
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = barrier;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = doubleJump;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = paintBoost;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = staminaBoost;
+
+                        DataManager.Instance.playerData.energy += System.Convert.ToUInt32(playerController.distanceSinceStart);
+                        DataManager.Instance.SaveData();
+                        saveDataOnce = false;
+                    }
+                    
                 }
                 break;
             default:

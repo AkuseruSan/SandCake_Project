@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour {
     private bool invulnerable = false;
     private Color dayColor = new Color(0.79f, 0.79f, 0.79f, 1), nightColor = new Color(0.12f, 0.14f, 0.23f, 1);
 
+    //Giant Sun spawn bool
+    public bool spawnGiantSun = false;
+
     [HideInInspector]
     public bool onCoolDown;
 
@@ -95,7 +98,15 @@ public class PlayerController : MonoBehaviour {
 
                     //Debug.Log("Power! - "+power);
 
-                    if (transform.position.y <= -10 || power <= 0) GameCore.Instance.gameState = GameState.GAMEOVER;
+                    if (transform.position.y <= -10 || (power <= 0 && !GameCore.Instance.revive) ) GameCore.Instance.gameState = GameState.GAMEOVER;
+                    if (power <= 0 && GameCore.Instance.revive)
+                    {
+                        power = maxPower;
+                        spawnGiantSun = true;
+                        Time.timeScale = 0.001f;
+                        GameCore.Instance.reviveFirstFrame = true;
+                        GameCore.Instance.revive = false;
+                    }
                 }
                 break;
             case GameState.GAMEOVER:
@@ -149,11 +160,11 @@ public class PlayerController : MonoBehaviour {
             invTime = invTimeInspector;
             invulnerable = true;
             Destroy(collision.gameObject);
+        }
 
-            if (collision.gameObject.tag == "Death")
-            {
-                Die();
-            }
+        if (collision.gameObject.tag == "Death")
+        {
+            Die();
         }
         //Debug.Log(invulnerable);
         //Debug.Log("The wolf has been TRIGGERED with: " + collision.name);
