@@ -104,6 +104,8 @@ public class PlayerController : MonoBehaviour {
                         power = maxPower;
                         spawnGiantSun = true;
                         Time.timeScale = 0.001f;
+                        invTime = invTimeInspector;
+                        invulnerable = true;
                         GameCore.Instance.reviveFirstFrame = true;
                         GameCore.Instance.revive = false;
                     }
@@ -162,7 +164,7 @@ public class PlayerController : MonoBehaviour {
             Destroy(collision.gameObject);
         }
 
-        if (collision.gameObject.tag == "Death")
+        if (collision.gameObject.tag == "Death" && !invulnerable)
         {
             Die();
         }
