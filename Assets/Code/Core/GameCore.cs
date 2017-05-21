@@ -52,6 +52,9 @@ public class GameCore : MonoBehaviour
     public bool barrier, doubleJump, revive, paintBoost, staminaBoost;
     public bool reviveFirstFrame;
 
+    //Score
+    public int finalScore;
+
     RaycastHit hit;
 
     void Awake()
@@ -74,6 +77,7 @@ public class GameCore : MonoBehaviour
         camSize = minCamSize;
 
         reviveFirstFrame = false;
+
 
         worldConstructorSpawnToSpawnDistance *= worldModuleScale.x;
 
@@ -132,16 +136,18 @@ public class GameCore : MonoBehaviour
                 break;
             case GameState.GAMEOVER:
                 {
+                    
+
                     if (saveDataOnce)
                     {
-
+                        finalScore += playerController.distanceSinceStart;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = barrier;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = doubleJump;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = paintBoost;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = staminaBoost;
 
-                        DataManager.Instance.playerData.energy += System.Convert.ToUInt32(playerController.distanceSinceStart);
+                        DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
                         saveDataOnce = false;
                     }
@@ -172,8 +178,18 @@ public class GameCore : MonoBehaviour
 
     void InstantiateSpawnPoint()
     {
-        GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
-        Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+        if (paintBoost)
+        {
+            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPointBig", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
+            Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+        }
+
+        else
+        {
+            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
+            Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+        }
+        
     }
 
     void OverlapOtherWorld()

@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour {
     private float invTime = 1.5f;
     private bool invulnerable = false;
     private Color dayColor = new Color(0.79f, 0.79f, 0.79f, 1), nightColor = new Color(0.12f, 0.14f, 0.23f, 1);
+    private int enemyKillScore = 50;
 
     //Giant Sun spawn bool
     public bool spawnGiantSun = false;
@@ -43,8 +44,7 @@ public class PlayerController : MonoBehaviour {
         power = maxPower;
         startPos = transform.position.x;
         distanceSinceStart = 0;
-        jumpCount = 1;
-        currentJumpCount = jumpCount;
+
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
 
@@ -68,7 +68,13 @@ public class PlayerController : MonoBehaviour {
         {
             case GameState.AWAKE:
                 {
-                    
+                    if (GameCore.Instance.doubleJump)
+                    {
+                        jumpCount = 2;
+                    }
+                    else { jumpCount = 1; }
+
+                    currentJumpCount = jumpCount;
                 }
                 break;
             case GameState.PAUSE:
@@ -91,12 +97,10 @@ public class PlayerController : MonoBehaviour {
 
                     UpdateDistance();
 
-                    
-
                     if(!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
 
-                    //Debug.Log("Power! - "+power);
+                    Debug.Log(currentJumpCount);
 
                     if (transform.position.y <= -10 || (power <= 0 && !GameCore.Instance.revive) ) GameCore.Instance.gameState = GameState.GAMEOVER;
                     if (power <= 0 && GameCore.Instance.revive)
@@ -133,7 +137,6 @@ public class PlayerController : MonoBehaviour {
 
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            //Debug.Log(contact.normal);
             if (contact.normal == new Vector2( -1, 0)) Die();
         }
 
@@ -164,10 +167,17 @@ public class PlayerController : MonoBehaviour {
             Destroy(collision.gameObject);
         }
 
+        if(collision.tag == "KillEnemy")
+        {
+            GameCore.Instance.finalScore += enemyKillScore;
+            Destroy(collision.gameObject);
+        }
+
         if (collision.gameObject.tag == "Death" && !invulnerable)
         {
             Die();
         }
+
         //Debug.Log(invulnerable);
         //Debug.Log("The wolf has been TRIGGERED with: " + collision.name);
     }

@@ -73,14 +73,14 @@ public class InputManagerUI : MonoBehaviour {
                 {
                     
                     endMenuAnimator.SetBool("Show", true);
-                    finalScore.GetComponent<Text>().text = "SCORE: " + GameCore.Instance.playerController.distanceSinceStart;
+                    finalScore.GetComponent<Text>().text = "SCORE: " + GameCore.Instance.finalScore;
                 }
                 break;
             default:
                 break;
         }
 
-        score.GetComponent<Text>().text = "DISTANCE: " + GameCore.Instance.playerController.distanceSinceStart;
+        score.GetComponent<Text>().text = "SCORE: " + GameCore.Instance.finalScore;
     }
 
     public void OpenOptions()
