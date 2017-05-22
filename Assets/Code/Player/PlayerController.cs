@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour {
     public float maxPower;
     public float powerRegenSpeed;
 
+    [HideInInspector]
+    public float barrier;
+
+    public float maxBarrier;
+
     private Animator myAnimator;
     private Animator myAnimatorN;
     #endregion
@@ -42,6 +47,7 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         onCoolDown = false;
         power = maxPower;
+        barrier = maxBarrier;
         startPos = transform.position.x;
         distanceSinceStart = 0;
 
@@ -160,7 +166,7 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Stamina") RecoverStamina(20);
-        if (collision.tag == "Enemy" && invulnerable == false)
+        if (collision.tag == "Enemy" && invulnerable == false && !GameCore.Instance.barrier)
         {
             DecreaseStamina(5);
             invTime = invTimeInspector;
@@ -168,15 +174,25 @@ public class PlayerController : MonoBehaviour {
             Destroy(collision.gameObject);
         }
 
-        if(collision.tag == "KillEnemy")
+        if (collision.tag == "Enemy" && GameCore.Instance.barrier)
+        {
+            DecreaseBarrierValue(5);
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.tag == "KillEnemy")
         {
             GameCore.Instance.finalScore += enemyKillScore;
             Destroy(collision.gameObject);
         }
 
-        if (collision.gameObject.tag == "Death" && !invulnerable)
+        if (collision.gameObject.tag == "Death" && !invulnerable && !GameCore.Instance.barrier)
         {
             Die();
+        }
+        else if(collision.gameObject.tag == "Death" && GameCore.Instance.barrier)
+        {
+            DecreaseBarrierValue(2);
         }
 
         //Debug.Log(invulnerable);
@@ -226,9 +242,19 @@ public class PlayerController : MonoBehaviour {
         power -= AuxLib.Map(Mathf.Clamp(percentOnTotal, 0, 100), 0, 100, 0, maxPower);
     }
 
+    public void DecreaseBarrierValue(float percentOnTotal)
+    {
+        barrier -= AuxLib.Map(Mathf.Clamp(percentOnTotal, 0, 100), 0, 100, 0, maxBarrier);
+    }
+
     public float GetCurrentPower()
     {
         return power;
+    }
+
+    public float GetCurrentBarrier()
+    {
+        return barrier;
     }
 
     void RotateFromYSpeed()//Changes player's rotation by raycasting towards the -y vector and detecting floor's normal.

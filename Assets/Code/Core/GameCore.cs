@@ -105,7 +105,11 @@ public class GameCore : MonoBehaviour
         {
             case GameState.AWAKE:
                 {
-
+                    if (!GameCore.Instance.barrier)
+                    {
+                        GameCore.Instance.playerController.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                        GameCore.Instance.playerController.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+                    }
                 }
                 break;
             case GameState.PAUSE:
@@ -138,14 +142,15 @@ public class GameCore : MonoBehaviour
                 {
                     
 
+
                     if (saveDataOnce)
                     {
                         finalScore += playerController.distanceSinceStart;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = barrier;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = false;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = doubleJump;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = paintBoost;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = staminaBoost;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
 
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
