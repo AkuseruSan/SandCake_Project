@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public enum WorldModuleConnect { TOP = 0, MIDDLE = 1, BOTTOM = 2 }
 
 [System.Serializable]
-public enum WorldModuleType { VOID = 0, SIMPLE_JUMP = 1, SIMPLE_PAINT = 2, COMPLEX_PAINT = 3, INDIRECT_PAINT = 4 }
+public enum WorldModuleType { VOID = 0, SIMPLE_JUMP = 1, SIMPLE_PAINT = 2, PAINT_JUMP = 3}
 
 public static class AuxLib {
 
@@ -73,7 +73,7 @@ public struct DualTexture
 public class WorldModuleData
 {
     private uint ID;
-    public Stage stage;
+    public WorldConstructor.Stage stage;
     public WorldModuleType type;
     public WorldModuleConnect beginConnection;
     public WorldModuleConnect endConnection;
