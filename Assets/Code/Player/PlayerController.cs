@@ -97,7 +97,8 @@ public class PlayerController : MonoBehaviour {
 
                     UpdateDistance();
 
-                    if(!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
+                    if (!onCoolDown && GameCore.Instance.staminaBoost) power -= powerRegenSpeed / 2 * Time.deltaTime;
+                    else if (!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
 
                     Debug.Log(currentJumpCount);

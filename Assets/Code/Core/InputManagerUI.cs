@@ -16,6 +16,7 @@ public class InputManagerUI : MonoBehaviour {
     public Transform finalScore;
     public Transform optionsAwake;
     public Transform staminaBarValue;
+    public Transform staminaBarBorders;
     public Transform hud;
     public Transform endMenu;
     public Transform pausePanel;
@@ -66,7 +67,16 @@ public class InputManagerUI : MonoBehaviour {
             case GameState.PLAY:
                 {
                     hudDisplay.SetBool("Playing", true);
-                    staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 256 * 2));
+
+                    if (GameCore.Instance.staminaBoost)
+                    {
+                        staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 512 * 2));
+                        staminaBarBorders.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 512);
+                    }
+                    else
+                    {
+                        staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 256 * 2));
+                    }
                 }
                 break;
             case GameState.GAMEOVER:
