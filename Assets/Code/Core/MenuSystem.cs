@@ -148,14 +148,14 @@ public class MenuSystem : MonoBehaviour {
 #endif
         if(input)
         { 
-            Debug.Log("YAY!");
+
             RaycastHit2D hit = GetHit();
 
             if (hit)
             {
                 if (hit.transform.GetComponent<Button2D>() != null)
                 {
-                    Debug.Log("PENE!");
+
                     Button2D btn = hit.transform.GetComponent<Button2D>();
 
                     if (btn.type == Button2D.ButtonType.POWER_UP && camTravelMode == CamTravelMode.OUT)
@@ -163,6 +163,40 @@ public class MenuSystem : MonoBehaviour {
                         camTravelMode = CamTravelMode.IN;
                         StopCoroutine("MoveAndLookAt");
                         StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN, 3, true));
+
+
+                        //Filling Popup depending on every power-up
+                        switch (btn.powerUpID)
+                        {
+                            case DataManager.PowerUpID.BARRIER:
+                                {
+                                    
+                                }
+                                break;
+                            case DataManager.PowerUpID.DOUBLE_JUMP:
+                                {
+
+                                }
+                                break;
+                            case DataManager.PowerUpID.REVIVE:
+                                {
+
+                                }
+                                break;
+                            case DataManager.PowerUpID.PAINT_BOOST:
+                                {
+
+                                }
+                                break;
+                            case DataManager.PowerUpID.STAMINA_BOOST:
+                                {
+
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
                         powerUpPopup.gameObject.SetActive(true);
                     }
                     else if(btn.type == Button2D.ButtonType.PLAY && camTravelMode == CamTravelMode.OUT)

@@ -5,6 +5,9 @@ using UnityEngine;
 public class Button2D : MonoBehaviour {
 
     public enum ButtonType { POWER_UP, PLAY }
+
+    public DataManager.PowerUpID powerUpID;
+
     public ButtonType type;
 
     public Transform cameraTarget;
