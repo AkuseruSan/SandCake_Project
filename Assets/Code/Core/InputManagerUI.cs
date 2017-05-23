@@ -16,10 +16,15 @@ public class InputManagerUI : MonoBehaviour {
     public Transform finalScore;
     public Transform optionsAwake;
     public Transform staminaBarValue;
+    public Transform staminaBarBorders;
+    public Transform barrierBarValue;
+    public Transform barrierBarBorders;
     public Transform hud;
     public Transform endMenu;
     public Transform pausePanel;
     public Transform actualScore;
+
+    public int barrierBarLength = 192;
 
     public Slider volume;
     public AudioSource gameMusic;
@@ -58,7 +63,10 @@ public class InputManagerUI : MonoBehaviour {
         {
             case GameState.AWAKE:
                 {
-                    
+                    if (!GameCore.Instance.barrier)
+                    {
+                        barrierBarBorders.gameObject.SetActive(false);
+                    }
                 }
                 break;
             case GameState.PAUSE:
@@ -66,7 +74,28 @@ public class InputManagerUI : MonoBehaviour {
             case GameState.PLAY:
                 {
                     hudDisplay.SetBool("Playing", true);
-                    staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 256 * 2));
+
+                    if (GameCore.Instance.staminaBoost)
+                    {
+                        staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 512 * 2));
+                        staminaBarBorders.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 512);
+                    }
+                    else
+                    {
+                        staminaBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentPower(), 0, GameCore.Instance.playerController.maxPower, 0, 256 * 2));
+                    }
+
+                    if (GameCore.Instance.barrier)
+                    {
+                        barrierBarValue.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, AuxLib.Map(GameCore.Instance.playerController.GetCurrentBarrier(), 0, GameCore.Instance.playerController.maxBarrier, 0, barrierBarLength * 2));
+                        barrierBarBorders.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, barrierBarLength);
+                        if(GameCore.Instance.playerController.barrier <= 0)
+                        {
+                            GameCore.Instance.barrier = false;
+                            GameCore.Instance.playerController.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                            GameCore.Instance.playerController.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+                        }
+                    }
                 }
                 break;
             case GameState.GAMEOVER:
