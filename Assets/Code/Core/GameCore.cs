@@ -34,12 +34,6 @@ public class GameCore : MonoBehaviour
     [HideInInspector]
     public EnemyManager enemyController;
 
-    [Space(20)]
-    [Header("[World Dictionary Lists]")]
-    public List<WorldDictionaryList> worldModulesList;
-
-    public Dictionary<WorldModuleType, List<WorldModuleData>> worldModules;
-
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
     public const int DAY_LAYER = 8;
@@ -49,8 +43,8 @@ public class GameCore : MonoBehaviour
     private bool saveDataOnce;
 
     //Power ups state
-    public bool barrier, doubleJump, revive, paintBoost, staminaBoost;
-    public bool reviveFirstFrame;
+    [HideInInspector]
+    public bool barrier, doubleJump, revive, paintBoost, staminaBoost, reviveFirstFrame;
 
     //Score
     public int finalScore;

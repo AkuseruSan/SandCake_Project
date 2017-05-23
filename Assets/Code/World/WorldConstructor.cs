@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class WorldConstructor : MonoBehaviour {
 
-    public enum Stage { Z_1, Z_2, Z_3, Z_4, Z_5, Z_BOSS };
+    public enum Stage { Z_1, Z_2, Z_3, Z_4, Z_5, Z_BOSS, Z_CHECKPOINT };
 
     private float lastX;
 
@@ -35,7 +35,14 @@ public class WorldConstructor : MonoBehaviour {
     //Number of modules spawned
     public int moduleCounter;
 
+    //Max Zone Modules
+    public List<int> moduleLimit;
+
+    //First start bool
+    private bool firsTime;
+
     //Counter of revive time
+    [HideInInspector]
     public float reviveCounter = 1f;
     private bool spawnOnce;
 
@@ -70,8 +77,9 @@ public class WorldConstructor : MonoBehaviour {
 
         //Queue start
         current = new Queue<uint>();
+        firsTime = true;
 
-        EnqueuerSystem();
+        //EnqueuerSystem();
     }
     // Use this for initialization
     void Start () {
@@ -223,18 +231,39 @@ public class WorldConstructor : MonoBehaviour {
             WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
 
             //First module added || in case of empty queue
-            if (previousModule == null || current.Count <= 0)
+            if (previousModule == null)
             {
-                previousModule = currentModule;
-                current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
-                moduleCounter++;
+                if (firsTime)
+                {
+                    for (int i = 0; i < ListOfIndex[(int)currentStage].Count; ++i)
+                    {
+                        currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][i]];
+                        if (currentModule.beginConnection == WorldModuleConnect.MIDDLE && firsTime)
+                        {
+                            previousModule = currentModule;
+                            current.Enqueue(ListOfIndex[(int)currentStage][i]);
+                            moduleCounter++;
+                            firsTime = false;
+                        }
+                    }
+                }
+                
+                else
+                {
+                    previousModule = currentModule;
+                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+                    moduleCounter++;
+                }
+                
             }
 
             else
             {
+                
                 //In case there's the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
-                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
-                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type)
+                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex] )
+                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type 
+                && currentStage != Stage.Z_BOSS)
                 {
                     previousModule = currentModule;
                     current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
@@ -242,12 +271,36 @@ public class WorldConstructor : MonoBehaviour {
                 }
                 //In case there isn't the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
                 else if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
-                && previousModule.endConnection == currentModule.beginConnection)
+                && previousModule.endConnection == currentModule.beginConnection
+                && currentStage != Stage.Z_BOSS)
                 {
                     previousModule = currentModule;
                     current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
                     moduleCounter++;
                 }
+                
+                //Spawn CheckPoints
+                if (moduleCounter == moduleLimit[(int)currentStage] && currentStage != Stage.Z_BOSS)
+                {   
+                    for(int i = 0; i < ListOfIndex[(int)Stage.Z_CHECKPOINT].Count; ++i)
+                    {
+                        currentModule = WorldModuleDictionary[ListOfIndex[(int)Stage.Z_CHECKPOINT][i]];
+                        if (previousModule.endConnection == currentModule.beginConnection)
+                        {
+                            previousModule = currentModule;
+                            current.Enqueue(ListOfIndex[(int)Stage.Z_CHECKPOINT][i]);
+                            currentStage++;
+                            moduleCounter = 0;
+                        }
+                    }
+                }
+
+                else if (currentStage == Stage.Z_BOSS)
+                {
+                    Debug.Log("Here Comes that boss, oh shit waddup");
+                    current.Enqueue(ListOfIndex[(int)currentStage][0]);
+                }
+
             }
         }
     }
