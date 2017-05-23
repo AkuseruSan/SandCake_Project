@@ -8,7 +8,16 @@ public class MenuSystem : MonoBehaviour {
     public enum CamTravelMode { IN, OUT }
     private CamTravelMode camTravelMode = CamTravelMode.OUT;
 
+    [Header("Power Up Panel Attributes")]
     public RectTransform powerUpPopup;
+    public Text powerUpInfoText;
+    public Text powerUpNameText;
+    public Text powerUpCostText;
+    public Image powerUpImage;
+    public Button powerUpBuyButton;
+
+    [Space(20)]
+
     public RectTransform playPopup;
     public RectTransform noEnergyPopup;
     public GameObject energyText;
@@ -164,37 +173,67 @@ public class MenuSystem : MonoBehaviour {
                         StopCoroutine("MoveAndLookAt");
                         StartCoroutine(MoveAndLookAt(Camera.main.transform.position, btn.cameraTarget.position, CamTravelMode.IN, 3, true));
 
+                        uint currentPowerUpCost = 0;
 
                         //Filling Popup depending on every power-up
                         switch (btn.powerUpID)
                         {
                             case DataManager.PowerUpID.BARRIER:
                                 {
-                                    
+                                    powerUpInfoText.text = "Barrier PowerUp!";
+                                    powerUpNameText.text = "Barrier";
+                                    powerUpImage.color = Color.blue;
+                                    currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.BARRIER);
+                                    powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.BARRIER);
                                 }
                                 break;
                             case DataManager.PowerUpID.DOUBLE_JUMP:
                                 {
-
+                                    powerUpInfoText.text = "Double Jump PowerUp!";
+                                    powerUpNameText.text = "Double Jump";
+                                    powerUpImage.color = Color.yellow;
+                                    currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.DOUBLE_JUMP);
+                                    powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.DOUBLE_JUMP);
                                 }
                                 break;
                             case DataManager.PowerUpID.REVIVE:
                                 {
-
+                                    powerUpInfoText.text = "Revive PowerUp!";
+                                    powerUpNameText.text = "Revive";
+                                    powerUpImage.color = Color.green;
+                                    currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.REVIVE);
+                                    powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.REVIVE);
                                 }
                                 break;
                             case DataManager.PowerUpID.PAINT_BOOST:
                                 {
-
+                                    powerUpInfoText.text = "Paint Boost PowerUp!";
+                                    powerUpNameText.text = "Paint Boost";
+                                    powerUpImage.color = Color.magenta;
+                                    currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.PAINT_BOOST);
+                                    powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.PAINT_BOOST);
                                 }
                                 break;
                             case DataManager.PowerUpID.STAMINA_BOOST:
                                 {
-
+                                    powerUpInfoText.text = "Stamina Boost PowerUp!";
+                                    powerUpNameText.text = "Stamina Boost";
+                                    powerUpImage.color = Color.cyan;
+                                    currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.STAMINA_BOOST);
+                                    powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.STAMINA_BOOST);
                                 }
                                 break;
                             default:
                                 break;
+                        }
+
+                        if(DataManager.Instance.playerData.energy < currentPowerUpCost)
+                        {
+                            powerUpBuyButton.interactable = false;
+                        }
+                        else
+                        {
+                            powerUpBuyButton.interactable = true;
                         }
 
                         powerUpPopup.gameObject.SetActive(true);

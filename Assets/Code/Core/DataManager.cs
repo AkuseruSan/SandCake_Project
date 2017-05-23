@@ -16,6 +16,7 @@ public struct PlayerData
 public class DataManager : MonoBehaviour {
 
     public enum PowerUpID { BARRIER = 0, DOUBLE_JUMP = 1, REVIVE = 2, PAINT_BOOST = 3, STAMINA_BOOST = 4 }
+    public enum PowerUpCost { BARRIER = 100, DOUBLE_JUMP = 5, REVIVE = 2500, PAINT_BOOST = 1000, STAMINA_BOOST = 4500 }// Precio de los powerups
 
     public static DataManager Instance { get; private set; }
     public PlayerData playerData;
