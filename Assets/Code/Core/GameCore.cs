@@ -34,12 +34,6 @@ public class GameCore : MonoBehaviour
     [HideInInspector]
     public EnemyManager enemyController;
 
-    [Space(20)]
-    [Header("[World Dictionary Lists]")]
-    public List<WorldDictionaryList> worldModulesList;
-
-    public Dictionary<WorldModuleType, List<WorldModuleData>> worldModules;
-
     private Vector3 drawPointSpawnPos;//Position to spawn draw points
 
     public const int DAY_LAYER = 8;
@@ -48,9 +42,12 @@ public class GameCore : MonoBehaviour
     //Data saving
     private bool saveDataOnce;
 
+    //Current stage/zone
+    public WorldConstructor.Stage currentStage;
+
     //Power ups state
-    public bool barrier, doubleJump, revive, paintBoost, staminaBoost;
-    public bool reviveFirstFrame;
+    [HideInInspector]
+    public bool barrier, doubleJump, revive, paintBoost, staminaBoost, reviveFirstFrame;
 
     //Score
     public int finalScore;
@@ -70,7 +67,7 @@ public class GameCore : MonoBehaviour
     void Start()
     {
         //DontDestroyOnLoad(this);
-
+        currentStage = (WorldConstructor.Stage)DataManager.Instance.currentSpawnPoint;
         minCamSize = 6;
         maxCamSize = 10;
 
@@ -85,6 +82,8 @@ public class GameCore : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
 
         enemyController = transform.GetComponent<EnemyManager>();
+
+        playerController.savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
 
         worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
 
@@ -151,7 +150,7 @@ public class GameCore : MonoBehaviour
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
-
+                        DataManager.Instance.playerData.unlockedSpawnPoints = playerController.savedCheckpoints;
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
                         saveDataOnce = false;
