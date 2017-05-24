@@ -64,6 +64,12 @@ public class DataManager : MonoBehaviour {
                 DeleteData();
                 Debug.Log("[ALL GAME DATA HAS BEEN DELETED]");
             }
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                playerData.energy += 100;
+                Debug.Log("ENERGY: " + playerData.energy);
+                SaveData();
+            }
 
             //GODMODE FILE
             else if (Input.GetKeyDown(KeyCode.G))

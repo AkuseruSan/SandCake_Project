@@ -125,6 +125,16 @@ public class MenuSystem : MonoBehaviour {
         yield return 0;
     }
 
+    public void BuyPowerUp(GameObject caller)
+    {
+        DataManager.Instance.playerData.activePowerUps[(int)caller.GetComponent<BuyPowerUpButton>().powerUpID] = true;
+        DataManager.Instance.playerData.energy -= System.Convert.ToUInt32(powerUpCostText.text);
+        DataManager.Instance.SaveData();
+
+        SetCameraToOrigin();
+        powerUpPopup.gameObject.SetActive(false);
+    }
+
     public void StartGame()
     {
         if (DataManager.Instance.playerData.energy < currentPlayCost)
@@ -140,14 +150,18 @@ public class MenuSystem : MonoBehaviour {
 
     private void Update()
     {
+        //Update energy text value
+        energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
+
         bool input = false;
-//#if UNITY_ANDROID
-//        if (Input.GetTouch(0).phase == TouchPhase.Began)
-//        {
-//            input = true;
-//        }
-//        else input = false;
-//#endif
+
+#if UNITY_ANDROID
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            input = true;
+        }
+        else input = false;
+#endif
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
         {
@@ -155,7 +169,7 @@ public class MenuSystem : MonoBehaviour {
         }
         else input = false;
 #endif
-        if(input)
+        if (input)
         { 
 
             RaycastHit2D hit = GetHit();
@@ -185,6 +199,8 @@ public class MenuSystem : MonoBehaviour {
                                     powerUpImage.color = Color.blue;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.BARRIER);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.BARRIER);
+
+                                    powerUpBuyButton.GetComponent<BuyPowerUpButton>().powerUpID = DataManager.PowerUpID.BARRIER;
                                 }
                                 break;
                             case DataManager.PowerUpID.DOUBLE_JUMP:
@@ -194,6 +210,8 @@ public class MenuSystem : MonoBehaviour {
                                     powerUpImage.color = Color.yellow;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.DOUBLE_JUMP);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.DOUBLE_JUMP);
+
+                                    powerUpBuyButton.GetComponent<BuyPowerUpButton>().powerUpID = DataManager.PowerUpID.DOUBLE_JUMP;
                                 }
                                 break;
                             case DataManager.PowerUpID.REVIVE:
@@ -203,6 +221,8 @@ public class MenuSystem : MonoBehaviour {
                                     powerUpImage.color = Color.green;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.REVIVE);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.REVIVE);
+
+                                    powerUpBuyButton.GetComponent<BuyPowerUpButton>().powerUpID = DataManager.PowerUpID.REVIVE;
                                 }
                                 break;
                             case DataManager.PowerUpID.PAINT_BOOST:
@@ -212,6 +232,8 @@ public class MenuSystem : MonoBehaviour {
                                     powerUpImage.color = Color.magenta;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.PAINT_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.PAINT_BOOST);
+
+                                    powerUpBuyButton.GetComponent<BuyPowerUpButton>().powerUpID = DataManager.PowerUpID.PAINT_BOOST;
                                 }
                                 break;
                             case DataManager.PowerUpID.STAMINA_BOOST:
@@ -221,13 +243,15 @@ public class MenuSystem : MonoBehaviour {
                                     powerUpImage.color = Color.cyan;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.STAMINA_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.STAMINA_BOOST);
+
+                                    powerUpBuyButton.GetComponent<BuyPowerUpButton>().powerUpID = DataManager.PowerUpID.STAMINA_BOOST;
                                 }
                                 break;
                             default:
                                 break;
                         }
 
-                        if(DataManager.Instance.playerData.energy < currentPowerUpCost)
+                        if(DataManager.Instance.playerData.energy < currentPowerUpCost || DataManager.Instance.playerData.activePowerUps[(int)powerUpBuyButton.GetComponent<BuyPowerUpButton>().powerUpID] == true)
                         {
                             powerUpBuyButton.interactable = false;
                         }
