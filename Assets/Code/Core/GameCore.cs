@@ -42,6 +42,9 @@ public class GameCore : MonoBehaviour
     //Data saving
     private bool saveDataOnce;
 
+    //Current stage/zone
+    public WorldConstructor.Stage currentStage;
+
     //Power ups state
     [HideInInspector]
     public bool barrier, doubleJump, revive, paintBoost, staminaBoost, reviveFirstFrame;
@@ -64,7 +67,7 @@ public class GameCore : MonoBehaviour
     void Start()
     {
         //DontDestroyOnLoad(this);
-
+        currentStage = (WorldConstructor.Stage)DataManager.Instance.currentSpawnPoint;
         minCamSize = 6;
         maxCamSize = 10;
 
@@ -79,6 +82,8 @@ public class GameCore : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
 
         enemyController = transform.GetComponent<EnemyManager>();
+
+        playerController.savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
 
         worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
 
@@ -145,7 +150,7 @@ public class GameCore : MonoBehaviour
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
-
+                        DataManager.Instance.playerData.unlockedSpawnPoints = playerController.savedCheckpoints;
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
                         saveDataOnce = false;

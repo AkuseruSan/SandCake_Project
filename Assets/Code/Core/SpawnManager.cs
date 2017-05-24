@@ -15,7 +15,7 @@
 //    Queue<uint> current;
 
 //    //Current stage/zone
-//    public Stage currentStage;
+//    public Stage GameCore.currentStage;
 
 //    [Space(20)]
 //    [Header("[World Dictionary Lists]")]
@@ -66,41 +66,41 @@
 
 //        //-------------------- MODULE QUEUE ADDITION MANAGEMENT -----------------------//
 
-//        while (current.Count < ListOfIndex[(int)currentStage].Count / 2)
+//        while (current.Count < ListOfIndex[(int)GameCore.currentStage].Count / 2)
 //        {
 
 
-//            //Debug.Log("current length: " + current.Count + "  List of index length: " + ListOfIndex[(int)currentStage].Count / 2);
-//            int selectedIndex = Random.Range(0, (ListOfIndex[(int)currentStage].Count));
+//            //Debug.Log("current length: " + current.Count + "  List of index length: " + ListOfIndex[(int)GameCore.currentStage].Count / 2);
+//            int selectedIndex = Random.Range(0, (ListOfIndex[(int)GameCore.currentStage].Count));
 
 //            // ListOfIndex = List with all the modules ID's
-//            // currentStage = Representation of the current zone
+//            // GameCore.currentStage = Representation of the current zone
 //            // selectedIndex = Random number to select a modlue inside the corresponding zone
-//            // ListOfIndex[(int)currentStage][selectedIndex] = ID of a module
-//            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
+//            // ListOfIndex[(int)GameCore.currentStage][selectedIndex] = ID of a module
+//            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.currentStage][selectedIndex]];
 
 //            if (previousModule == null)
 //            {
 //                previousModule = currentModule;
-//                current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                moduleCounter++;
 
 //            }
 
 //            else
 //            {
-//                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+//                if (!current.Contains(ListOfIndex[(int)GameCore.currentStage][selectedIndex])
 //                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type)
 //                {
 //                    previousModule = currentModule;
-//                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                    current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                    moduleCounter++;
 //                }
-//                else if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+//                else if (!current.Contains(ListOfIndex[(int)GameCore.currentStage][selectedIndex])
 //                && previousModule.endConnection == currentModule.beginConnection)
 //                {
 //                    previousModule = currentModule;
-//                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                    current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                    moduleCounter++;
 //                }
 //            }
@@ -125,7 +125,7 @@
 //        //------------------- ↓↓↓↓↓ SPAWN MAGIC GOES HERE ↓↓↓↓↓ -----------------//
 
 //        //Decide when to dequeue
-//        if (current.Count == ListOfIndex[(int)currentStage].Count / 2)
+//        if (current.Count == ListOfIndex[(int)GameCore.currentStage].Count / 2)
 //        {
 //            Debug.Log("Ready to spawn!");
 //            current.Dequeue();
@@ -134,41 +134,41 @@
 //        //-------------------- MODULE QUEUE ADDITION MANAGEMENT -----------------------//
 
 //        //Automatically adds new modules to the queue if not full
-//        while (current.Count < ListOfIndex[(int)currentStage].Count / 2)
+//        while (current.Count < ListOfIndex[(int)GameCore.currentStage].Count / 2)
 //        {
 
-//            int selectedIndex = Random.Range(0, (ListOfIndex[(int)currentStage].Count));
+//            int selectedIndex = Random.Range(0, (ListOfIndex[(int)GameCore.currentStage].Count));
 
 //            // ListOfIndex = List with all the modules ID's
-//            // currentStage = Representation of the current zone
+//            // GameCore.currentStage = Representation of the current zone
 //            // selectedIndex = Random number to select a modlue inside the corresponding zone
-//            //ListOfIndex[(int)currentStage][selectedIndex] = ID of a module
-//            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
+//            //ListOfIndex[(int)GameCore.currentStage][selectedIndex] = ID of a module
+//            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.currentStage][selectedIndex]];
 
 //            //First module added || in case of empty queue
 //            if (previousModule == null || current.Count <= 0)
 //            {
 //                previousModule = currentModule;
-//                current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                moduleCounter++;
 //            }
 
 //            else
 //            {
 //                //In case there's the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
-//                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+//                if (!current.Contains(ListOfIndex[(int)GameCore.currentStage][selectedIndex])
 //                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type)
 //                {
 //                    previousModule = currentModule;
-//                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                    current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                    moduleCounter++;
 //                }
 //                //In case there isn't the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
-//                else if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+//                else if (!current.Contains(ListOfIndex[(int)GameCore.currentStage][selectedIndex])
 //                && previousModule.endConnection == currentModule.beginConnection)
 //                {
 //                    previousModule = currentModule;
-//                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                    current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                    moduleCounter++;
 //                }
 //            }
@@ -178,41 +178,41 @@
 
 //    private IEnumerator FillQueue()
 //    {
-//        if (current.Count < ListOfIndex[(int)currentStage].Count / 2)
+//        if (current.Count < ListOfIndex[(int)GameCore.currentStage].Count / 2)
 //        {
 
 
-//            //Debug.Log("current length: " + current.Count + "  List of index length: " + ListOfIndex[(int)currentStage].Count / 2);
-//            int selectedIndex = Random.Range(0, (ListOfIndex[(int)currentStage].Count));
+//            //Debug.Log("current length: " + current.Count + "  List of index length: " + ListOfIndex[(int)GameCore.currentStage].Count / 2);
+//            int selectedIndex = Random.Range(0, (ListOfIndex[(int)GameCore.currentStage].Count));
 
 //            // ListOfIndex = List with all the modules ID's
-//            // currentStage = Representation of the current zone
+//            // GameCore.currentStage = Representation of the current zone
 //            // selectedIndex = Random number to select a modlue inside the corresponding zone
-//            // ListOfIndex[(int)currentStage][selectedIndex] = ID of a module
-//            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)currentStage][selectedIndex]];
+//            // ListOfIndex[(int)GameCore.currentStage][selectedIndex] = ID of a module
+//            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.currentStage][selectedIndex]];
 
 //            if (previousModule == null)
 //            {
 //                previousModule = currentModule;
-//                current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                moduleCounter++;
 
 //            }
 
 //            else
 //            {
-//                if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+//                if (!current.Contains(ListOfIndex[(int)GameCore.currentStage][selectedIndex])
 //                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type)
 //                {
 //                    previousModule = currentModule;
-//                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                    current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                    moduleCounter++;
 //                }
-//                else if (!current.Contains(ListOfIndex[(int)currentStage][selectedIndex])
+//                else if (!current.Contains(ListOfIndex[(int)GameCore.currentStage][selectedIndex])
 //                && previousModule.endConnection == currentModule.beginConnection)
 //                {
 //                    previousModule = currentModule;
-//                    current.Enqueue(ListOfIndex[(int)currentStage][selectedIndex]);
+//                    current.Enqueue(ListOfIndex[(int)GameCore.currentStage][selectedIndex]);
 //                    moduleCounter++;
 //                }
 //            }

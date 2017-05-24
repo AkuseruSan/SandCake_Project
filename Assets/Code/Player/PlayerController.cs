@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour {
     //Giant Sun spawn bool
     public bool spawnGiantSun = false;
 
+    //Checkpoints
+    public uint savedCheckpoints, checkpointsSurpassed;
+
     [HideInInspector]
     public bool onCoolDown;
 
@@ -193,6 +196,17 @@ public class PlayerController : MonoBehaviour {
         else if(collision.gameObject.tag == "Death" && GameCore.Instance.barrier)
         {
             DecreaseBarrierValue(2);
+        }
+
+        if(collision.tag == "CheckPoint")
+        {
+            checkpointsSurpassed = (uint)(GameCore.Instance.currentStage) + 1;
+
+            if(savedCheckpoints < checkpointsSurpassed)
+            {
+                savedCheckpoints = checkpointsSurpassed;
+            }
+
         }
 
         //Debug.Log(invulnerable);
