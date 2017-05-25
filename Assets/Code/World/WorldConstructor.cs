@@ -38,6 +38,9 @@ public class WorldConstructor : MonoBehaviour {
     //First start bool
     private bool firsTime;
 
+    //Boss object
+    public GameObject bossPrefab;
+
     //Counter of revive time
     [HideInInspector]
     public float reviveCounter = 1f;
@@ -80,6 +83,12 @@ public class WorldConstructor : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
+
+        if(DataManager.Instance.currentSpawnPoint == (uint)Stage.Z_BOSS)
+        {
+            SpawnBoss();
+        }
+
         lastX = transform.position.x;
         spawnOnce = false;
     }
@@ -102,6 +111,7 @@ public class WorldConstructor : MonoBehaviour {
                 GameCore.Instance.playerController.spawnGiantSun = false;
                 Time.timeScale = 1f;
             }
+
             if (GameCore.Instance.reviveFirstFrame)
             {
                 reviveCounter -= Time.deltaTime;
@@ -215,94 +225,117 @@ public class WorldConstructor : MonoBehaviour {
     void EnqueuerSystem()
     {
         //Automatically adds new modules to the queue if not full
-        while (current.Count < ListOfIndex[(int)GameCore.Instance.currentStage].Count / 2)
+        if(GameCore.Instance.currentStage == Stage.Z_BOSS)
         {
-
-            int selectedIndex = Random.Range(0, (ListOfIndex[(int)GameCore.Instance.currentStage].Count));
-
-            // ListOfIndex = List with all the modules ID's
-            // GameCore.Instance.currentStage = Representation of the current zone
-            // selectedIndex = Random number to select a modlue inside the corresponding zone
-            // ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex] = ID of a module
-            WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]];
-
-            //First module added || in case of empty queue
-            if (previousModule == null)
+            if(current.Count < 5)
             {
-                if (firsTime)
+                Debug.Log("Here Comes that bauss, oh shit waddup");
+                current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][0]);
+            }            
+        }
+
+        else {
+
+            while (current.Count < ListOfIndex[(int)GameCore.Instance.currentStage].Count / 2)
+            {
+
+                int selectedIndex = Random.Range(0, (ListOfIndex[(int)GameCore.Instance.currentStage].Count));
+
+                // ListOfIndex = List with all the modules ID's
+                // GameCore.Instance.currentStage = Representation of the current zone
+                // selectedIndex = Random number to select a modlue inside the corresponding zone
+                // ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex] = ID of a module
+                WorldModuleData currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]];
+
+                //First module added || in case of empty queue
+                if (previousModule == null)
                 {
-                    for (int i = 0; i < ListOfIndex[(int)GameCore.Instance.currentStage].Count; ++i)
+                    if (firsTime)
                     {
-                        currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.Instance.currentStage][i]];
-                        if (currentModule.beginConnection == WorldModuleConnect.MIDDLE && firsTime)
+                        for (int i = 0; i < ListOfIndex[(int)GameCore.Instance.currentStage].Count; ++i)
                         {
-                            previousModule = currentModule;
-                            current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][i]);
-                            moduleCounter++;
-                            firsTime = false;
+                            currentModule = WorldModuleDictionary[ListOfIndex[(int)GameCore.Instance.currentStage][i]];
+                            if (currentModule.beginConnection == WorldModuleConnect.MIDDLE && firsTime)
+                            {
+                                previousModule = currentModule;
+                                current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][i]);
+                                moduleCounter++;
+                                firsTime = false;
+                            }
                         }
                     }
+
+                    else
+                    {
+                        previousModule = currentModule;
+                        current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]);
+                        moduleCounter++;
+                    }
+
                 }
-                
+
                 else
                 {
-                    previousModule = currentModule;
-                    current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]);
-                    moduleCounter++;
-                }
-                
-            }
 
-            else
-            {
-                
-                //In case there's the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
-                if (!current.Contains(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex] )
-                && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type 
-                && GameCore.Instance.currentStage != Stage.Z_BOSS)
-                {
-                    previousModule = currentModule;
-                    current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]);
-                    moduleCounter++;
-                }
-                //In case there isn't the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
-                else if (!current.Contains(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex])
-                && previousModule.endConnection == currentModule.beginConnection
-                && GameCore.Instance.currentStage != Stage.Z_BOSS)
-                {
-                    previousModule = currentModule;
-                    current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]);
-                    moduleCounter++;
-                }
-                
-                //Spawn CheckPoints
-                if (moduleCounter == moduleLimit[(int)GameCore.Instance.currentStage] && GameCore.Instance.currentStage != Stage.Z_BOSS)
-                {   
-                    for(int i = 0; i < ListOfIndex[(int)Stage.Z_CHECKPOINT].Count; ++i)
+                    //In case there's the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
+                    if (!current.Contains(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex])
+                    && previousModule.endConnection == currentModule.beginConnection && previousModule.type != currentModule.type
+                    && GameCore.Instance.currentStage != Stage.Z_BOSS)
                     {
-                        currentModule = WorldModuleDictionary[ListOfIndex[(int)Stage.Z_CHECKPOINT][i]];
-                        if (previousModule.endConnection == currentModule.beginConnection)
+                        previousModule = currentModule;
+                        current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]);
+                        moduleCounter++;
+                    }
+                    //In case there isn't the possiblity of spawn a different type of module(EX: prev = VOID, next = SIMPLE_JUMP)
+                    else if (!current.Contains(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex])
+                    && previousModule.endConnection == currentModule.beginConnection
+                    && GameCore.Instance.currentStage != Stage.Z_BOSS)
+                    {
+                        previousModule = currentModule;
+                        current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][selectedIndex]);
+                        moduleCounter++;
+                    }
+
+                    //Spawn CheckPoints
+                    if (moduleCounter == moduleLimit[(int)GameCore.Instance.currentStage] && GameCore.Instance.currentStage != Stage.Z_BOSS)
+                    {
+                        for (int i = 0; i < ListOfIndex[(int)Stage.Z_CHECKPOINT].Count; ++i)
                         {
-                            previousModule = currentModule;
-                            current.Enqueue(ListOfIndex[(int)Stage.Z_CHECKPOINT][i]);
-                            GameCore.Instance.currentStage++;
-                            moduleCounter = 0;
+                            currentModule = WorldModuleDictionary[ListOfIndex[(int)Stage.Z_CHECKPOINT][i]];
+                            if (previousModule.endConnection == currentModule.beginConnection)
+                            {
+                                previousModule = currentModule;
+                                current.Enqueue(ListOfIndex[(int)Stage.Z_CHECKPOINT][i]);
+                                GameCore.Instance.currentStage++;
+                                if (GameCore.Instance.currentStage == Stage.Z_BOSS)
+                                {
+                                    SpawnBoss();
+                                }
+                                moduleCounter = 0;
+                            }
                         }
                     }
-                }
 
-                else if (GameCore.Instance.currentStage == Stage.Z_BOSS)
-                {
-                    Debug.Log("Here Comes that boss, oh shit waddup");
-                    current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][0]);
-                }
+                    else if (GameCore.Instance.currentStage == Stage.Z_BOSS)
+                    {
+                        Debug.Log("Here Comes that bauss, oh shit waddup");
+                        current.Enqueue(ListOfIndex[(int)GameCore.Instance.currentStage][0]);
+                    }
 
+                }
             }
         }
+        
     }
     public void SpawnGiantSun(Vector3 playerPosition)
     {
         GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_GiantSun", typeof(GameObject)), playerPosition, Quaternion.Euler(0, 180, 0)) as GameObject;
         Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+    }
+
+    public void SpawnBoss()
+    {
+        GameObject boss = Instantiate(bossPrefab) as GameObject;
+        Undo.MoveGameObjectToScene(boss, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
     }
 }

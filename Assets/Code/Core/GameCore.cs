@@ -95,6 +95,14 @@ public class GameCore : MonoBehaviour
         paintBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST];
         staminaBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST];
 
+        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = false;
+        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
+        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
+        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
+        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
+
+        DataManager.Instance.SaveData();
+
     }
 
     // Update is called once per frame
@@ -145,11 +153,6 @@ public class GameCore : MonoBehaviour
                     if (saveDataOnce)
                     {
                         finalScore += playerController.distanceSinceStart;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = false;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
-                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
                         DataManager.Instance.playerData.unlockedSpawnPoints = playerController.savedCheckpoints;
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
