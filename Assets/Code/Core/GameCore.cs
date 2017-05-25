@@ -52,6 +52,9 @@ public class GameCore : MonoBehaviour
     //Score
     public int finalScore;
 
+    //Bullet explosion particle system
+    public GameObject bulletExplosion;
+
     RaycastHit hit;
 
     void Awake()
@@ -189,6 +192,7 @@ public class GameCore : MonoBehaviour
         {
             GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPointBig", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
             Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+
         }
 
         else

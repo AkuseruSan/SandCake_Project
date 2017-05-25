@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
@@ -30,6 +32,14 @@ public class PlayerController : MonoBehaviour {
     //Checkpoints
     public uint savedCheckpoints, checkpointsSurpassed;
 
+    //Jump audio
+    [HideInInspector]
+    public AudioSource jumpSound;
+
+    //Death particle systems
+    public GameObject nightDeath;
+    public GameObject dayDeath;
+
     [HideInInspector]
     public bool onCoolDown;
 
@@ -53,6 +63,8 @@ public class PlayerController : MonoBehaviour {
         barrier = maxBarrier;
         startPos = transform.position.x;
         distanceSinceStart = 0;
+
+        jumpSound = GetComponent<AudioSource>();
 
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
@@ -142,7 +154,6 @@ public class PlayerController : MonoBehaviour {
         currentJumpCount = jumpCount;
         myAnimator.SetBool("Grounded", true);
         myAnimatorN.SetBool("Grounded", true);
-
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.normal == new Vector2( -1, 0)) Die();
@@ -166,18 +177,26 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Stamina") RecoverStamina(20);
+        if (collision.tag == "Stamina")
+        {
+            RecoverStamina(20);
+            collision.gameObject.GetComponent<AudioSource>().Play();
+        }
         if (collision.tag == "Enemy" && invulnerable == false && !GameCore.Instance.barrier)
         {
             DecreaseStamina(5);
             invTime = invTimeInspector;
             invulnerable = true;
+            GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
+            Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             Destroy(collision.gameObject);
         }
 
         if (collision.tag == "Enemy" && GameCore.Instance.barrier)
         {
             DecreaseBarrierValue(5);
+            GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
+            Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             Destroy(collision.gameObject);
         }
 
@@ -282,6 +301,7 @@ public class PlayerController : MonoBehaviour {
             myAnimatorN.SetBool("Grounded", false);
             currentJumpCount -= 1;
             rBody.AddForce(jump, ForceMode2D.Impulse);
+            GameCore.Instance.playerController.jumpSound.Play();
             contactNormal.x = 0;
         }
 
@@ -349,6 +369,11 @@ public class PlayerController : MonoBehaviour {
     private void Die()
     {
         GameCore.Instance.gameState = GameState.GAMEOVER;
+
+        GameObject go = Instantiate(nightDeath, gameObject.transform.position, Quaternion.identity);
+        Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
+        GameObject go1 = Instantiate(dayDeath, gameObject.transform.position, Quaternion.identity);
+        Undo.MoveGameObjectToScene(go1, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
         //Debug.Log("Die!");
     }
 

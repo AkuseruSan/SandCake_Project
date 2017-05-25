@@ -39,6 +39,7 @@ public class RavenEnemy : BaseEnemyBehaviour
 
                     //LOGIC
                     SpawnBullets(10);
+                    GetComponent<AudioSource>().Play();
 
                     state = States.IDDLE;
                 }
