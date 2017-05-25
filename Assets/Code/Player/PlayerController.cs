@@ -110,8 +110,6 @@ public class PlayerController : MonoBehaviour {
                     else if (!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
 
-                    Debug.Log(currentJumpCount);
-
                     if (transform.position.y <= -10 || (power <= 0 && !GameCore.Instance.revive) ) GameCore.Instance.gameState = GameState.GAMEOVER;
                     if (power <= 0 && GameCore.Instance.revive)
                     {
@@ -351,7 +349,7 @@ public class PlayerController : MonoBehaviour {
     private void Die()
     {
         GameCore.Instance.gameState = GameState.GAMEOVER;
-        Debug.Log("Die!");
+        //Debug.Log("Die!");
     }
 
     #endregion

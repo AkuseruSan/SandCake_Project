@@ -116,7 +116,7 @@ public class CoreSceneManager : MonoBehaviour {
                 break;
         }
 
-        Debug.Log("Core Scene Manager State: " + state);
+        //Debug.Log("Core Scene Manager State: " + state);
     }
 
     public void SwitchScene(SceneID sceneID)
@@ -125,7 +125,7 @@ public class CoreSceneManager : MonoBehaviour {
         {
             case SceneID.MASTER:
                 {
-                    Debug.Log("[Master Scene can not be reloaded]");
+                    //Debug.Log("[Master Scene can not be reloaded]");
                 }
                 break;
             case SceneID.MENU:

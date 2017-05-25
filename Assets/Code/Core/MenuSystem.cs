@@ -59,10 +59,18 @@ public class MenuSystem : MonoBehaviour {
             if (unlockedPoints == startPointButtons.Length + 1) bossPointButton.GetComponent<Button>().interactable = true;
             else bossPointButton.GetComponent<Button>().interactable = false;
 
-            if (btn == startPointButtons[i] || btn == bossPointButton)
+            if (btn == startPointButtons[i])
             {
                 btn.transform.localScale = new Vector3(1.2f, 1.2f, 1);
                 DataManager.Instance.currentSpawnPoint = i;
+
+                //Esto es una marranada, depende de la jerarquia de gameobjects de la UI
+                currentPlayCost = System.Convert.ToUInt32(btn.transform.parent.GetChild(1).GetChild(0).GetComponent<Text>().text);
+            }
+            else if (btn == bossPointButton)
+            {
+                btn.transform.localScale = new Vector3(1.2f, 1.2f, 1);
+                DataManager.Instance.currentSpawnPoint = (uint)WorldConstructor.Stage.Z_BOSS;
 
                 //Esto es una marranada, depende de la jerarquia de gameobjects de la UI
                 currentPlayCost = System.Convert.ToUInt32(btn.transform.parent.GetChild(1).GetChild(0).GetComponent<Text>().text);
