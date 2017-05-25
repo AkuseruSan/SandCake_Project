@@ -79,7 +79,7 @@ public class BossBehaviour : MonoBehaviour {
         lancesCounter--;
         if(lancesCounter <= 0)
         {
-            
+            StopCoroutine(LoadLance());
         }
         else
         {
