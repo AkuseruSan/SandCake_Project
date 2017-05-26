@@ -89,7 +89,8 @@ public class MenuSystem : MonoBehaviour {
         RaycastHit2D hit;
 
 #if UNITY_ANDROID
-        hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 0)), Vector3.forward, Mathf.Infinity);
+        if(Input.touchCount > 0)
+            hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 0)), Vector3.forward, Mathf.Infinity);
 #endif
 #if UNITY_EDITOR || UNITY_STANDALONE
         hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), Vector3.forward, Mathf.Infinity);

@@ -193,7 +193,21 @@ public class PlayerController : MonoBehaviour {
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
         }
+        if (collision.tag == "BossLance" && invulnerable == false && !GameCore.Instance.barrier)
+        {
+            DecreaseStamina(5);
+            invTime = invTimeInspector;
+            invulnerable = true;
+            GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
+            Destroy(collision.gameObject);
+        }
 
+        if (collision.tag == "BossLance" && GameCore.Instance.barrier)
+        {
+            DecreaseBarrierValue(7);
+            GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
+            Destroy(collision.gameObject);
+        }
         if (collision.tag == "Enemy" && GameCore.Instance.barrier)
         {
             DecreaseBarrierValue(5);
