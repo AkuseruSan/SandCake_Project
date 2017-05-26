@@ -60,7 +60,7 @@ public class MenuSystem : MonoBehaviour {
 
             if (btn == startPointButtons[i])
             {
-                btn.transform.localScale = new Vector3(1.2f, 1.2f, 1);
+                btn.transform.localScale = new Vector3(2.5f, 2.5f, 1);
                 DataManager.Instance.currentSpawnPoint = i;
 
                 //Esto es una marranada, depende de la jerarquia de gameobjects de la UI
@@ -68,16 +68,18 @@ public class MenuSystem : MonoBehaviour {
             }
             else if (btn == bossPointButton)
             {
-                btn.transform.localScale = new Vector3(1.2f, 1.2f, 1);
+                btn.transform.localScale = new Vector3(2.5f, 2.5f, 1);
                 DataManager.Instance.currentSpawnPoint = (uint)WorldConstructor.Stage.Z_BOSS;
 
                 //Esto es una marranada, depende de la jerarquia de gameobjects de la UI
                 currentPlayCost = System.Convert.ToUInt32(btn.transform.parent.GetChild(1).GetChild(0).GetComponent<Text>().text);
+
+                startPointButtons[i].transform.localScale = new Vector3(2, 2, 1);
             }
             else
             {
-                startPointButtons[i].transform.localScale = new Vector3(1, 1, 1);
-                bossPointButton.transform.localScale = new Vector3(1, 1, 1);
+                startPointButtons[i].transform.localScale = new Vector3(2, 2, 1);
+                bossPointButton.transform.localScale = new Vector3(2, 2, 1);
             }
         }
     }
