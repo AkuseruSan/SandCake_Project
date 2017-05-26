@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-
 
 public enum GameState { AWAKE, PAUSE, PLAY, GAMEOVER }
 
@@ -70,42 +68,46 @@ public class GameCore : MonoBehaviour
     void Start()
     {
         //DontDestroyOnLoad(this);
-        currentStage = (WorldConstructor.Stage)DataManager.Instance.currentSpawnPoint;
-        minCamSize = 6;
-        maxCamSize = 10;
+        if (DataManager.Instance != null)
+        {
+            currentStage = (WorldConstructor.Stage)DataManager.Instance.currentSpawnPoint;
+            minCamSize = 6;
+            maxCamSize = 10;
 
-        camSize = minCamSize;
+            camSize = minCamSize;
 
-        reviveFirstFrame = false;
+            reviveFirstFrame = false;
 
 
-        worldConstructorSpawnToSpawnDistance *= worldModuleScale.x;
+            worldConstructorSpawnToSpawnDistance *= worldModuleScale.x;
 
-        gameState = GameState.AWAKE;
-        playerController = player.GetComponent<PlayerController>();
+            gameState = GameState.AWAKE;
+            playerController = player.GetComponent<PlayerController>();
 
-        enemyController = transform.GetComponent<EnemyManager>();
+            enemyController = transform.GetComponent<EnemyManager>();
 
-        playerController.savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
+            playerController.savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
 
-        worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
+            worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
 
-        saveDataOnce = true;
+            saveDataOnce = true;
 
-        barrier = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER];
-        revive = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE];
-        doubleJump = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP];
-        paintBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST];
-        staminaBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST];
+            barrier = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER];
+            revive = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE];
+            doubleJump = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP];
+            paintBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST];
+            staminaBoost = DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST];
 
-        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = false;
-        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
-        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
-        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
-        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
+            DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.BARRIER] = false;
+            DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
+            DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.DOUBLE_JUMP] = false;
+            DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.PAINT_BOOST] = false;
+            DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.STAMINA_BOOST] = false;
 
-        DataManager.Instance.SaveData();
+            DataManager.Instance.SaveData();
 
+            SceneManager.SetActiveScene(CoreSceneManager.Instance.currentScene);
+        }
     }
 
     // Update is called once per frame
@@ -115,10 +117,10 @@ public class GameCore : MonoBehaviour
         {
             case GameState.AWAKE:
                 {
-                    if (!GameCore.Instance.barrier)
+                    if (!Instance.barrier)
                     {
-                        GameCore.Instance.playerController.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                        GameCore.Instance.playerController.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+                        Instance.playerController.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                        Instance.playerController.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
                     }
                 }
                 break;
@@ -139,6 +141,7 @@ public class GameCore : MonoBehaviour
                         if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                             SpawnMaskPoints();
 #endif
+
 #if UNITY_EDITOR || UNITY_STANDALONE
                     if (!EventSystem.current.IsPointerOverGameObject())
                         SpawnMaskPoints();
@@ -151,11 +154,10 @@ public class GameCore : MonoBehaviour
             case GameState.GAMEOVER:
                 {
                     
-
-
                     if (saveDataOnce)
                     {
                         finalScore += playerController.distanceSinceStart;
+                        DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
                         DataManager.Instance.playerData.unlockedSpawnPoints = playerController.savedCheckpoints;
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
@@ -190,17 +192,14 @@ public class GameCore : MonoBehaviour
     {
         if (paintBoost)
         {
-            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPointBig", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
-            Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
-
+            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPointBig", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;           
         }
 
         else
         {
             GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
-            Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
         }
-        
+
     }
 
     void OverlapOtherWorld()

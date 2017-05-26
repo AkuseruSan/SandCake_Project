@@ -11,7 +11,7 @@ public class CoreSceneManager : MonoBehaviour {
 
     public GameObject loadingScreen;
 
-    Scene currentScene;
+    public Scene currentScene;
 
     AsyncOperation currentAsyncOperation;
 

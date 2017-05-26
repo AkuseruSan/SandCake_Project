@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -68,7 +67,7 @@ public class PlayerController : MonoBehaviour {
 
         contactNormal = Vector2.zero;
         rBody = GetComponent<Rigidbody2D>();
-
+        
         myAnimatorN = GameObject.FindGameObjectWithTag("Night").gameObject.GetComponent<Animator>();
         myAnimator = GameObject.FindGameObjectWithTag("Day").gameObject.GetComponent<Animator>();
 
@@ -122,7 +121,11 @@ public class PlayerController : MonoBehaviour {
                     else if (!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
 
-                    if (transform.position.y <= -10 || (power <= 0 && !GameCore.Instance.revive) ) GameCore.Instance.gameState = GameState.GAMEOVER;
+                    if (transform.position.y <= -10 || (power <= 0 && !GameCore.Instance.revive))
+                    {
+                        GameCore.Instance.gameState = GameState.GAMEOVER;
+                        Die();
+                    }
                     if (power <= 0 && GameCore.Instance.revive)
                     {
                         power = maxPower;
@@ -188,7 +191,6 @@ public class PlayerController : MonoBehaviour {
             invTime = invTimeInspector;
             invulnerable = true;
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
-            Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             Destroy(collision.gameObject);
         }
 
@@ -196,7 +198,6 @@ public class PlayerController : MonoBehaviour {
         {
             DecreaseBarrierValue(5);
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
-            Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             Destroy(collision.gameObject);
         }
 
@@ -371,10 +372,7 @@ public class PlayerController : MonoBehaviour {
         GameCore.Instance.gameState = GameState.GAMEOVER;
 
         GameObject go = Instantiate(nightDeath, gameObject.transform.position, Quaternion.identity);
-        Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
         GameObject go1 = Instantiate(dayDeath, gameObject.transform.position, Quaternion.identity);
-        Undo.MoveGameObjectToScene(go1, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
-        //Debug.Log("Die!");
     }
 
     #endregion

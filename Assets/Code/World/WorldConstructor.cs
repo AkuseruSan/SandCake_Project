@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -79,61 +78,68 @@ public class WorldConstructor : MonoBehaviour {
         current = new Queue<uint>();
         firsTime = true;
 
-        //EnqueuerSystem();
     }
     // Use this for initialization
     void Start () {
-
-        if(DataManager.Instance.currentSpawnPoint == (uint)Stage.Z_BOSS)
+        if (DataManager.Instance != null)
         {
-            SpawnBoss();
-        }
+            if (DataManager.Instance.currentSpawnPoint == (uint)Stage.Z_BOSS)
+            {
+                SpawnBoss();
+            }
 
-        lastX = transform.position.x;
-        spawnOnce = false;
+            lastX = transform.position.x;
+            spawnOnce = false;
+        }
     }
 
     void Update()
     {
-        SpawnFlowers();
-        SpawnTrees();
-        if (GameCore.Instance.playerController.spawnGiantSun)
+        if (GameCore.Instance != null)
         {
-            if (!spawnOnce)
+            SpawnFlowers();
+            SpawnTrees();
+            if (GameCore.Instance.playerController.spawnGiantSun)
             {
-                Vector3 spawnPos = new Vector3(GameCore.Instance.playerController.transform.position.x, GameCore.Instance.playerController.transform.position.y, -5);
-                SpawnGiantSun(spawnPos);
-                spawnOnce = true;
-            }
-            
-            if(reviveCounter <= 0)
-            {
-                GameCore.Instance.playerController.spawnGiantSun = false;
-                Time.timeScale = 1f;
-            }
+                if (!spawnOnce)
+                {
+                    Vector3 spawnPos = new Vector3(GameCore.Instance.playerController.transform.position.x, GameCore.Instance.playerController.transform.position.y, -5);
+                    SpawnGiantSun(spawnPos);
+                    spawnOnce = true;
+                }
 
-            if (GameCore.Instance.reviveFirstFrame)
-            {
-                reviveCounter -= Time.deltaTime;
-                GameCore.Instance.reviveFirstFrame = false;
+                if (reviveCounter <= 0)
+                {
+                    GameCore.Instance.playerController.spawnGiantSun = false;
+                    Time.timeScale = 1f;
+                }
+
+                if (GameCore.Instance.reviveFirstFrame)
+                {
+                    reviveCounter -= Time.deltaTime;
+                    GameCore.Instance.reviveFirstFrame = false;
+                }
+                else
+                {
+                    reviveCounter -= Time.deltaTime * 1000f;
+                }
+
             }
-            else
-            {
-                reviveCounter -= Time.deltaTime * 1000f;
-            }
-            
         }
     }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        EnqueuerSystem();
-
-        if (transform.position.x - lastX >= GameCore.Instance.worldConstructorSpawnToSpawnDistance)
+        if (GameCore.Instance != null)
         {
-            lastX = transform.position.x;
-            SpawnWorldModule();
+            StartCoroutine(EnqueuerSystem());
+
+            if (transform.position.x - lastX >= GameCore.Instance.worldConstructorSpawnToSpawnDistance)
+            {
+                lastX = transform.position.x;
+                SpawnWorldModule();
+            }
         }
     }
 
@@ -155,19 +161,16 @@ public class WorldConstructor : MonoBehaviour {
             else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/Flower"), spawnPositionCheckR, Quaternion.identity) as GameObject;
-                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else if (spawnPositionCheckL.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/Flower"), spawnPositionCheckL, Quaternion.identity) as GameObject;
-                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Interactable/Flower"), spawnPosition, Quaternion.identity) as GameObject;
-                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
         }
@@ -193,19 +196,16 @@ public class WorldConstructor : MonoBehaviour {
             else if (spawnPositionCheckR.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckR, Quaternion.identity) as GameObject;
-                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else if(spawnPositionCheckL.y <= spawnPosition.y - 0.4)
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPositionCheckL, Quaternion.identity) as GameObject;
-                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
 
             else
             {
                 GameObject go = Instantiate(Resources.Load("Prefabs/Assets/Tree_00"), spawnPosition, Quaternion.identity) as GameObject;
-                Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
             }
             
 
@@ -219,10 +219,9 @@ public class WorldConstructor : MonoBehaviour {
         GameObject go = Instantiate(WorldModuleDictionary[current.Dequeue()].module as GameObject);
         go.transform.position = transform.position;
         go.transform.localScale = GameCore.Instance.worldModuleScale;
-        Undo.MoveGameObjectToScene(go, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
     }
 
-    void EnqueuerSystem()
+    IEnumerator EnqueuerSystem()
     {
         //Automatically adds new modules to the queue if not full
         if(GameCore.Instance.currentStage == Stage.Z_BOSS)
@@ -325,17 +324,15 @@ public class WorldConstructor : MonoBehaviour {
                 }
             }
         }
-        
+        yield return null;
     }
     public void SpawnGiantSun(Vector3 playerPosition)
     {
         GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_GiantSun", typeof(GameObject)), playerPosition, Quaternion.Euler(0, 180, 0)) as GameObject;
-        Undo.MoveGameObjectToScene(newPoint, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
     }
 
     public void SpawnBoss()
     {
         GameObject boss = Instantiate(bossPrefab) as GameObject;
-        Undo.MoveGameObjectToScene(boss, SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME), "MoveObject");
     }
 }

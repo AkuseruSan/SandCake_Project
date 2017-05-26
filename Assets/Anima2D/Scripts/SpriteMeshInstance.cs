@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
+
 namespace Anima2D
 {
 	[ExecuteInEditMode]
