@@ -12,6 +12,7 @@ public class LanceBehaviour : MonoBehaviour {
     private float speed;
     // Use this for initialization
     void Start() {
+        state = State.IDDLE;
         speed = 1;
     }
 	

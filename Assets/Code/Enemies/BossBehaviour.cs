@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class BossBehaviour : MonoBehaviour {
 
-    private enum State { IDDLE, LOAD, AIM, ATTACK, DIE }
+    private enum State { IDDLE, LOAD, LOADING, AIM, ATTACK, DIE }
     private State state;
 
     public GameObject lance;
 
     private Queue<GameObject> lances;
+
+    public Transform[] lanceSpawnPoints;
 
     private GameObject player;
     private PlayerController playerController;
@@ -17,12 +19,22 @@ public class BossBehaviour : MonoBehaviour {
     private float distanceToPlayer;
     private static int MAX_LANCES;
     private int lancesCounter;
+
+    private float loadingSpeed;
+    private float loadingCounter;
 	// Use this for initialization
 	void Start () {
-        distanceToPlayer = 10;
+
+        MAX_LANCES = 5;
+        distanceToPlayer = 5;
+        loadingSpeed = 1;
+
+        state = State.IDDLE;
 
         player = GameCore.Instance.player;
         playerController = GameCore.Instance.playerController;
+
+        Debug.Log(player.name);
 	}
 	
 	// Update is called once per frame
@@ -34,13 +46,30 @@ public class BossBehaviour : MonoBehaviour {
         {
             case State.IDDLE:
                 {
+                    //Reset all states.
+                    lancesCounter = MAX_LANCES;
+
                     state = State.LOAD;
                 }
                 break;
             case State.LOAD:
                 {
-                    LoadLances();
-                    state = State.AIM;
+                    loadingCounter = loadingSpeed;
+                    state = State.LOADING;
+                }
+                break;
+            case State.LOADING:
+                {
+                    loadingCounter -= Time.deltaTime;
+
+                    if (loadingCounter <= 0)
+                    {
+
+                        lancesCounter--;
+
+                        if (lancesCounter <= 0) state = State.AIM;
+                        else state = State.LOAD;
+                    }
                 }
                 break;
             case State.AIM:
@@ -63,27 +92,9 @@ public class BossBehaviour : MonoBehaviour {
         }
     }
 
-    void LoadLances()
+    void SpawnLance()
     {
-        lancesCounter = MAX_LANCES;
-
-        StartCoroutine(LoadLance());
-    }
-
-    private IEnumerator LoadLance()
-    {
-        GameObject g = Instantiate(lance, transform.position, Quaternion.identity, this.transform);
-
-        yield return new WaitForSeconds(1);
-
-        lancesCounter--;
-        if(lancesCounter <= 0)
-        {
-            StopCoroutine(LoadLance());
-        }
-        else
-        {
-            StartCoroutine(LoadLance());
-        }
+        GameObject g = Instantiate(lance, lanceSpawnPoints[lancesCounter - 1].position, Quaternion.identity, this.transform);
+        g.GetComponent<LanceBehaviour>().target = GameCore.Instance.player.transform;
     }
 }
