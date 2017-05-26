@@ -13,7 +13,6 @@ public class MenuSystem : MonoBehaviour {
     public Text powerUpInfoText;
     public Text powerUpNameText;
     public Text powerUpCostText;
-    public Image powerUpImage;
     public Button powerUpBuyButton;
 
     [Space(20)]
@@ -204,7 +203,6 @@ public class MenuSystem : MonoBehaviour {
                                 {
                                     powerUpInfoText.text = "Barrier PowerUp!";
                                     powerUpNameText.text = "Barrier";
-                                    powerUpImage.color = Color.blue;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.BARRIER);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.BARRIER);
 
@@ -215,7 +213,6 @@ public class MenuSystem : MonoBehaviour {
                                 {
                                     powerUpInfoText.text = "Double Jump PowerUp!";
                                     powerUpNameText.text = "Double Jump";
-                                    powerUpImage.color = Color.yellow;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.DOUBLE_JUMP);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.DOUBLE_JUMP);
 
@@ -226,7 +223,6 @@ public class MenuSystem : MonoBehaviour {
                                 {
                                     powerUpInfoText.text = "Revive PowerUp!";
                                     powerUpNameText.text = "Revive";
-                                    powerUpImage.color = Color.green;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.REVIVE);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.REVIVE);
 
@@ -237,7 +233,6 @@ public class MenuSystem : MonoBehaviour {
                                 {
                                     powerUpInfoText.text = "Paint Boost PowerUp!";
                                     powerUpNameText.text = "Paint Boost";
-                                    powerUpImage.color = Color.magenta;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.PAINT_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.PAINT_BOOST);
 
@@ -248,7 +243,6 @@ public class MenuSystem : MonoBehaviour {
                                 {
                                     powerUpInfoText.text = "Stamina Boost PowerUp!";
                                     powerUpNameText.text = "Stamina Boost";
-                                    powerUpImage.color = Color.cyan;
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.STAMINA_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.STAMINA_BOOST);
 
