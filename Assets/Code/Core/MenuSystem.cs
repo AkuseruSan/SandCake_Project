@@ -26,6 +26,9 @@ public class MenuSystem : MonoBehaviour {
     public GameObject[] startPointButtons = new GameObject[DataManager.SPAWN_POINTS];
     public GameObject bossPointButton;
 
+    public GameObject title;
+    private Animator titleAnimator;
+
     public float minOrthoSize, maxOrthoSize;
 
     private Vector3 originCameraPosition;
@@ -34,6 +37,8 @@ public class MenuSystem : MonoBehaviour {
 
         currentPlayCost = 0;
         minOrthoSize = Camera.main.orthographicSize;
+
+        titleAnimator = title.GetComponent<Animator>();
 
         powerUpPopup.gameObject.SetActive(false);
         playPopup.gameObject.SetActive(false);
@@ -106,6 +111,7 @@ public class MenuSystem : MonoBehaviour {
         camTravelMode = CamTravelMode.OUT;
         StopCoroutine("MoveAndLookAt");
         StartCoroutine(MoveAndLookAt(Camera.main.transform.position, originCameraPosition, CamTravelMode.OUT, 3, true));
+        titleAnimator.SetBool("stay", true);
     }
 
     private IEnumerator MoveAndLookAt(Vector3 origin, Vector3 target, CamTravelMode mode, float speed, bool scalable)
@@ -186,6 +192,9 @@ public class MenuSystem : MonoBehaviour {
 
             if (hit)
             {
+                titleAnimator.SetTrigger("exit");
+                titleAnimator.SetBool("stay", false);
+
                 if (hit.transform.GetComponent<Button2D>() != null)
                 {
 

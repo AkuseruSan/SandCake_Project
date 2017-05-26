@@ -53,6 +53,10 @@ public class GameCore : MonoBehaviour
     //Bullet explosion particle system
     public GameObject bulletExplosion;
 
+    //Drawpoints management
+    public int maxDrawpoints = 50;
+    Queue <GameObject> drawPointsSpawned;
+
     RaycastHit hit;
 
     void Awake()
@@ -78,6 +82,7 @@ public class GameCore : MonoBehaviour
 
             reviveFirstFrame = false;
 
+            drawPointsSpawned = new Queue<GameObject>();
 
             worldConstructorSpawnToSpawnDistance *= worldModuleScale.x;
 
@@ -192,12 +197,21 @@ public class GameCore : MonoBehaviour
     {
         if (paintBoost)
         {
-            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPointBig", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;           
+            GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPointBig", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
+            drawPointsSpawned.Enqueue(newPoint);
+            //Destroy(newPoint, Time.deltaTime * 120);         
         }
 
         else
         {
             GameObject newPoint = Instantiate(Resources.Load("Prefabs/P_DrawPoint", typeof(GameObject)), drawPointSpawnPos, Quaternion.Euler(0, 180, 0)) as GameObject;
+            drawPointsSpawned.Enqueue(newPoint);
+            //Destroy(newPoint, Time.deltaTime * 120);
+        }
+
+        if(drawPointsSpawned.Count >= maxDrawpoints)
+        {
+            Destroy(drawPointsSpawned.Dequeue());
         }
 
     }

@@ -17,36 +17,42 @@ public class RavenEnemy : BaseEnemyBehaviour
 
     // Update is called once per frame
     void Update () {
-        switch (state)
+        if(GameCore.Instance.gameState == GameState.PLAY)
         {
-            case States.INIT:
-                {
-                    separation = 10; 
-                    dmg = 5;
-                    bulletDir = new Vector2(-0.8f, 0);
-                    ctr = Random.Range(1, 3);
-                    state = States.IDDLE;
-                }
-                break;
-            case States.IDDLE:
-                {
-                    if (ctr <= 0) state = States.ATTACK;
-                }
-                break;
-            case States.ATTACK:
-                {
-                    ctr = Random.Range(1, 3);
+            switch (state)
+            {
+                case States.INIT:
+                    {
+                        separation = 10;
+                        dmg = 5;
+                        bulletDir = new Vector2(-0.8f, 0);
+                        ctr = Random.Range(1, 3);
+                        state = States.IDDLE;
+                    }
+                    break;
+                case States.IDDLE:
+                    {
+                        if (ctr <= 0) state = States.ATTACK;
+                    }
+                    break;
+                case States.ATTACK:
+                    {
+                        ctr = Random.Range(1, 3);
 
-                    //LOGIC
-                    SpawnBullets(10);
-                    GetComponent<AudioSource>().Play();
+                        //LOGIC
+                        if((GameCore.Instance.playerController.transform.position.x - this.transform.position.x) < 5f)
+                        {
+                            SpawnBullets(10);
+                            GetComponent<AudioSource>().Play();
+                        }                        
 
-                    state = States.IDDLE;
-                }
-                break;
-            default:
-                break;
-        }
+                        state = States.IDDLE;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }        
 
         ctr -= Time.deltaTime;
     }
@@ -55,17 +61,12 @@ public class RavenEnemy : BaseEnemyBehaviour
     {
         for (int i = 0; i < size; i++)
         {
-            Scene oldActiveScene = SceneManager.GetActiveScene();
-
-            SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex((int)CoreSceneManager.SceneID.GAME));
 
             GameObject go = Instantiate(Resources.Load("Prefabs/Enemies/Bullet"), transform.position, Quaternion.identity) as GameObject;
             go.transform.eulerAngles = new Vector3(0,0,(size * separation)/2 - i * separation);
             go.GetComponent<RavenBulletBehaviour>().SetSpeed(5.0f);
-
             Destroy(go, Time.deltaTime * 240);
 
-            SceneManager.SetActiveScene(oldActiveScene);
         }
     }
 }

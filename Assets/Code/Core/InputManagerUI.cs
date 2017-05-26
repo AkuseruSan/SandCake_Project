@@ -49,7 +49,7 @@ public class InputManagerUI : MonoBehaviour {
         gameMusic = GameObject.FindObjectOfType<AudioSource>();
 
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
-        optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
+        //optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
         endMenuAnimator = endMenu.GetComponent<Animator>();
         hudDisplay = hud.GetComponent<Animator>();
 

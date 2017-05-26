@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour {
 
                     Movement();
                     ClampSpeed();
-                    RotatePlayer();
+                    //RotatePlayer();
 
                     InvulnerabilityCount();
 

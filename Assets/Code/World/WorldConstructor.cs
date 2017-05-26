@@ -12,6 +12,8 @@ public class WorldConstructor : MonoBehaviour {
     private float flowerSpawnCtr;//Counter = ctr
     private float treeSpawnCounter;
 
+    public int moduleBufferNum = 2;
+
     //Stores an array with a lenght of the number of zones
     private uint[] zonesNumber;
 
@@ -235,7 +237,7 @@ public class WorldConstructor : MonoBehaviour {
 
         else {
 
-            while (current.Count < ListOfIndex[(int)GameCore.Instance.currentStage].Count / 2)
+            while (current.Count < moduleBufferNum)
             {
 
                 int selectedIndex = Random.Range(0, (ListOfIndex[(int)GameCore.Instance.currentStage].Count));
