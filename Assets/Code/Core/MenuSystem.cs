@@ -289,5 +289,11 @@ public class MenuSystem : MonoBehaviour {
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && CoreSceneManager.Instance.currentScene.buildIndex == (int)CoreSceneManager.SceneID.MENU)
+        {
+            Debug.Log("Button Works");
+            Application.Quit();
+        }
     }
 }

@@ -29,7 +29,7 @@ public class EnemyManager : MonoBehaviour {
                     if (counter <= 0)
                     {
                         counter = Random.Range(randomSpawnTimeRange.x, randomSpawnTimeRange.y);
-
+                        spawnHeight = Random.Range(3.0f, 7.0f);
 
                         //Debug.Log(GameCore.Instance.player.transform.position);
                         Vector3 playerDistance = new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0);
