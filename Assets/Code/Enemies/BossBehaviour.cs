@@ -97,7 +97,7 @@ public class BossBehaviour : MonoBehaviour {
     void SpawnLance()
     {
         GameObject g = Instantiate(lance, lanceSpawnPoints[lancesCounter - 1].position, Quaternion.identity, this.transform);
-
-        g.GetComponent<LanceBehaviour>().target = GameCore.Instance.player.transform;
+        g.GetComponent<LanceBehaviour>().Init(GameCore.Instance.player.transform, 10, 1, "BossLance");
+        //g.GetComponent<LanceBehaviour>().target = GameCore.Instance.player.transform;
     }
 }

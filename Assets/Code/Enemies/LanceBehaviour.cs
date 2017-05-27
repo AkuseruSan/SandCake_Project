@@ -15,14 +15,21 @@ public class LanceBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start() {
         state = State.IDDLE;
-        speed = 10;
-
-        loadTime = 1;
-
-        timeCounter = loadTime;
 
         transform.forward = Vector3.left;
         
+    }
+
+    public void Init(Transform targ, float spd, float startLoadTime, string lanceTag)
+    {
+        transform.tag = lanceTag;
+        target = targ;
+
+        speed = spd;
+
+        loadTime = startLoadTime;
+
+        timeCounter = loadTime;
     }
 	
 	// Update is called once per frame
@@ -63,33 +70,40 @@ public class LanceBehaviour : MonoBehaviour {
                 break;
             case State.TRANSFORM:
                 {
-                    transform.GetComponent<SpriteRenderer>().color = Color.blue;
+                    GameObject g = Instantiate(this.gameObject, transform.position, Quaternion.Euler(transform.rotation.eulerAngles - new Vector3(0, 0, 180)));
+
+                    g.GetComponent<LanceBehaviour>().Init(GameCore.Instance.GetBossRef(), 25, 0, "PlayerLance");
+
+                    g.transform.GetComponent<SpriteRenderer>().color = Color.blue;
                     Debug.Log("Transformed");
+
+                    //Destroy This
+                    Destroy(this.gameObject);
                 }
                 break;
             default:
                 break;
         }
     }
-    private void OnColisionEnter(Collision col)
-    {
-        if (col.transform.tag == "Depth")
-        {
-            state = State.TRANSFORM;
-        }
-    }
+    //private void OnColisionEnter(Collision col)
+    //{
+    //    if (col.transform.tag == "Depth")
+    //    {
+    //        state = State.TRANSFORM;
+    //    }
+    //}
 
-    private void OnColisionEnter2D(Collision2D collision)
-    {
-        if(collision.transform.tag == "Depth")
-        {
-            state = State.TRANSFORM;
-        }
-    }
+    //private void OnColisionEnter2D(Collision2D collision)
+    //{
+    //    if(collision.transform.tag == "Depth")
+    //    {
+    //        state = State.TRANSFORM;
+    //    }
+    //}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Depth")
+        if (collision.transform.tag == "Depth" && state == State.SHOOT)
         {
             state = State.TRANSFORM;
         }

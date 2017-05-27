@@ -19,6 +19,7 @@ public class GameCore : MonoBehaviour
     public Transform cameraSystemTransform;
     public Transform parallaxSystemTransform;
     public Transform worldManager;
+    private Transform boss;
 
     public Vector3 cameraPositionOffset;
     public float camSize { get; private set; }
@@ -175,6 +176,16 @@ public class GameCore : MonoBehaviour
                 break;
         }
 
+    }
+
+    public void SetBossRef(Transform bossref)
+    {
+        boss = bossref;
+    }
+
+    public Transform GetBossRef()
+    {
+        return boss;
     }
 
     void SpawnMaskPoints()

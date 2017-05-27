@@ -336,5 +336,6 @@ public class WorldConstructor : MonoBehaviour {
     public void SpawnBoss()
     {
         GameObject boss = Instantiate(bossPrefab) as GameObject;
+        GameCore.Instance.SetBossRef(boss.transform);
     }
 }
