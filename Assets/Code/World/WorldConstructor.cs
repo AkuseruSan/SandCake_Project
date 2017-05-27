@@ -182,7 +182,7 @@ public class WorldConstructor : MonoBehaviour {
 
     void SpawnTrees()
     {
-        if (treeSpawnCounter <= 0)
+        if (treeSpawnCounter <= 0 && GameCore.Instance.currentStage != Stage.Z_BOSS)
         {
             treeSpawnCounter = Random.Range(1, 6);
 

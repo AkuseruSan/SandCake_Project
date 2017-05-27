@@ -130,6 +130,7 @@ public class CoreSceneManager : MonoBehaviour {
                 break;
             case SceneID.MENU:
                 {
+
                     if(currentScene == SceneManager.GetSceneByBuildIndex((int)SceneID.GAME))
                     {
                         SetLoadingScreen(true);

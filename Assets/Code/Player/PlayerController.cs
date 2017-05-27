@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour {
     public GameObject nightDeath;
     public GameObject dayDeath;
 
+    //Stamina Bar partsyst
+    public ParticleSystem staminaBarPS;
+
     [HideInInspector]
     public bool onCoolDown;
 
@@ -184,7 +187,13 @@ public class PlayerController : MonoBehaviour {
         {
             RecoverStamina(20);
             collision.gameObject.GetComponent<AudioSource>().Play();
+            staminaBarPS.Play();
+            GameObject go = Instantiate(Resources.Load("Prefabs/FlowerPartSystem"), collision.transform.position, Quaternion.identity) as GameObject;
+            go.layer = GameCore.NIGHT_LAYER;
+            GameObject go2 = Instantiate(Resources.Load("Prefabs/FlowerPartSystem"), collision.transform.position, Quaternion.identity) as GameObject;
+            go2.layer = GameCore.DAY_LAYER;
         }
+
         if (collision.tag == "Enemy" && invulnerable == false && !GameCore.Instance.barrier)
         {
             DecreaseStamina(5);

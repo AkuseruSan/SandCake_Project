@@ -17,7 +17,7 @@ public class ParallaxController : MonoBehaviour {
     public List<DualTexture> parallaxLayers;
 
     private int parallaxLayerMin = 1;
-    private int parallaxLayerMax = 5;
+    private int parallaxLayerMax = 10;
 
     void Awake()
     {
@@ -67,6 +67,7 @@ public class ParallaxController : MonoBehaviour {
             {
                 go.name = "Parallax_BackLayer " + i;
                 go.transform.localPosition = new Vector3(0, 0, AuxLib.Map(i, 0, parallaxLayers.Count, parallaxLayerMin, parallaxLayerMax));
+
             }
             else
             {
@@ -74,14 +75,20 @@ public class ParallaxController : MonoBehaviour {
                 go.transform.localPosition = new Vector3(0, 0, AuxLib.Map(i, 0, parallaxLayers.Count, -parallaxLayerMin, -parallaxLayerMax));
             }
 
-
             GameObject goDay = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            goDay.name ="DayLayer";
+            goDay.name = "DayLayer";
             goDay.transform.parent = go.transform;
             goDay.transform.localPosition = Vector3.zero;
             Destroy(goDay.GetComponent<MeshCollider>());
             goDay.GetComponent<MeshRenderer>().material = Resources.Load("Materials/MAT_ParallaxLayer") as Material;
             goDay.GetComponent<MeshRenderer>().material.mainTexture = parallaxLayers[i].day;
+
+            if (parallaxLayers[i].order == ParallaxLayerOrder.FRONT)
+            {
+                goDay.GetComponent<MeshRenderer>().sortingLayerName = "FrontParallax";
+                Debug.Log("Sorting layer: " + goDay.GetComponent<MeshRenderer>().sortingLayerName);
+            }
+
             goDay.layer = GameCore.DAY_LAYER;
             goDay.AddComponent<ParallaxLayerBehaviour>().movementSpeed = parallaxLayers[i].speed;
 
@@ -93,8 +100,17 @@ public class ParallaxController : MonoBehaviour {
             Destroy(goNight.GetComponent<MeshCollider>());
             goNight.GetComponent<MeshRenderer>().material = Resources.Load("Materials/MAT_ParallaxLayer") as Material;
             goNight.GetComponent<MeshRenderer>().material.mainTexture = parallaxLayers[i].night;
+
+            if (parallaxLayers[i].order == ParallaxLayerOrder.FRONT)
+            {
+                goNight.GetComponent<MeshRenderer>().sortingLayerName = "FrontParallax";
+
+            }
+
             goNight.layer = GameCore.NIGHT_LAYER;
             goNight.AddComponent<ParallaxLayerBehaviour>().movementSpeed = parallaxLayers[i].speed;
+
+
         }
     }
 }

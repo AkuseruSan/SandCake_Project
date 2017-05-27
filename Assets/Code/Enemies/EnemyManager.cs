@@ -26,10 +26,10 @@ public class EnemyManager : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
-                    if (counter <= 0)
+                    if (counter <= 0 && GameCore.Instance.currentStage != WorldConstructor.Stage.Z_BOSS)
                     {
                         counter = Random.Range(randomSpawnTimeRange.x, randomSpawnTimeRange.y);
-
+                        spawnHeight = Random.Range(3.0f, 7.0f);
 
                         //Debug.Log(GameCore.Instance.player.transform.position);
                         Vector3 playerDistance = new Vector3(GameCore.Instance.player.transform.position.x + 30, 10, 0);
