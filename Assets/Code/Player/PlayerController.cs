@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour {
     public GameObject nightDeath;
     public GameObject dayDeath;
 
+    //Stamina Bar partsyst
+    public ParticleSystem staminaBarPS;
+
     [HideInInspector]
     public bool onCoolDown;
 
@@ -184,7 +187,9 @@ public class PlayerController : MonoBehaviour {
         {
             RecoverStamina(20);
             collision.gameObject.GetComponent<AudioSource>().Play();
+            staminaBarPS.Play();
         }
+
         if (collision.tag == "Enemy" && invulnerable == false && !GameCore.Instance.barrier)
         {
             DecreaseStamina(5);
