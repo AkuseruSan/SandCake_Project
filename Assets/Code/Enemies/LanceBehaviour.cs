@@ -64,6 +64,7 @@ public class LanceBehaviour : MonoBehaviour {
             case State.TRANSFORM:
                 {
                     transform.GetComponent<SpriteRenderer>().color = Color.blue;
+                    Debug.Log("Transformed");
                 }
                 break;
             default:
@@ -81,6 +82,14 @@ public class LanceBehaviour : MonoBehaviour {
     private void OnColisionEnter2D(Collision2D collision)
     {
         if(collision.transform.tag == "Depth")
+        {
+            state = State.TRANSFORM;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Depth")
         {
             state = State.TRANSFORM;
         }

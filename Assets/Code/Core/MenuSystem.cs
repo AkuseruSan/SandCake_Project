@@ -29,6 +29,8 @@ public class MenuSystem : MonoBehaviour {
     public GameObject title;
     private Animator titleAnimator;
 
+    RaycastHit2D hit;
+
     public float minOrthoSize, maxOrthoSize;
 
     private Vector3 originCameraPosition;
@@ -91,7 +93,6 @@ public class MenuSystem : MonoBehaviour {
 
     private RaycastHit2D GetHit()
     {
-        RaycastHit2D hit;
 
 #if UNITY_ANDROID
         if(Input.touchCount > 0)
