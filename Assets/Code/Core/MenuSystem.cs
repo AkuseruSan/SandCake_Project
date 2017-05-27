@@ -214,7 +214,7 @@ public class MenuSystem : MonoBehaviour {
                         {
                             case DataManager.PowerUpID.BARRIER:
                                 {
-                                    powerUpInfoText.text = "Barrier PowerUp!";
+                                    powerUpInfoText.text = "Protect your wolf with a special barrier! For a game, it will protect you from any projectile or obstacles like rocks and fire. ";
                                     powerUpNameText.text = "Barrier";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.BARRIER);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.BARRIER);
@@ -224,7 +224,7 @@ public class MenuSystem : MonoBehaviour {
                                 break;
                             case DataManager.PowerUpID.DOUBLE_JUMP:
                                 {
-                                    powerUpInfoText.text = "Double Jump PowerUp!";
+                                    powerUpInfoText.text = "Give your wolf the ability to double jump in your next game";
                                     powerUpNameText.text = "Double Jump";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.DOUBLE_JUMP);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.DOUBLE_JUMP);
@@ -234,7 +234,7 @@ public class MenuSystem : MonoBehaviour {
                                 break;
                             case DataManager.PowerUpID.REVIVE:
                                 {
-                                    powerUpInfoText.text = "Revive PowerUp!";
+                                    powerUpInfoText.text = "Let's take a second opportunity if the wolf's stamina it's over. Come back to life and continue your game! ";
                                     powerUpNameText.text = "Revive";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.REVIVE);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.REVIVE);
@@ -244,7 +244,7 @@ public class MenuSystem : MonoBehaviour {
                                 break;
                             case DataManager.PowerUpID.PAINT_BOOST:
                                 {
-                                    powerUpInfoText.text = "Paint Boost PowerUp!";
+                                    powerUpInfoText.text = "Enlarge your painted area! This powerup will gives you a bigger area when you paint, it lasts for one game";
                                     powerUpNameText.text = "Paint Boost";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.PAINT_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.PAINT_BOOST);
@@ -254,7 +254,7 @@ public class MenuSystem : MonoBehaviour {
                                 break;
                             case DataManager.PowerUpID.STAMINA_BOOST:
                                 {
-                                    powerUpInfoText.text = "Stamina Boost PowerUp!";
+                                    powerUpInfoText.text = "Get your stamina bar twice as big, enlarge it and get the double stamina for a game";
                                     powerUpNameText.text = "Stamina Boost";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.STAMINA_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.STAMINA_BOOST);
