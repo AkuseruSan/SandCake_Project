@@ -7,7 +7,10 @@ public class BossBehaviour : MonoBehaviour {
     private enum State { IDDLE, LOAD, LOADING, SHOOT, DIE }
     private State state;
 
-    public GameObject lance;
+    private float maxLife;
+    public float life;
+
+    public GameObject lancePrefab;
 
     private Queue<LanceBehaviour> lances;
 
@@ -26,6 +29,8 @@ public class BossBehaviour : MonoBehaviour {
     private float loadingCounter;
 	// Use this for initialization
 	void Start () {
+        maxLife = 100;
+        life = maxLife;
 
         MAX_LANCES = 5;
         distanceToPlayer = 10;
@@ -45,6 +50,9 @@ public class BossBehaviour : MonoBehaviour {
 	void Update () {
         Debug.Log("BOSS STATE: " + state);
         transform.position = new Vector3(player.transform.position.x + distanceToPlayer, transform.position.y, transform.position.z);
+
+        //transform.position = Vector3.Lerp(transform.position, new Vector3(player.transform.position.x + distanceToPlayer, transform.position.y, transform.position.z), Time.deltaTime * 25);
+        if (life <= 0) state = State.DIE;
 
         switch (state)
         {
@@ -86,7 +94,7 @@ public class BossBehaviour : MonoBehaviour {
                 break;
             case State.DIE:
                 {
-
+                    
                 }
                 break;
             default:
@@ -96,8 +104,17 @@ public class BossBehaviour : MonoBehaviour {
 
     void SpawnLance()
     {
-        GameObject g = Instantiate(lance, lanceSpawnPoints[lancesCounter - 1].position, Quaternion.identity, this.transform);
+        GameObject g = Instantiate(lancePrefab, lanceSpawnPoints[lancesCounter - 1].position, Quaternion.identity, this.transform);
         g.GetComponent<LanceBehaviour>().Init(GameCore.Instance.player.transform, 10, 1, "BossLance");
         //g.GetComponent<LanceBehaviour>().target = GameCore.Instance.player.transform;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "PlayerLance")
+        {
+            Debug.Log("Ouch! >.<");
+            life -= 5;
+        }
     }
 }
