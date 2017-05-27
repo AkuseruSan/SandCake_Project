@@ -26,7 +26,7 @@ public class EnemyManager : MonoBehaviour {
                 break;
             case GameState.PLAY:
                 {
-                    if (counter <= 0)
+                    if (counter <= 0 && GameCore.Instance.currentStage != WorldConstructor.Stage.Z_BOSS)
                     {
                         counter = Random.Range(randomSpawnTimeRange.x, randomSpawnTimeRange.y);
                         spawnHeight = Random.Range(3.0f, 7.0f);
