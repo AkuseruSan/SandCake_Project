@@ -44,6 +44,10 @@ public class GameCore : MonoBehaviour
     //Current stage/zone
     public WorldConstructor.Stage currentStage;
 
+    //Checkpoints
+    public uint savedCheckpoints, checkpointsSurpassed;
+    public bool checkpointState;
+
     //Power ups state
     [HideInInspector]
     public bool barrier, doubleJump, revive, paintBoost, staminaBoost, reviveFirstFrame;
@@ -92,7 +96,7 @@ public class GameCore : MonoBehaviour
 
             enemyController = transform.GetComponent<EnemyManager>();
 
-            playerController.savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
+            savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
 
             worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);
 
@@ -164,7 +168,7 @@ public class GameCore : MonoBehaviour
                     {
                         finalScore += playerController.distanceSinceStart;
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
-                        DataManager.Instance.playerData.unlockedSpawnPoints = playerController.savedCheckpoints;
+                        DataManager.Instance.playerData.unlockedSpawnPoints = savedCheckpoints;
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
                         DataManager.Instance.SaveData();
                         saveDataOnce = false;

@@ -28,8 +28,7 @@ public class PlayerController : MonoBehaviour {
     //Giant Sun spawn bool
     public bool spawnGiantSun = false;
 
-    //Checkpoints
-    public uint savedCheckpoints, checkpointsSurpassed;
+
 
     //Jump audio
     [HideInInspector]
@@ -241,11 +240,12 @@ public class PlayerController : MonoBehaviour {
 
         if(collision.tag == "CheckPoint")
         {
-            checkpointsSurpassed = (uint)(GameCore.Instance.currentStage) + 1;
+            GameCore.Instance.checkpointsSurpassed = (uint)(GameCore.Instance.currentStage) + 1;
 
-            if(savedCheckpoints < checkpointsSurpassed)
+            if(GameCore.Instance.savedCheckpoints < GameCore.Instance.checkpointsSurpassed)
             {
-                savedCheckpoints = checkpointsSurpassed;
+                GameCore.Instance.savedCheckpoints = GameCore.Instance.checkpointsSurpassed;
+
             }
 
         }
