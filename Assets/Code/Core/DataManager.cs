@@ -17,7 +17,7 @@ public struct PlayerData
 public class DataManager : MonoBehaviour {
 
     public enum PowerUpID { BARRIER = 0, DOUBLE_JUMP = 1, REVIVE = 2, PAINT_BOOST = 3, STAMINA_BOOST = 4 }
-    public enum PowerUpCost { BARRIER = 100, DOUBLE_JUMP = 5, REVIVE = 2500, PAINT_BOOST = 1000, STAMINA_BOOST = 4500 }// Precio de los powerups
+    public enum PowerUpCost { BARRIER = 1500, DOUBLE_JUMP = 1200, REVIVE = 3500, PAINT_BOOST = 1100, STAMINA_BOOST = 2500 }// Precio de los powerups
 
     public static DataManager Instance { get; private set; }
     public PlayerData playerData;
@@ -80,7 +80,6 @@ public class DataManager : MonoBehaviour {
                 playerData.gameComplete = 2;
                 playerData.energy = MAX_ENERGY;
                 playerData.unlockedSpawnPoints = SPAWN_POINTS;
-                //playerData.currentSpawnPoint = 0;
                 playerData.activeMultiplier = 1f;
                 playerData.activePowerUps = new bool[POWERUP_COUNT];
 
@@ -108,7 +107,6 @@ public class DataManager : MonoBehaviour {
             playerData.gameComplete = 0;
             playerData.energy = 0;
             playerData.unlockedSpawnPoints = 1;
-            //playerData.currentSpawnPoint = 0;
             playerData.activeMultiplier = 1f;
             playerData.activePowerUps = new bool[POWERUP_COUNT];
 
@@ -134,7 +132,6 @@ public class DataManager : MonoBehaviour {
         playerData.gameComplete = System.Convert.ToUInt32(load[index++]);
         playerData.energy = System.Convert.ToUInt32(load[index++]);
         playerData.unlockedSpawnPoints = System.Convert.ToUInt32(load[index++]);
-        //playerData.currentSpawnPoint = System.Convert.ToUInt32(load[index++]);
         playerData.activeMultiplier = (float)System.Convert.ToDouble(load[index++]);
 
         playerData.activePowerUps = new bool[POWERUP_COUNT];
@@ -166,14 +163,12 @@ public class DataManager : MonoBehaviour {
 
     public void SaveData()
     {
-        //playerData.currentSpawnPoint = System.Convert.ToUInt16(Mathf.Clamp(playerData.currentSpawnPoint, 0, SPAWN_POINTS - 1));
         playerData.unlockedSpawnPoints = System.Convert.ToUInt16(Mathf.Clamp(playerData.unlockedSpawnPoints, 1, SPAWN_POINTS));
         playerData.energy = System.Convert.ToUInt32(Mathf.Clamp(playerData.energy, 0, MAX_ENERGY));
 
         string save = playerData.gameComplete.ToString() + CONTROL_CHAR +
             playerData.energy + CONTROL_CHAR +
             playerData.unlockedSpawnPoints + CONTROL_CHAR +
-            //playerData.currentSpawnPoint + CONTROL_CHAR +
             playerData.activeMultiplier;
 
         foreach(bool b in playerData.activePowerUps)

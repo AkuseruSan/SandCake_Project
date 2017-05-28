@@ -15,15 +15,17 @@ public class PlayerController : MonoBehaviour {
 
     public int distanceSinceStart;
     public float speed;
+    private float initialSpeed;
     public float maxSpeed;
     public float minSpeed;
     public float rotationLerpTime;
     public Vector2 jump;
     public float invTimeInspector;
     private float invTime = 1.5f;
+    public float staminaRecovered = 15;
     private bool invulnerable = false;
     private Color dayColor = new Color(0.79f, 0.79f, 0.79f, 1), nightColor = new Color(0.12f, 0.14f, 0.23f, 1);
-    private int enemyKillScore = 50;
+    private int enemyKillScore = 100;
 
     //Giant Sun spawn bool
     public bool spawnGiantSun = false;
@@ -44,7 +46,9 @@ public class PlayerController : MonoBehaviour {
     [HideInInspector]
     public bool onCoolDown;
 
-    private float power;
+    [HideInInspector]
+    public float power;
+
     public float maxPower;
     public float powerRegenSpeed;
 
@@ -60,10 +64,16 @@ public class PlayerController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         onCoolDown = false;
-        power = maxPower;
+        if (GameCore.Instance.staminaBoost)
+        {
+            power = maxPower * 2;
+        }
+        else power = maxPower;
         barrier = maxBarrier;
         startPos = transform.position.x;
         distanceSinceStart = 0;
+
+        initialSpeed = speed;
 
         jumpSound = GetComponent<AudioSource>();
 
@@ -119,7 +129,8 @@ public class PlayerController : MonoBehaviour {
 
                     UpdateDistance();
 
-                    if (!onCoolDown && GameCore.Instance.staminaBoost) power -= powerRegenSpeed / 2 * Time.deltaTime;
+                    if (!onCoolDown && GameCore.Instance.staminaBoost)
+                        power -= powerRegenSpeed / 2 * Time.deltaTime;
                     else if (!onCoolDown) power -= powerRegenSpeed * Time.deltaTime;
                     power = Mathf.Clamp(power, 0, maxPower);
 
@@ -159,9 +170,15 @@ public class PlayerController : MonoBehaviour {
         currentJumpCount = jumpCount;
         myAnimator.SetBool("Grounded", true);
         myAnimatorN.SetBool("Grounded", true);
+        speed = initialSpeed;
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.normal == new Vector2( -1, 0)) Die();
+            if (contact.collider.tag == "Rock" && GameCore.Instance.barrier)
+            {
+                contact.collider.enabled = false;
+                DecreaseBarrierValue(5);
+            } 
+            else if (contact.normal == new Vector2( -1, 0)) Die();
         }
 
     }
@@ -184,7 +201,12 @@ public class PlayerController : MonoBehaviour {
     {
         if (collision.tag == "Stamina")
         {
-            RecoverStamina(20);
+            if (GameCore.Instance.staminaBoost)
+            {
+                RecoverStamina(staminaRecovered/2f);
+            }
+            else RecoverStamina(staminaRecovered);
+            collision.GetComponent<Collider2D>().enabled = false;
             collision.gameObject.GetComponent<AudioSource>().Play();
             staminaBarPS.Play();
             GameObject go = Instantiate(Resources.Load("Prefabs/FlowerPartSystem"), collision.transform.position, Quaternion.identity) as GameObject;
@@ -195,7 +217,12 @@ public class PlayerController : MonoBehaviour {
 
         if (collision.tag == "Enemy" && invulnerable == false && !GameCore.Instance.barrier)
         {
-            DecreaseStamina(5);
+            if (GameCore.Instance.staminaBoost)
+            {
+                DecreaseStamina(7.5f/2f);
+            }
+            else DecreaseStamina(7.5f);
+
             invTime = invTimeInspector;
             invulnerable = true;
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
@@ -203,7 +230,11 @@ public class PlayerController : MonoBehaviour {
         }
         if (collision.tag == "BossLance" && invulnerable == false && !GameCore.Instance.barrier)
         {
-            DecreaseStamina(5);
+            if (GameCore.Instance.staminaBoost)
+            {
+                DecreaseStamina(10f / 2f);
+            }
+            else DecreaseStamina(10f);
             invTime = invTimeInspector;
             invulnerable = true;
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
@@ -212,13 +243,13 @@ public class PlayerController : MonoBehaviour {
 
         if (collision.tag == "BossLance" && GameCore.Instance.barrier)
         {
-            DecreaseBarrierValue(7);
+            DecreaseBarrierValue(20);
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
         }
         if (collision.tag == "Enemy" && GameCore.Instance.barrier)
         {
-            DecreaseBarrierValue(5);
+            DecreaseBarrierValue(7);
             GameObject go = Instantiate(GameCore.Instance.bulletExplosion, collision.gameObject.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
         }
@@ -235,7 +266,7 @@ public class PlayerController : MonoBehaviour {
         }
         else if(collision.gameObject.tag == "Death" && GameCore.Instance.barrier)
         {
-            DecreaseBarrierValue(2);
+            DecreaseBarrierValue(1);
         }
 
         if(collision.tag == "CheckPoint")
@@ -325,6 +356,7 @@ public class PlayerController : MonoBehaviour {
             myAnimatorN.SetBool("Grounded", false);
             currentJumpCount -= 1;
             rBody.AddForce(jump, ForceMode2D.Impulse);
+            speed += jump.x;
             GameCore.Instance.playerController.jumpSound.Play();
             contactNormal.x = 0;
         }

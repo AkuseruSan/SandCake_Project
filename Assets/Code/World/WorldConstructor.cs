@@ -17,6 +17,8 @@ public class WorldConstructor : MonoBehaviour {
     //Stores an array with a lenght of the number of zones
     private uint[] zonesNumber;
 
+    public float minTimeFlower = 2f, maxTimeFlower = 3f;
+
     Queue<uint> current;
 
     [Space(20)]
@@ -149,7 +151,8 @@ public class WorldConstructor : MonoBehaviour {
     {
         if (flowerSpawnCtr <= 0)
         {
-            flowerSpawnCtr = Random.Range(1, 3);
+
+            flowerSpawnCtr = Random.Range(minTimeFlower, maxTimeFlower);
 
             Vector3 spawnPosition = AuxLib.SetPositionOnRaycastHit2D(new Vector3(transform.position.x - 10, 20, 0), "Terrain", Vector2.down, 1);
             Vector3 spawnPositionCheckR = AuxLib.SetPositionOnRaycastHit2D(new Vector3(spawnPosition.x + 2, 20, 0), "Terrain", Vector2.down, 1);
