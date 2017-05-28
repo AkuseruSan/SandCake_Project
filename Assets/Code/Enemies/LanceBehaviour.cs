@@ -60,7 +60,7 @@ public class LanceBehaviour : MonoBehaviour {
                         state = State.SHOOT;
                     }
 
-                    transform.GetComponent<SpriteRenderer>().color = Color.yellow;
+                    transform.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
                 }
                 break;
             case State.SHOOT:
@@ -74,7 +74,7 @@ public class LanceBehaviour : MonoBehaviour {
 
                     g.GetComponent<LanceBehaviour>().Init(GameCore.Instance.GetBossRef(), 25, 0, "PlayerLance");
 
-                    g.transform.GetComponent<SpriteRenderer>().color = Color.blue;
+                    g.transform.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
                     Debug.Log("Transformed");
 
                     //Destroy This
