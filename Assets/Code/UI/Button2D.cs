@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Button2D : MonoBehaviour {
 
-    public enum ButtonType { POWER_UP, PLAY }
+    public enum ButtonType { POWER_UP, PLAY, SETTINGS }
 
     public DataManager.PowerUpID powerUpID;
 

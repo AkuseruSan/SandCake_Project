@@ -28,6 +28,12 @@ public class MenuSystem : MonoBehaviour {
 
     public GameObject title;
     private Animator titleAnimator;
+    public GameObject settingsButton;
+    private bool opened;
+    private Vector3 settingsPanelPosition;
+    public GameObject settingsCanvas;
+    public GameObject eraseDataPopup;
+    private bool eraseDataPopupOn;
 
     RaycastHit2D hit;
 
@@ -42,9 +48,16 @@ public class MenuSystem : MonoBehaviour {
 
         titleAnimator = title.GetComponent<Animator>();
 
+        opened = false;
+        eraseDataPopupOn = false;
+        eraseDataPopup.SetActive(false);
+
+        settingsPanelPosition = new Vector3(-27.3f, 2.55f, -10);
+
         powerUpPopup.gameObject.SetActive(false);
         playPopup.gameObject.SetActive(false);
         noEnergyPopup.gameObject.SetActive(false);
+        settingsCanvas.SetActive(false);
 
         originCameraPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
         
@@ -113,6 +126,9 @@ public class MenuSystem : MonoBehaviour {
         StopCoroutine("MoveAndLookAt");
         StartCoroutine(MoveAndLookAt(Camera.main.transform.position, originCameraPosition, CamTravelMode.OUT, 3, true));
         titleAnimator.SetBool("stay", true);
+        opened = false;
+        settingsButton.SetActive(true);
+        settingsCanvas.SetActive(false);
     }
 
     private IEnumerator MoveAndLookAt(Vector3 origin, Vector3 target, CamTravelMode mode, float speed, bool scalable)
@@ -152,6 +168,19 @@ public class MenuSystem : MonoBehaviour {
         powerUpPopup.gameObject.SetActive(false);
     }
 
+    public void OpenEraseDataPopup()
+    {
+        eraseDataPopupOn = !eraseDataPopupOn;
+        if (eraseDataPopupOn)
+        {
+            eraseDataPopup.SetActive(true);
+        }
+        else
+        {
+            eraseDataPopup.SetActive(false);
+        }
+    }
+
     public void StartGame()
     {
         if (DataManager.Instance.playerData.energy < currentPlayCost)
@@ -169,6 +198,11 @@ public class MenuSystem : MonoBehaviour {
     {
         //Update energy text value
         energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
+
+        if(Camera.main.transform.position == settingsPanelPosition && opened == true)
+        {
+            settingsCanvas.SetActive(true);
+        }
 
         bool input = false;
 
@@ -195,6 +229,8 @@ public class MenuSystem : MonoBehaviour {
             {
                 titleAnimator.SetTrigger("exit");
                 titleAnimator.SetBool("stay", false);
+                settingsButton.SetActive(false);
+
 
                 if (hit.transform.GetComponent<Button2D>() != null)
                 {
@@ -286,13 +322,20 @@ public class MenuSystem : MonoBehaviour {
                         CheckStartPointButtonAvailable(startPointButtons[0]);
                     }
 
+                    else if (btn.type == Button2D.ButtonType.SETTINGS && camTravelMode == CamTravelMode.OUT)
+                    {
+                        camTravelMode = CamTravelMode.IN;
+                        StopCoroutine("MoveAndLookAt");
+                        StartCoroutine(MoveAndLookAt(Camera.main.transform.position, settingsPanelPosition, CamTravelMode.IN, 3, false));
+                        opened = true;
+                    }
+
                 }
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) && CoreSceneManager.Instance.currentScene.buildIndex == (int)CoreSceneManager.SceneID.MENU)
         {
-            Debug.Log("Button Works");
             Application.Quit();
         }
     }

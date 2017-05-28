@@ -96,6 +96,7 @@ public class GameCore : MonoBehaviour
 
             enemyController = transform.GetComponent<EnemyManager>();
 
+            checkpointsSurpassed = 1;
             savedCheckpoints = DataManager.Instance.playerData.unlockedSpawnPoints;
 
             worldManager.GetChild(0).transform.position = new Vector3(worldConstructorSpawnToSpawnDistance, 0, 0);

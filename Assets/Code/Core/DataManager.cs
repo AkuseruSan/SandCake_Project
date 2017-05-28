@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public struct PlayerData
@@ -157,6 +158,7 @@ public class DataManager : MonoBehaviour {
     public void DeleteData()
     {
         PlayerPrefs.DeleteKey(DATA_KEY);
+        SceneManager.LoadScene(0);
         StartDataManager();
     }
 

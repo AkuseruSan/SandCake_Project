@@ -23,6 +23,11 @@ public class CheckPointBehaviour : MonoBehaviour {
             checkPointActive = true;
             
         }
+        else if(GameCore.Instance.savedCheckpoints > GameCore.Instance.checkpointsSurpassed)
+        {
+            checkPointLight.SetBool("CheckpointActive", true);
+            checkPointActive = true;
+        }
 
     }
 
