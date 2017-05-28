@@ -16,6 +16,9 @@ public class MenuSystem : MonoBehaviour {
     public Button powerUpBuyButton;
 
     [Space(20)]
+    [Header("Order must match: DataManager.PowerUpID")]
+    public Transform[] powerUpGlows;
+    [Space(20)]
 
     public RectTransform playPopup;
     public RectTransform noEnergyPopup;
@@ -65,7 +68,9 @@ public class MenuSystem : MonoBehaviour {
         originCameraPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
         
         energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
-	}
+
+        SetPowerUpGlows();
+    }
 
     //Used on UI Buttons events.
     public void CheckStartPointButtonAvailable(GameObject btn)
@@ -167,8 +172,27 @@ public class MenuSystem : MonoBehaviour {
         DataManager.Instance.playerData.energy -= System.Convert.ToUInt32(powerUpCostText.text);
         DataManager.Instance.SaveData();
 
+        //Recalculate all power-up rune-glows.
+        SetPowerUpGlows();
+        //---
+
         SetCameraToOrigin();
         powerUpPopup.gameObject.SetActive(false);
+    }
+
+    public void SetPowerUpGlows()
+    {
+        for(int i = 0; i < DataManager.Instance.playerData.activePowerUps.Length; i++)
+        {
+            if(DataManager.Instance.playerData.activePowerUps[i] == true)
+            {
+                powerUpGlows[i].gameObject.SetActive(true);
+            }
+            else if(DataManager.Instance.playerData.activePowerUps[i] == true)
+            {
+                powerUpGlows[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void OpenEraseDataPopup()
