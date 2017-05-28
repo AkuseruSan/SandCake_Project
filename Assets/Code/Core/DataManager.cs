@@ -22,6 +22,8 @@ public class DataManager : MonoBehaviour {
     public static DataManager Instance { get; private set; }
     public PlayerData playerData;
 
+    public bool doingTutorial;
+
     public bool godMode;
     [HideInInspector] public uint currentSpawnPoint;
 
@@ -47,7 +49,7 @@ public class DataManager : MonoBehaviour {
 
         currentSpawnPoint = 0;
         StartDataManager();
-
+        doingTutorial = false;
         if(godMode)
         {
             
