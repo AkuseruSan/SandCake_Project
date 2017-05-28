@@ -125,6 +125,18 @@ public class BossBehaviour : MonoBehaviour {
         {
             Debug.Log("Ouch! >.<");
             life -= 1;
+
+            StopCoroutine("DamageAnim");
+            StartCoroutine(DamageAnim(0.1f));
+
+            Destroy(col.gameObject);
         }
+    }
+
+    private IEnumerator DamageAnim(float sec)
+    {
+        transform.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(sec);
+        transform.GetComponentInChildren<SpriteRenderer>().color = Color.white;
     }
 }
