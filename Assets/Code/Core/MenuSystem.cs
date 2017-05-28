@@ -36,7 +36,7 @@ public class MenuSystem : MonoBehaviour {
     private bool eraseDataPopupOn;
 
     //FirstTime Counter
-    private float firstTimeCounter = 3;
+    private float firstTimeCounter = 4;
 
     RaycastHit2D hit;
 
@@ -141,7 +141,7 @@ public class MenuSystem : MonoBehaviour {
         float camOrthoScale = Camera.main.orthographicSize;
         while (t < 1)
         {
-            Debug.Log("Traveling Camera . . ."+t);
+            //Debug.Log("Traveling Camera . . ."+t);
 
             t += Time.deltaTime*speed;
             t = Mathf.Clamp(t, 0, 1);
@@ -197,6 +197,12 @@ public class MenuSystem : MonoBehaviour {
         }
     }
 
+    public void RepeatTutorial()
+    {
+        SetCameraToOrigin();
+        DataManager.Instance.doingTutorial = true;
+    }
+
     private void Update()
     {
         //Update energy text value
@@ -205,12 +211,13 @@ public class MenuSystem : MonoBehaviour {
         if(DataManager.Instance.playerData.gameComplete == 0)
         {
             firstTimeCounter -= Time.deltaTime;
-        }
 
-        if(firstTimeCounter <= 0)
-        {
-
+            if (firstTimeCounter <= 0)
+            {
+                DataManager.Instance.doingTutorial = true;
+            }
         }
+        
 
         if(Camera.main.transform.position == settingsPanelPosition && opened == true)
         {
@@ -233,7 +240,7 @@ public class MenuSystem : MonoBehaviour {
         }
         else input = false;
 #endif
-        if (input)
+        if (input && !DataManager.Instance.doingTutorial)
         { 
 
             RaycastHit2D hit = GetHit();
