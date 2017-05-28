@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public enum GameState { AWAKE, PAUSE, PLAY, GAMEOVER }
+public enum GameState { AWAKE, PAUSE, PLAY, GAMEOVER, GAME_COMPLETE }
 
 //Singleton Controller
 public class GameCore : MonoBehaviour
@@ -20,6 +21,10 @@ public class GameCore : MonoBehaviour
     public Transform parallaxSystemTransform;
     public Transform worldManager;
     private Transform boss;
+
+    private bool endGameAnimationCycleDone;
+
+    public Transform gameCompleteAnimation;
 
     public Vector3 cameraPositionOffset;
     public float camSize { get; private set; }
@@ -76,6 +81,8 @@ public class GameCore : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        endGameAnimationCycleDone = false;
+        gameCompleteAnimation.gameObject.SetActive(false);
         //DontDestroyOnLoad(this);
         if (DataManager.Instance != null)
         {
@@ -178,10 +185,46 @@ public class GameCore : MonoBehaviour
                     
                 }
                 break;
+            case GameState.GAME_COMPLETE:
+                {
+                    if (!endGameAnimationCycleDone)
+                    {
+                        gameCompleteAnimation.gameObject.SetActive(true);
+
+                        Color animColor = gameCompleteAnimation.GetComponent<Image>().color;
+                        animColor += new Color(0, 0, 0, Time.deltaTime * 0.25f);
+
+
+                        if (animColor.a >= 1)
+                        {
+                            animColor = new Color(0, 0, 0, 255);
+
+                            StartCoroutine(EndGameAfterSeconds(5));
+
+                            endGameAnimationCycleDone = true;
+                        }
+
+                        Debug.Log("EndGame Color: " + animColor);
+                        gameCompleteAnimation.GetComponent<Image>().color = animColor;
+                    }
+                }
+                break;
             default:
                 break;
         }
 
+    }
+
+    public IEnumerator EndGameAfterSeconds(float sec)
+    {
+        foreach (Transform child in gameCompleteAnimation)
+        {
+            child.gameObject.SetActive(true);
+            yield return new WaitForSeconds(sec);
+            child.gameObject.SetActive(false);
+        }
+
+        CoreSceneManager.Instance.SwitchScene(CoreSceneManager.SceneID.MENU);
     }
 
     public void SetBossRef(Transform bossref)

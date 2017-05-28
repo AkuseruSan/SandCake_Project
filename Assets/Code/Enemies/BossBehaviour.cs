@@ -48,6 +48,14 @@ public class BossBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(DataManager.Instance.godMode)
+        {
+            if(Input.GetKeyDown(KeyCode.K))
+            {
+                life -= 10;
+            }
+        }
+
         Debug.Log("BOSS STATE: " + state);
         transform.position = new Vector3(player.transform.position.x + distanceToPlayer, transform.position.y, transform.position.z);
 
@@ -94,7 +102,9 @@ public class BossBehaviour : MonoBehaviour {
                 break;
             case State.DIE:
                 {
-                    
+                    GameCore.Instance.gameState = GameState.GAME_COMPLETE;
+
+                    Destroy(this.gameObject);
                 }
                 break;
             default:
@@ -114,7 +124,7 @@ public class BossBehaviour : MonoBehaviour {
         if(col.tag == "PlayerLance")
         {
             Debug.Log("Ouch! >.<");
-            life -= 5;
+            life -= 1;
         }
     }
 }
