@@ -171,6 +171,7 @@ public class GameCore : MonoBehaviour
                         DataManager.Instance.playerData.activePowerUps[(int)DataManager.PowerUpID.REVIVE] = revive;
                         DataManager.Instance.playerData.unlockedSpawnPoints = savedCheckpoints;
                         DataManager.Instance.playerData.energy += System.Convert.ToUInt32(finalScore);
+                        DataManager.Instance.playerData.gameComplete = 1;
                         DataManager.Instance.SaveData();
                         saveDataOnce = false;
                     }

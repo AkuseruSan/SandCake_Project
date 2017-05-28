@@ -35,6 +35,9 @@ public class MenuSystem : MonoBehaviour {
     public GameObject eraseDataPopup;
     private bool eraseDataPopupOn;
 
+    //FirstTime Counter
+    private float firstTimeCounter = 3;
+
     RaycastHit2D hit;
 
     public float minOrthoSize, maxOrthoSize;
@@ -198,6 +201,16 @@ public class MenuSystem : MonoBehaviour {
     {
         //Update energy text value
         energyText.GetComponent<TextMesh>().text = System.Convert.ToString(DataManager.Instance.playerData.energy);
+
+        if(DataManager.Instance.playerData.gameComplete == 0)
+        {
+            firstTimeCounter -= Time.deltaTime;
+        }
+
+        if(firstTimeCounter <= 0)
+        {
+
+        }
 
         if(Camera.main.transform.position == settingsPanelPosition && opened == true)
         {
