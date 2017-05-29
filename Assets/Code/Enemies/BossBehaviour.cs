@@ -11,6 +11,7 @@ public class BossBehaviour : MonoBehaviour {
     public float life;
 
     public GameObject lancePrefab;
+    public GameObject lanceExplosion;
 
     private Queue<LanceBehaviour> lances;
 
@@ -128,7 +129,7 @@ public class BossBehaviour : MonoBehaviour {
 
             StopCoroutine("DamageAnim");
             StartCoroutine(DamageAnim(0.1f));
-
+            Instantiate(lanceExplosion, col.transform.position, Quaternion.identity);
             Destroy(col.gameObject);
         }
     }

@@ -234,12 +234,7 @@ public class MenuSystem : MonoBehaviour {
 
         if(DataManager.Instance.playerData.gameComplete == 0)
         {
-            firstTimeCounter -= Time.deltaTime;
-
-            if (firstTimeCounter <= 0)
-            {
-                DataManager.Instance.doingTutorial = true;
-            }
+            DataManager.Instance.doingTutorial = true;
         }
         
 
