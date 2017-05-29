@@ -58,6 +58,7 @@ public class LanceBehaviour : MonoBehaviour {
                     {
                         transform.parent = null;
                         state = State.SHOOT;
+                        GetComponent<AudioSource>().Play();
                     }
 
                     transform.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;

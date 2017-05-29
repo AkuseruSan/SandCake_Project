@@ -117,6 +117,7 @@ public class BossBehaviour : MonoBehaviour {
     {
         GameObject g = Instantiate(lancePrefab, lanceSpawnPoints[lancesCounter - 1].position, Quaternion.identity, this.transform);
         g.GetComponent<LanceBehaviour>().Init(GameCore.Instance.player.transform, 20, 1, "BossLance");
+        g.GetComponent<AudioSource>().Play();
         //g.GetComponent<LanceBehaviour>().target = GameCore.Instance.player.transform;
     }
 

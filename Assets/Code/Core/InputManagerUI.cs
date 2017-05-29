@@ -67,6 +67,10 @@ public class InputManagerUI : MonoBehaviour {
                     {
                         barrierBarBorders.gameObject.SetActive(false);
                     }
+                    if(GameCore.Instance.currentStage == WorldConstructor.Stage.Z_BOSS)
+                    {
+                        StartGame();
+                    }
                 }
                 break;
             case GameState.PAUSE:
