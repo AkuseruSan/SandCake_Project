@@ -309,7 +309,7 @@ public class MenuSystem : MonoBehaviour {
                                 break;
                             case DataManager.PowerUpID.REVIVE:
                                 {
-                                    powerUpInfoText.text = "Let's take a second opportunity if the wolf's stamina it's over. Come back to life and continue your game! ";
+                                    powerUpInfoText.text = "Let's take a second opportunity! If the wolf's stamina it's over, come back to life and continue your game! ";
                                     powerUpNameText.text = "Revive";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.REVIVE);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.REVIVE);
@@ -319,7 +319,7 @@ public class MenuSystem : MonoBehaviour {
                                 break;
                             case DataManager.PowerUpID.PAINT_BOOST:
                                 {
-                                    powerUpInfoText.text = "Enlarge your painted area! This powerup will gives you a bigger area when you paint, it lasts for one game";
+                                    powerUpInfoText.text = "Enlarge your painted area! This powerup will give you a bigger area when you paint, it lasts for a game";
                                     powerUpNameText.text = "Paint Boost";
                                     currentPowerUpCost = System.Convert.ToUInt32((int)DataManager.PowerUpCost.PAINT_BOOST);
                                     powerUpCostText.text = System.Convert.ToString((int)DataManager.PowerUpCost.PAINT_BOOST);
