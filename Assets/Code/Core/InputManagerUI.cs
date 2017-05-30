@@ -47,6 +47,7 @@ public class InputManagerUI : MonoBehaviour {
     void Start()
     {
         gameMusic = GameObject.FindObjectOfType<AudioSource>();
+        pausePanel.transform.FindChild("Master Volume Slider").GetComponent<Slider>().value = DataManager.Instance.configData.masterVolume;
         menuAnimator = mainMenuPanel.GetComponent<Animator>();
         //optionsAwakeAnimator = optionsAwake.GetComponent<Animator>();
         endMenuAnimator = endMenu.GetComponent<Animator>();
