@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
     public Vector2 jump;
     public float invTimeInspector;
     private float invTime = 1.5f;
-    public float staminaRecovered = 15;
+    public float staminaRecovered;
     private bool invulnerable = false;
     private Color dayColor = new Color(0.79f, 0.79f, 0.79f, 1), nightColor = new Color(0.12f, 0.14f, 0.23f, 1);
     private int enemyKillScore = 100;
@@ -428,6 +428,8 @@ public class PlayerController : MonoBehaviour {
 
         GameObject go = Instantiate(nightDeath, gameObject.transform.position, Quaternion.identity);
         GameObject go1 = Instantiate(dayDeath, gameObject.transform.position, Quaternion.identity);
+
+        Destroy(this.gameObject);
     }
 
     #endregion

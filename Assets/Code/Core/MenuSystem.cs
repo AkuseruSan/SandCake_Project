@@ -38,9 +38,6 @@ public class MenuSystem : MonoBehaviour {
     public GameObject eraseDataPopup;
     private bool eraseDataPopupOn;
 
-    //FirstTime Counter
-    private float firstTimeCounter = 4;
-
     RaycastHit2D hit;
 
     public float minOrthoSize, maxOrthoSize;
@@ -64,6 +61,9 @@ public class MenuSystem : MonoBehaviour {
         playPopup.gameObject.SetActive(false);
         noEnergyPopup.gameObject.SetActive(false);
         settingsCanvas.SetActive(false);
+
+        settingsCanvas.transform.FindChild("SFX Slider").GetComponent<Slider>().value = DataManager.Instance.configData.sfxVolume;
+        settingsCanvas.transform.FindChild("Music Slider").GetComponent<Slider>().value = DataManager.Instance.configData.musicVolume;
 
         originCameraPosition = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
         
@@ -377,5 +377,9 @@ public class MenuSystem : MonoBehaviour {
         {
             Application.Quit();
         }
+    }
+    public void SaveConfiguration()
+    {
+        DataManager.Instance.SaveConfig();
     }
 }

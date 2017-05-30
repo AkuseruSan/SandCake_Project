@@ -14,6 +14,13 @@ public struct PlayerData
     public uint gameComplete;// 0 - FIRST TIME PLAY / 1 - PLAYED BEFORE / 2 - GAME COMPLETE
 }
 
+public struct ConfigData
+{
+    public float masterVolume;
+    public float musicVolume;
+    public float sfxVolume;
+}
+
 public class DataManager : MonoBehaviour {
 
     public enum PowerUpID { BARRIER = 0, DOUBLE_JUMP = 1, REVIVE = 2, PAINT_BOOST = 3, STAMINA_BOOST = 4 }
@@ -21,6 +28,7 @@ public class DataManager : MonoBehaviour {
 
     public static DataManager Instance { get; private set; }
     public PlayerData playerData;
+    public ConfigData configData;
 
     public bool doingTutorial;
 
@@ -33,11 +41,16 @@ public class DataManager : MonoBehaviour {
     public const uint POWERUP_COUNT = 5;
     public const char CONTROL_CHAR = '|';
     public const string DATA_KEY = "EltaGameData";
+    public const string CONFIG_KEY = "EltaGameConfig";
 
     #endregion
     // Use this for initialization
     void Awake()
     {
+        //Visual settings
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -46,18 +59,24 @@ public class DataManager : MonoBehaviour {
 
     }
     void Start () {
-
         currentSpawnPoint = 0;
         StartDataManager();
         doingTutorial = false;
-        if(godMode)
-        {
-            
-        }
-	}
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if((1.0f / Time.deltaTime) < 25f)
+        {
+            Debug.Log("Frame Drop");
+        }
 
         if (godMode)
         {
@@ -97,6 +116,7 @@ public class DataManager : MonoBehaviour {
     private void OnApplicationQuit()
     {
         SaveData();
+        SaveConfig();
     }
 
     private void StartDataManager()
@@ -118,6 +138,12 @@ public class DataManager : MonoBehaviour {
             SaveData();
         }
         else LoadData();
+
+        if (!PlayerPrefs.HasKey(CONFIG_KEY))
+        {
+            SaveConfig();
+        }
+        else LoadConfig();
     }
 
     private void LoadData()
@@ -154,6 +180,17 @@ public class DataManager : MonoBehaviour {
         Debug.Log(str);
     }
 
+    public void LoadConfig()
+    {
+        string data = PlayerPrefs.GetString(CONFIG_KEY);
+
+        string[] load = data.Split(CONTROL_CHAR);
+
+        configData.masterVolume = (float)System.Convert.ToDecimal(load[0]);
+        configData.musicVolume = (float)System.Convert.ToDecimal(load[1]);
+        configData.sfxVolume = (float)System.Convert.ToDecimal(load[2]);
+    }
+
     public void DeleteData()
     {
         PlayerPrefs.DeleteKey(DATA_KEY);
@@ -180,5 +217,16 @@ public class DataManager : MonoBehaviour {
 
         PlayerPrefs.SetString(DATA_KEY, save);
 
+    }
+
+    public void SaveConfig()
+    {
+        string save = configData.masterVolume.ToString() + CONTROL_CHAR +
+            configData.musicVolume + CONTROL_CHAR +
+            configData.sfxVolume;
+
+        Debug.Log("[SAVED CONFIG DATA] Encoded: [ " + save + " ]");
+
+        PlayerPrefs.SetString(CONFIG_KEY, save);
     }
 }

@@ -17,7 +17,8 @@ public class WorldConstructor : MonoBehaviour {
     //Stores an array with a lenght of the number of zones
     private uint[] zonesNumber;
 
-    public float minTimeFlower = 2f, maxTimeFlower = 3f;
+    [HideInInspector]
+    public float minTimeFlower = 2f, maxTimeFlower = 5f;
 
     Queue<uint> current;
 
@@ -92,6 +93,8 @@ public class WorldConstructor : MonoBehaviour {
                 SpawnBoss();
             }
 
+            minTimeFlower = 2f;
+            maxTimeFlower = 5f;
             lastX = transform.position.x;
             spawnOnce = false;
         }
